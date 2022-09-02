@@ -32,8 +32,8 @@ def main():
     plt.plot(x, y)
     plt.show()
 
-    latex_str = sp.latex(res)
-    sp.preview(latex_str, output="png")
+    latex_str = "$" + sp.latex(res) + "$"    
+    sp.preview(latex_str, output="png", dvioptions=["-D","1200"])
 
 
 if __name__ == "__main__":
