@@ -25,8 +25,10 @@ sp.init_printing()
 res = coulombs_law_eqn(7)
 print(res)
 
-for r_val in range(1, 10, 1):
-    f = res.subs({R: r_val, EPSILON_NAUGHT: 1, sp.pi: np.pi})
-    print(f)
+x = np.linspace(1, 10, 100)
+y = [res.subs({R: r_val, EPSILON_NAUGHT: 1, sp.pi: np.pi}) for r_val in x]
+
+plt.plot(x, y)
+plt.show()
 
 sp.preview(sp.latex(res), output="png")
