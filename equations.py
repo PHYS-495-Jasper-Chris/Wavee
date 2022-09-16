@@ -3,6 +3,9 @@ from typing import List, Optional
 import matplotlib.pyplot as plt
 import numpy as np
 
+import mayavi.mlab as mplt
+from mayavi.core.api import Scene
+
 COULOMB_CONSTANT = 8.99 * 10**9
 """
 Coulomb's constant, in N m^2 / C^2
@@ -194,11 +197,27 @@ def main():
                 mag_x[i][j] = window.electric_field_x([i, j])
                 mag_y[i][j] = window.electric_field_y([i, j])
 
-                mag_x[i][j] = 0 if abs(mag_x[i][j]) > 10000000000 else mag_x[i][j]
-                mag_y[i][j] = 0 if abs(mag_y[i][j]) > 10000000000 else mag_y[i][j]
             except ZeroDivisionError:
                 mag_x[i][j] = 0
                 mag_y[i][j] = 0
+
+    p_z = np.zeros_like(p_x)
+    fig: Scene = mplt.figure(fgcolor=(0, 0, 0), bgcolor=(1, 1, 1), size=(500, 500))
+    fig.scene.z_plus_view()
+    fig.scene.parallel_projection = True
+
+    mplt.quiver3d(p_x, p_y, p_z, mag_x, mag_y, p_z)
+    mplt.axes(y_axis_visibility=False)
+
+    # Add original point charges
+    pc_x, pc_y, pc_z = [], [], []
+    for point_charge in window.charges:
+        pc_x.append(point_charge.position[0])
+        pc_y.append(point_charge.position[1])
+        pc_z.append(0.0)
+    nodes = mplt.points3d(pc_x, pc_y, pc_z, mode="sphere", scale_factor=0.5)
+    nodes.glyph.scale_mode = 'scale_by_vector'
+    nodes.mlab_source.dataset.point_data.scalars = [x / 2 for x in range(3)]
 
     # Plot point charges themselves
     for point_charge in window.charges:
