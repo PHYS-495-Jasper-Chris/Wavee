@@ -210,14 +210,23 @@ def main():
     mplt.axes(y_axis_visibility=False)
 
     # Add original point charges
-    pc_x, pc_y, pc_z = [], [], []
+    pc_x, pc_y, pc_z, pc_s = [], [], [], []
     for point_charge in window.charges:
         pc_x.append(point_charge.position[0])
         pc_y.append(point_charge.position[1])
         pc_z.append(0.0)
-    nodes = mplt.points3d(pc_x, pc_y, pc_z, mode="sphere", scale_factor=0.5)
-    nodes.glyph.scale_mode = 'scale_by_vector'
-    nodes.mlab_source.dataset.point_data.scalars = [x / 2 for x in range(3)]
+        pc_s.append(abs(point_charge.charge))
+    pc_s = [s / max(pc_s) for s in pc_s]
+    nodes = mplt.quiver3d(pc_x,
+                          pc_y,
+                          pc_z,
+                          pc_s,
+                          pc_s,
+                          pc_s,
+                          mode="sphere",
+                          scalars=[x / len(pc_s) for x in range(len(pc_s))],
+                          scale_factor=0.5)
+    nodes.glyph.glyph_source.glyph_source.center = [0, 0, 0]
 
     # Plot point charges themselves
     for point_charge in window.charges:
