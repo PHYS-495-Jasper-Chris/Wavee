@@ -3,8 +3,8 @@ from typing import List, Optional
 import matplotlib.pyplot as plt
 import numpy as np
 
-import mayavi.mlab as mplt
-from mayavi.core.api import Scene
+# import mayavi.mlab as mplt
+# from mayavi.core.api import Scene
 
 COULOMB_CONSTANT = 8.99 * 10**9
 """
