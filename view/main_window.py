@@ -45,7 +45,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _build_plots(self,
                      new_point_charges: List[PointCharge] = None,
-                     max_mag_length: float = 50,
+                     max_mag_length: float = 20,
                      resolution=2) -> None:
 
         if new_point_charges is not None:
@@ -80,31 +80,34 @@ class MainWindow(QtWidgets.QMainWindow):
                 y_pos = j / resolution - y_shift
                 p_x[i][j] = x_pos
                 p_y[i][j] = y_pos
+
                 try:
-                    mag_x[i][j] = self.graph_window.electric_field_x([x_pos, y_pos])
-                    mag_y[i][j] = self.graph_window.electric_field_y([x_pos, y_pos])
-                    net_mag[i][j] = np.sqrt(mag_x[i][j]**2 + mag_y[i][j]**2)
+                    ef_mag_x = self.graph_window.electric_field_x([x_pos, y_pos])
+                    ef_mag_y = self.graph_window.electric_field_y([x_pos, y_pos])
+                    ef_mag_net = np.sqrt(ef_mag_x**2 + ef_mag_y**2)
+                    mag_x[i][j] = ef_mag_x
+                    mag_y[i][j] = ef_mag_y
+                    net_mag[i][j] = np.log2(ef_mag_net)
 
                 except ZeroDivisionError:
-                    mag_x[i][j] = 0
-                    mag_y[i][j] = 0
-                    net_mag[i][j] = 0
+                    pass
 
         max_mag = np.amax(net_mag)
+        min_mag = np.amin(net_mag)
 
         # Plot the vector arrows
         for i in range(len(p_x) - 1):
             for j in range(len(p_y) - 1):
-                angle = 180 - np.rad2deg(np.arctan2(mag_y[i][j], mag_x[i][j]))
-                normalized_mag = net_mag[i][j] / max_mag
-                scaled_mag = normalized_mag * max_mag_length
-
-                brush_color = self.get_color_from_mag(scaled_mag, max_mag_length)
-                arrow_item = pyqtgraph.ArrowItem(pos=(p_x[i][j], p_y[i][j]),
-                                                 tailLen=scaled_mag,
-                                                 brush=brush_color,
-                                                 angle=angle)
-                self.graph_widget.addItem(arrow_item)
+                if net_mag[i][j] > 0.0:
+                    angle = 180 - np.rad2deg(np.arctan2(mag_y[i][j], mag_x[i][j]))
+                    normalized_mag = net_mag[i][j] / max_mag
+                    scaled_mag = normalized_mag * max_mag_length
+                    brush_color = self.get_color_from_mag(scaled_mag, min_mag, max_mag_length)
+                    arrow_item = pyqtgraph.ArrowItem(pos=(p_x[i][j], p_y[i][j]),
+                                                     tailLen=scaled_mag,
+                                                     brush=brush_color,
+                                                     angle=angle)
+                    self.graph_widget.addItem(arrow_item)
 
         # Plot point charges themselves
         scatter_plot_item = pyqtgraph.ScatterPlotItem()
@@ -117,7 +120,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.graph_widget.addItem(scatter_plot_item)
 
-    def get_color_from_mag(self, mag: float, max_mag_length: float) -> tuple:
+    def get_color_from_mag(self, mag: float, min_mag_length: float, max_mag_length: float) -> tuple:
         """
         Return the color from the given mag. We use 4 different colors to draw brush our vectors with:
         blue -> green   | (low magnitude)
@@ -141,7 +144,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Blue -> Green
         if relative_strength <= 0.25:
             return self.gradient_color_map(mag,
-                                           0,
+                                           min_mag_length,
                                            max_mag_length,
                                            min_color=min_mag_color,
                                            max_color=low_mag_color)
@@ -149,14 +152,14 @@ class MainWindow(QtWidgets.QMainWindow):
         # Green -> Yellow
         if relative_strength <= 0.50:
             return self.gradient_color_map(mag,
-                                           0,
+                                           min_mag_length,
                                            max_mag_length,
                                            min_color=low_mag_color,
                                            max_color=high_mag_color)
 
         # Yellow -> Red
         return self.gradient_color_map(mag,
-                                       0,
+                                       min_mag_length,
                                        max_mag_length,
                                        min_color=high_mag_color,
                                        max_color=max_mag_color)
