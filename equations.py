@@ -3,8 +3,8 @@ from typing import List, Optional
 import matplotlib.pyplot as plt
 import numpy as np
 
-# import mayavi.mlab as mplt
-# from mayavi.core.api import Scene
+import mayavi.mlab as mplt
+from mayavi.core.api import Scene
 
 COULOMB_CONSTANT = 8.99 * 10**9
 """
@@ -205,7 +205,7 @@ def main():
     fig: Scene = mplt.figure(fgcolor=(0, 0, 0), bgcolor=(1, 1, 1), size=(500, 500))
     fig.scene.z_plus_view()
     fig.scene.parallel_projection = True
-
+    
     mplt.quiver3d(p_x, p_y, p_z, mag_x, mag_y, p_z)
     mplt.axes(y_axis_visibility=False)
 
@@ -227,7 +227,7 @@ def main():
                           scalars=[x / len(pc_s) for x in range(len(pc_s))],
                           scale_factor=0.5)
     nodes.glyph.glyph_source.glyph_source.center = [0, 0, 0]
-
+    
     # Plot point charges themselves
     for point_charge in window.charges:
         plt.plot(*point_charge.position,
