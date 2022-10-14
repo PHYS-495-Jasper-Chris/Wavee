@@ -3,6 +3,7 @@ The main window
 """
 
 import os
+from pyexpat.errors import XML_ERROR_TAG_MISMATCH
 import sys
 
 from typing import List
@@ -44,7 +45,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _build_plots(self,
                      new_point_charges: List[PointCharge] = None,
-                     max_mag_length: float = 50) -> None:
+                     max_mag_length: float = 50,
+                     resolution=2) -> None:
 
         if new_point_charges is not None:
             for new_point_charge in new_point_charges:
@@ -52,8 +54,18 @@ class MainWindow(QtWidgets.QMainWindow):
 
         top_left = [-5, 6]
         bottom_right = [4, -3]
-        x_len = abs(top_left[0]) + abs(bottom_right[0])
-        y_len = abs(top_left[1]) + abs(bottom_right[1])
+
+        # Doing all the calculations from zero and just shifting it back after is just so much
+        # better
+
+        x_shift = 0 - top_left[0] if top_left[0] < 0 else 0
+        y_shift = 0 - bottom_right[1] if bottom_right[1] < 0 else 0
+
+        shifted_top_left = [top_left[0] + x_shift, top_left[1] + y_shift]
+        shifted_bottom_right = [bottom_right[0] + x_shift, bottom_right[1] + y_shift]
+
+        x_len = (abs(shifted_top_left[0]) + abs(shifted_bottom_right[0])) * resolution
+        y_len = (abs(shifted_top_left[1]) + abs(shifted_bottom_right[1])) * resolution
 
         p_x = [[0.0] * x_len for _ in range(y_len + 1)]
         p_y = [[0.0] * x_len for _ in range(y_len + 1)]
@@ -62,13 +74,15 @@ class MainWindow(QtWidgets.QMainWindow):
         mag_y = [[0.0] * x_len for _ in range(y_len + 1)]
         net_mag = [[0.0] * x_len for _ in range(y_len + 1)]
 
-        for i in range(top_left[0], bottom_right[0] + 1):
-            for j in range(bottom_right[1], top_left[1] + 1):
-                p_x[i][j] = i
-                p_y[i][j] = j
+        for i in range(len(p_x) - 1):
+            for j in range(len(p_y) - 1):
+                x_pos = i / resolution - x_shift
+                y_pos = j / resolution - y_shift
+                p_x[i][j] = x_pos
+                p_y[i][j] = y_pos
                 try:
-                    mag_x[i][j] = self.graph_window.electric_field_x([i, j])
-                    mag_y[i][j] = self.graph_window.electric_field_y([i, j])
+                    mag_x[i][j] = self.graph_window.electric_field_x([x_pos, y_pos])
+                    mag_y[i][j] = self.graph_window.electric_field_y([x_pos, y_pos])
                     net_mag[i][j] = np.sqrt(mag_x[i][j]**2 + mag_y[i][j]**2)
 
                 except ZeroDivisionError:
@@ -78,8 +92,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         max_mag = np.amax(net_mag)
 
-        for i in range(y_len + 1):
-            for j in range(x_len):
+        # Plot the vector arrows
+        for i in range(len(p_x) - 1):
+            for j in range(len(p_y) - 1):
                 angle = 180 - np.rad2deg(np.arctan2(mag_y[i][j], mag_x[i][j]))
                 normalized_mag = net_mag[i][j] / max_mag
                 scaled_mag = normalized_mag * max_mag_length
@@ -125,14 +140,26 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Blue -> Green
         if relative_strength <= 0.25:
-            return self.gradient_color_map(mag, 0, max_mag_length, min_color = min_mag_color, max_color = low_mag_color)
-        
+            return self.gradient_color_map(mag,
+                                           0,
+                                           max_mag_length,
+                                           min_color=min_mag_color,
+                                           max_color=low_mag_color)
+
         # Green -> Yellow
         if relative_strength <= 0.50:
-            return self.gradient_color_map(mag, 0, max_mag_length, min_color = low_mag_color, max_color = high_mag_color)
-        
+            return self.gradient_color_map(mag,
+                                           0,
+                                           max_mag_length,
+                                           min_color=low_mag_color,
+                                           max_color=high_mag_color)
+
         # Yellow -> Red
-        return self.gradient_color_map(mag, 0, max_mag_length, min_color = high_mag_color,max_color = max_mag_color)
+        return self.gradient_color_map(mag,
+                                       0,
+                                       max_mag_length,
+                                       min_color=high_mag_color,
+                                       max_color=max_mag_color)
 
     def gradient_color_map(
         self,
