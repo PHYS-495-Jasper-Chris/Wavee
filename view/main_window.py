@@ -3,10 +3,9 @@ The main window
 """
 
 import os
-from pyexpat.errors import XML_ERROR_TAG_MISMATCH
 import sys
 
-from typing import List
+from typing import List, Optional, Tuple
 
 import pyqtgraph
 
@@ -15,6 +14,15 @@ import numpy as np
 from PyQt6 import QtCore, QtWidgets, uic
 
 from equations import PointCharge, Window
+
+class CenterArrowItem(pyqtgraph.ArrowItem):
+    """
+    An ArrowItem that loads its position from the center, not from the head of the arrow.
+    """
+
+    def paint(self, p, *args):
+        p.translate(-self.boundingRect().center())
+        return super().paint(p, *args)
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -33,10 +41,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         uic.load_ui.loadUi(os.path.join(sys.path[0], "view/ui/main_window.ui"), self)
 
-        a = PointCharge([1, 4], 10)
-        b = PointCharge([-3, 5], 8)
-
-        self.graph_window = Window([a, b, PointCharge([0, 1], -5)])
+        self.graph_window = Window(
+            [PointCharge([1, 4], 10),
+             PointCharge([-3, 5], 8),
+             PointCharge([0, 1], -5)])
 
         self._build_plots()
 
@@ -44,13 +52,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.show()
 
     def _build_plots(self,
-                     new_point_charges: List[PointCharge] = None,
-                     max_mag_length: float = 20,
-                     resolution=2) -> None:
+                     new_point_charges: Optional[List[PointCharge]] = None,
+                     max_mag_length: float = 20.0,
+                     resolution: int = 2) -> None:
 
-        if new_point_charges is not None:
-            for new_point_charge in new_point_charges:
-                self.graph_window.add_point_charge(new_point_charge)
+        new_point_charges = new_point_charges or []
+
+        for new_point_charge in new_point_charges:
+            self.graph_window.add_point_charge(new_point_charge)
 
         top_left = [-5, 6]
         bottom_right = [4, -3]
@@ -92,8 +101,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 except ZeroDivisionError:
                     pass
 
-        max_mag = np.amax(net_mag)
-        min_mag = np.amin(net_mag)
+        max_mag: float = np.amax(net_mag)
+        min_mag: float = np.amin(net_mag)
 
         # Plot the vector arrows
         for i in range(len(p_x) - 1):
@@ -103,10 +112,10 @@ class MainWindow(QtWidgets.QMainWindow):
                     normalized_mag = net_mag[i][j] / max_mag
                     scaled_mag = normalized_mag * max_mag_length
                     brush_color = self.get_color_from_mag(scaled_mag, min_mag, max_mag_length)
-                    arrow_item = pyqtgraph.ArrowItem(pos=(p_x[i][j], p_y[i][j]),
-                                                     tailLen=scaled_mag,
-                                                     brush=brush_color,
-                                                     angle=angle)
+                    arrow_item = CenterArrowItem(pos=(p_x[i][j], p_y[i][j]),
+                                                 tailLen=scaled_mag,
+                                                 brush=brush_color,
+                                                 angle=angle)
                     self.graph_widget.addItem(arrow_item)
 
         # Plot point charges themselves
@@ -120,9 +129,19 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.graph_widget.addItem(scatter_plot_item)
 
-    def get_color_from_mag(self, mag: float, min_mag_length: float, max_mag_length: float) -> tuple:
+        plot_item = self.graph_widget.getPlotItem()
+        if not isinstance(plot_item, pyqtgraph.PlotItem):
+            raise RuntimeError("Unable to build plot!")
+
+        for axis in plot_item.axes:
+            plot_item.getAxis(axis).setGrid(255)
+
+
+    def get_color_from_mag(self, mag: float, min_mag_length: float,
+                           max_mag_length: float) -> Tuple[int, int, int]:
         """
-        Return the color from the given mag. We use 4 different colors to draw brush our vectors with:
+        Return the color from the given mag. We use 4 different colors to draw brush our vectors
+        with:
         blue -> green   | (low magnitude)
         green -> yellow | (med magnitude)
         yellow -> red   | (high magnitude)
@@ -170,7 +189,8 @@ class MainWindow(QtWidgets.QMainWindow):
         min_num: float = 0,
         max_num: float = 100,
         min_color: tuple = (0, 0, 255),
-        max_color: tuple = (255, 0, 0)) -> tuple:
+        max_color: tuple = (255, 0, 0)
+    ) -> Tuple[int, int, int]:
         """
         Takes in a range of numbers and maps it to the expected color given the start and end color
         of a gradient
@@ -183,7 +203,7 @@ class MainWindow(QtWidgets.QMainWindow):
             max_color (tuple): Right most color of gradient
 
         Returns:
-            tuple: _description_
+            tuple: R, G, B color as integers
         """
 
         if number < min_num:
