@@ -15,6 +15,7 @@ from PyQt6 import QtCore, QtWidgets, uic
 
 from equations import PointCharge, Window
 
+
 class CenterArrowItem(pyqtgraph.ArrowItem):
     """
     An ArrowItem that loads its position from the center, not from the head of the arrow.
@@ -132,10 +133,12 @@ class MainWindow(QtWidgets.QMainWindow):
         plot_item = self.graph_widget.getPlotItem()
         if not isinstance(plot_item, pyqtgraph.PlotItem):
             raise RuntimeError("Unable to build plot!")
+        axes = plot_item.axes
+        if axes is None:
+            raise RuntimeError("Unable to build plot: No axes!")
 
-        for axis in plot_item.axes:
+        for axis in axes:
             plot_item.getAxis(axis).setGrid(255)
-
 
     def get_color_from_mag(self, mag: float, min_mag_length: float,
                            max_mag_length: float) -> Tuple[int, int, int]:
