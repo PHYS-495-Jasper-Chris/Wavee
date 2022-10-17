@@ -59,6 +59,17 @@ class MainWindow(QtWidgets.QMainWindow):
 
         new_point_charges = new_point_charges or []
 
+        plot_item = self.graph_widget.getPlotItem()
+        if not isinstance(plot_item, pyqtgraph.PlotItem):
+            raise RuntimeError("Unable to build plot!")
+        axes = plot_item.axes
+        view_box = plot_item.getViewBox()
+        if not isinstance(view_box, pyqtgraph.ViewBox) or not isinstance(axes, dict):
+            raise RuntimeError("Unable to build plot")
+
+        for axis in axes:
+            plot_item.getAxis(axis).setGrid(255)
+
         for new_point_charge in new_point_charges:
             self.graph_window.add_point_charge(new_point_charge)
 
@@ -97,27 +108,30 @@ class MainWindow(QtWidgets.QMainWindow):
                     ef_mag_net = np.sqrt(ef_mag_x**2 + ef_mag_y**2)
                     mag_x[i][j] = ef_mag_x
                     mag_y[i][j] = ef_mag_y
-                    net_mag[i][j] = np.log2(ef_mag_net)
+                    net_mag[i][j] = ef_mag_net
 
                 except ZeroDivisionError:
                     pass
 
         max_mag: float = np.amax(net_mag)
         min_mag: float = np.amin(net_mag)
+        min_mag_length = min_mag / max_mag * max_mag_length
 
         # Plot the vector arrows
         for i in range(len(p_x) - 1):
             for j in range(len(p_y) - 1):
-                if net_mag[i][j] > 0.0:
-                    angle = 180 - np.rad2deg(np.arctan2(mag_y[i][j], mag_x[i][j]))
-                    normalized_mag = net_mag[i][j] / max_mag
-                    scaled_mag = normalized_mag * max_mag_length
-                    brush_color = self.get_color_from_mag(scaled_mag, min_mag, max_mag_length)
-                    arrow_item = CenterArrowItem(pos=(p_x[i][j], p_y[i][j]),
-                                                 tailLen=scaled_mag,
-                                                 brush=brush_color,
-                                                 angle=angle)
-                    self.graph_widget.addItem(arrow_item)
+                if net_mag[i][j] <= 0.0:
+                    continue
+
+                angle = 180 - np.rad2deg(np.arctan2(mag_y[i][j], mag_x[i][j]))
+                normalized_mag = net_mag[i][j] / max_mag
+                scaled_mag = normalized_mag * max_mag_length
+                brush_color = self.get_color_from_mag(scaled_mag, min_mag_length, max_mag_length)
+                arrow_item = CenterArrowItem(pos=(p_x[i][j], p_y[i][j]),
+                                             tailLen=scaled_mag,
+                                             brush=brush_color,
+                                             angle=angle)
+                self.graph_widget.addItem(arrow_item)
 
         # Plot point charges themselves
         scatter_plot_item = pyqtgraph.ScatterPlotItem()
@@ -129,16 +143,6 @@ class MainWindow(QtWidgets.QMainWindow):
                                         brush="r" if point_charge.charge > 0.0 else "b")
 
         self.graph_widget.addItem(scatter_plot_item)
-
-        plot_item = self.graph_widget.getPlotItem()
-        if not isinstance(plot_item, pyqtgraph.PlotItem):
-            raise RuntimeError("Unable to build plot!")
-        axes = plot_item.axes
-        if axes is None:
-            raise RuntimeError("Unable to build plot: No axes!")
-
-        for axis in axes:
-            plot_item.getAxis(axis).setGrid(255)
 
     def get_color_from_mag(self, mag: float, min_mag_length: float,
                            max_mag_length: float) -> Tuple[int, int, int]:
