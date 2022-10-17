@@ -160,20 +160,11 @@ class MainWindow(QtWidgets.QMainWindow):
         Returns:
             tuple: color to brush the arrow with
         """
-        min_mag_color = (0, 0, 255)
         low_mag_color = (0, 255, 0)
         high_mag_color = (255, 255, 0)
         max_mag_color = (255, 0, 0)
 
         relative_strength = mag / max_mag_length
-
-        # Blue -> Green
-        if relative_strength <= 0.25:
-            return self.gradient_color_map(mag,
-                                           min_mag_length,
-                                           max_mag_length,
-                                           min_color=min_mag_color,
-                                           max_color=low_mag_color)
 
         # Green -> Yellow
         if relative_strength <= 0.50:
