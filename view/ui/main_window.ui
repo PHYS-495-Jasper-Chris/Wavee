@@ -80,7 +80,7 @@
      </layout>
     </item>
     <item row="1" column="0">
-     <widget class="PlotWidget" name="graph_widget" native="true"/>
+     <widget class="DroppablePlotWidget" name="graph_widget" native="true"/>
     </item>
     <item row="2" column="1">
      <widget class="QWidget" name="equation_widget" native="true">
@@ -123,6 +123,12 @@
    <class>PlotWidget</class>
    <extends>QWidget</extends>
    <header>pyqtgraph</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DroppablePlotWidget</class>
+   <extends>QWidget</extends>
+   <header>view.droppable_plot_widget</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
