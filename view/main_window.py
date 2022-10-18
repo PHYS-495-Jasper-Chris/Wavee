@@ -14,7 +14,6 @@ import numpy as np
 from PyQt6 import QtCore, QtWidgets, uic
 
 from equations import PointCharge, Window
-
 from view.droppable_plot_widget import DroppablePlotWidget
 
 class CenterArrowItem(pyqtgraph.ArrowItem):
@@ -82,26 +81,26 @@ class MainWindow(QtWidgets.QMainWindow):
         view_box.disableAutoRange()
 
         # Regenerate the plots with the new positions (and same charges)
-        self._build_plots(dimensions=[top_left, bottom_right])
+        self._build_plots(dimensions=(top_left, bottom_right))
 
     def _build_plots(self,
-                     dimensions: Optional[List[List[float]]] = None,
+                     dimensions: Optional[Tuple[List[float], List[float]]] = None,
                      new_point_charges: Optional[List[PointCharge]] = None,
                      max_mag_length: float = 20.0,
-                     resolution: int = 25) -> None:
+                     resolution: int = 20) -> None:
         """
         Build the plots of the electric field and the point charges.
 
-        @param dimensions The dimensions to plot, [top_left, bottom_right]. Defaults to
-               [[-5, 6], [4, -3]]
+        @param dimensions The dimensions to plot, (top_left, bottom_right). Defaults to
+               ([-5, 6], [4, -3])
         @param new_point_charges Any additional point charges to add to the Window. Defaults to no
                new charges
         @param max_mag_length The length of the largest magnitude arrow. Defaults to 20.0
-        @param resolution The number of x-axis arrows to plot. Defaults to 25
+        @param resolution The number of x-axis arrows to plot. Defaults to 20
         """
 
         new_point_charges = new_point_charges or []
-        dimensions = dimensions or [[-5.0, 6.0], [4.0, -3.0]]
+        dimensions = dimensions or ([-5.0, 6.0], [4.0, -3.0])
 
         plot_item = self.graph_widget.getPlotItem()
         if not isinstance(plot_item, pyqtgraph.PlotItem):
@@ -122,23 +121,23 @@ class MainWindow(QtWidgets.QMainWindow):
         top_left = dimensions[0]
         bottom_right = dimensions[1]
 
-        # Doing all the calculations from zero and just shifting it back after is just so much
-        # better
+        x_indices = resolution
+        y_indices = int(self.graph_widget.height() / self.graph_widget.width() * resolution)
 
-        x_len = resolution
-        y_len = int(self.graph_widget.height() / self.graph_widget.width() * resolution)
+        x_distance = bottom_right[0] - top_left[0]
+        y_distance = top_left[1] - bottom_right[1]
 
-        p_x = [[0.0] * y_len for _ in range(x_len)]
-        p_y = [[0.0] * y_len for _ in range(x_len)]
+        p_x = [[0.0] * y_indices for _ in range(x_indices)]
+        p_y = [[0.0] * y_indices for _ in range(x_indices)]
 
-        mag_x = [[0.0] * y_len for _ in range(x_len)]
-        mag_y = [[0.0] * y_len for _ in range(x_len)]
-        net_mag = [[0.0] * y_len for _ in range(x_len)]
+        mag_x = [[0.0] * y_indices for _ in range(x_indices)]
+        mag_y = [[0.0] * y_indices for _ in range(x_indices)]
+        net_mag = [[0.0] * y_indices for _ in range(x_indices)]
 
-        for i in range(x_len):
-            for j in range(y_len):
-                x_pos = (i / (x_len - 1)) * (bottom_right[0] - top_left[0]) + top_left[0]
-                y_pos = (j / (y_len - 1)) * (top_left[1] - bottom_right[1]) + bottom_right[1]
+        for i in range(x_indices):
+            for j in range(y_indices):
+                x_pos = (i / (x_indices - 1)) * x_distance + top_left[0]
+                y_pos = (j / (y_indices - 1)) * y_distance + bottom_right[1]
                 p_x[i][j] = x_pos
                 p_y[i][j] = y_pos
 
@@ -158,8 +157,8 @@ class MainWindow(QtWidgets.QMainWindow):
         min_mag_length = min_mag / max_mag * max_mag_length
 
         # Plot the vector arrows
-        for i in range(x_len):
-            for j in range(y_len):
+        for i in range(x_indices):
+            for j in range(y_indices):
                 if net_mag[i][j] <= 0.0:
                     continue
 
@@ -268,20 +267,19 @@ class MainWindow(QtWidgets.QMainWindow):
             return max_color
 
         # easier to have everything start from 0
-        min_num = min_num - min_num if min_num > 0 else min_num + min_num
-        max_num = max_num - min_num if min_num > 0 else max_num + min_num
-        number = number - min_num if min_num > 0 else number + min_num
+        number -= min_num
+        max_num -= min_num
 
         # calculate how far to shift each color value
         percent = number / max_num
-        r_diff = abs(min_color[0] - max_color[0])
-        g_diff = abs(min_color[1] - max_color[1])
-        b_diff = abs(min_color[2] - max_color[2])
+        r_diff = min_color[0] - max_color[0]
+        g_diff = min_color[1] - max_color[1]
+        b_diff = min_color[2] - max_color[2]
         r_shift = r_diff * percent
         g_shift = g_diff * percent
         b_shift = b_diff * percent
 
-        r = min_color[0] + r_shift if min_color[0] < max_color[0] else min_color[0] - r_shift
-        g = min_color[1] + g_shift if min_color[1] < max_color[1] else min_color[1] - g_shift
-        b = min_color[2] + b_shift if min_color[2] < max_color[2] else min_color[2] - b_shift
+        r = min_color[0] - r_shift
+        g = min_color[1] - g_shift
+        b = min_color[2] - b_shift
         return (int(r), int(g), int(b))

@@ -127,7 +127,7 @@
   </customwidget>
   <customwidget>
    <class>DroppablePlotWidget</class>
-   <extends>QWidget</extends>
+   <extends>PlotWidget</extends>
    <header>view.droppable_plot_widget</header>
    <container>1</container>
   </customwidget>
