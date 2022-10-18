@@ -11,7 +11,7 @@ import pyqtgraph
 
 import numpy as np
 
-from PyQt6 import QtCore, QtWidgets, uic
+from PyQt6 import QtCore, QtWidgets, QtGui, uic
 
 from equations import PointCharge, Window
 from view.droppable_plot_widget import DroppablePlotWidget
@@ -35,7 +35,7 @@ class MainWindow(QtWidgets.QMainWindow):
     central_widget: QtWidgets.QWidget
     grid_layout: QtWidgets.QGridLayout
     graph_widget: DroppablePlotWidget
-    point_charge_circle: QtWidgets.QWidget
+    point_charge_circle: QtWidgets.QLabel
     refresh_button: QtWidgets.QPushButton
     menu_bar: QtWidgets.QMenuBar
 
@@ -43,6 +43,7 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         uic.load_ui.loadUi(os.path.join(sys.path[0], "view/ui/main_window.ui"), self)
+        self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
 
         self.graph_window = Window(
             [PointCharge([1, 4], 10),
@@ -55,10 +56,29 @@ class MainWindow(QtWidgets.QMainWindow):
         refresh_graph_action.setShortcuts(["Ctrl+R", "F5"])
         refresh_graph_action.triggered.connect(self._refresh_button_pressed)
 
+        self._paint_shapes()
         self._build_plots()
 
-        self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
         self.show()
+
+    def _paint_shapes(self):
+        """
+        Create a circle for the point charge.
+
+        Will also be used to draw other shapes.
+        """
+
+        canvas = QtGui.QPixmap(110, 110)
+
+        painter = QtGui.QPainter(canvas)
+        pen = QtGui.QPen()
+        pen.setWidth(5)
+        pen.setColor(QtGui.QColor('red'))
+        painter.setPen(pen)
+        painter.drawEllipse(5, 5, 100, 100)
+        painter.end()
+
+        self.point_charge_circle.setPixmap(canvas)
 
     def _refresh_button_pressed(self):
         """

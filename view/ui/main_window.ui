@@ -31,7 +31,11 @@
      <widget class="QWidget" name="charge_widget" native="true">
       <layout class="QVBoxLayout" name="charge_layout">
        <item>
-        <widget class="QWidget" name="point_charge_circle" native="true"/>
+        <widget class="QLabel" name="point_charge_circle">
+         <property name="textInteractionFlags">
+          <set>Qt::NoTextInteraction</set>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="point_charge_label">
@@ -120,14 +124,8 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PlotWidget</class>
-   <extends>QWidget</extends>
-   <header>pyqtgraph</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>DroppablePlotWidget</class>
-   <extends>PlotWidget</extends>
+   <extends>QWidget</extends>
    <header>view.droppable_plot_widget</header>
    <container>1</container>
   </customwidget>
