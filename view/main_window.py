@@ -36,6 +36,8 @@ class MainWindow(QtWidgets.QMainWindow):
     grid_layout: QtWidgets.QGridLayout
     graph_widget: pyqtgraph.PlotWidget
     point_charge_circle: QtWidgets.QWidget
+    refresh_button: QtWidgets.QPushButton
+    menu_bar: QtWidgets.QMenuBar
 
     def __init__(self) -> None:
         super().__init__()
@@ -46,18 +48,54 @@ class MainWindow(QtWidgets.QMainWindow):
             [PointCharge([1, 4], 10),
              PointCharge([-3, 5], 8),
              PointCharge([0, 1], -5)])
+        self.refresh_button.clicked.connect(self._refresh_button_pressed)
 
         self._build_plots()
 
         self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
         self.show()
 
+    def _refresh_button_pressed(self):
+        """
+        When the refresh button is pressed, reload the graphs
+        """
+
+        plot_item = self.graph_widget.getPlotItem()
+        if not isinstance(plot_item, pyqtgraph.PlotItem):
+            raise RuntimeError("Unable to build plot!")
+        view_box = plot_item.getViewBox()
+        if not isinstance(view_box, pyqtgraph.ViewBox):
+            raise RuntimeError("Unable to rebuild plot")
+
+        # Get the plot dimensions
+        view_range: List[List[float]] = view_box.getState()["viewRange"]
+        top_left = [view_range[0][0], view_range[1][1]]
+        bottom_right = [view_range[0][1], view_range[1][0]]
+
+        # Don't change the scale
+        view_box.disableAutoRange()
+
+        # Regenerate the plots with the new positions (and same charges)
+        self._build_plots(dimensions=[top_left, bottom_right])
+
     def _build_plots(self,
+                     dimensions: Optional[List[List[float]]] = None,
                      new_point_charges: Optional[List[PointCharge]] = None,
                      max_mag_length: float = 20.0,
-                     resolution: int = 2) -> None:
+                     resolution: int = 25) -> None:
+        """
+        Build the plots of the electric field and the point charges.
+
+        @param dimensions The dimensions to plot, [top_left, bottom_right]. Defaults to
+               [[-5, 6], [4, -3]]
+        @param new_point_charges Any additional point charges to add to the Window. Defaults to no
+               new charges
+        @param max_mag_length The length of the largest magnitude arrow. Defaults to 20.0
+        @param resolution The number of x-axis arrows to plot. Defaults to 25
+        """
 
         new_point_charges = new_point_charges or []
+        dimensions = dimensions or [[-5.0, 6.0], [4.0, -3.0]]
 
         plot_item = self.graph_widget.getPlotItem()
         if not isinstance(plot_item, pyqtgraph.PlotItem):
@@ -67,38 +105,34 @@ class MainWindow(QtWidgets.QMainWindow):
         if not isinstance(view_box, pyqtgraph.ViewBox) or not isinstance(axes, dict):
             raise RuntimeError("Unable to build plot")
 
+        plot_item.clear()
+
         for axis in axes:
             plot_item.getAxis(axis).setGrid(255)
 
         for new_point_charge in new_point_charges:
             self.graph_window.add_point_charge(new_point_charge)
 
-        top_left = [-5, 6]
-        bottom_right = [4, -3]
+        top_left = dimensions[0]
+        bottom_right = dimensions[1]
 
         # Doing all the calculations from zero and just shifting it back after is just so much
         # better
 
-        x_shift = 0 - top_left[0] if top_left[0] < 0 else 0
-        y_shift = 0 - bottom_right[1] if bottom_right[1] < 0 else 0
+        x_len = resolution
+        y_len = int(self.graph_widget.height() / self.graph_widget.width() * resolution)
 
-        shifted_top_left = [top_left[0] + x_shift, top_left[1] + y_shift]
-        shifted_bottom_right = [bottom_right[0] + x_shift, bottom_right[1] + y_shift]
+        p_x = [[0.0] * y_len for _ in range(x_len)]
+        p_y = [[0.0] * y_len for _ in range(x_len)]
 
-        x_len = (abs(shifted_top_left[0]) + abs(shifted_bottom_right[0])) * resolution
-        y_len = (abs(shifted_top_left[1]) + abs(shifted_bottom_right[1])) * resolution
+        mag_x = [[0.0] * y_len for _ in range(x_len)]
+        mag_y = [[0.0] * y_len for _ in range(x_len)]
+        net_mag = [[0.0] * y_len for _ in range(x_len)]
 
-        p_x = [[0.0] * x_len for _ in range(y_len + 1)]
-        p_y = [[0.0] * x_len for _ in range(y_len + 1)]
-
-        mag_x = [[0.0] * x_len for _ in range(y_len + 1)]
-        mag_y = [[0.0] * x_len for _ in range(y_len + 1)]
-        net_mag = [[0.0] * x_len for _ in range(y_len + 1)]
-
-        for i in range(len(p_x) - 1):
-            for j in range(len(p_y) - 1):
-                x_pos = i / resolution - x_shift
-                y_pos = j / resolution - y_shift
+        for i in range(x_len):
+            for j in range(y_len):
+                x_pos = (i / (x_len - 1)) * (bottom_right[0] - top_left[0]) + top_left[0]
+                y_pos = (j / (y_len - 1)) * (top_left[1] - bottom_right[1]) + bottom_right[1]
                 p_x[i][j] = x_pos
                 p_y[i][j] = y_pos
 
@@ -118,8 +152,8 @@ class MainWindow(QtWidgets.QMainWindow):
         min_mag_length = min_mag / max_mag * max_mag_length
 
         # Plot the vector arrows
-        for i in range(len(p_x) - 1):
-            for j in range(len(p_y) - 1):
+        for i in range(x_len):
+            for j in range(y_len):
                 if net_mag[i][j] <= 0.0:
                     continue
 

@@ -15,7 +15,19 @@
   </property>
   <widget class="QWidget" name="central_widget">
    <layout class="QGridLayout" name="grid_layout">
-    <item row="0" column="1">
+    <property name="leftMargin">
+     <number>12</number>
+    </property>
+    <property name="topMargin">
+     <number>12</number>
+    </property>
+    <property name="rightMargin">
+     <number>12</number>
+    </property>
+    <property name="bottomMargin">
+     <number>12</number>
+    </property>
+    <item row="1" column="1">
      <widget class="QWidget" name="charge_widget" native="true">
       <layout class="QVBoxLayout" name="charge_layout">
        <item>
@@ -41,9 +53,36 @@
      </widget>
     </item>
     <item row="0" column="0">
+     <layout class="QHBoxLayout" name="button_menu">
+      <item>
+       <widget class="QPushButton" name="refresh_button">
+        <property name="text">
+         <string>Refresh Graph</string>
+        </property>
+        <property name="default">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="button_spacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0">
      <widget class="PlotWidget" name="graph_widget" native="true"/>
     </item>
-    <item row="1" column="1">
+    <item row="2" column="1">
      <widget class="QWidget" name="equation_widget" native="true">
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>
