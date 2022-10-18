@@ -181,7 +181,28 @@ class MainWindow(QtWidgets.QMainWindow):
                                         symbol="o",
                                         brush="r" if point_charge.charge > 0.0 else "b")
 
+        # Add crosshair lines.
+        self.crosshair_v = pyqtgraph.InfiniteLine(angle=90, movable=False)
+        self.crosshair_h = pyqtgraph.InfiniteLine(angle=0, movable=False)
+        self.graph_widget.addItem(self.crosshair_v, ignoreBounds=True)
+        self.graph_widget.addItem(self.crosshair_h, ignoreBounds=True)
+        self.proxy = pyqtgraph.SignalProxy(self.graph_widget.scene().sigMouseMoved, rateLimit=60, slot=self._mouse_moved)
+
+
         self.graph_widget.addItem(scatter_plot_item)
+
+    def _mouse_moved(self, e):
+        pos = e[0]
+        if self.graph_widget.sceneBoundingRect().contains(pos):
+            mousePoint = self.graph_widget.getPlotItem().vb.mapSceneToView(pos)
+            x_pos = mousePoint.x()
+            y_pos = mousePoint.y()
+            self.crosshair_v.setPos(x_pos)
+            self.crosshair_h.setPos(y_pos)
+            ef_mag_x = self.graph_window.electric_field_x([x_pos, y_pos])
+            ef_mag_y = self.graph_window.electric_field_y([x_pos, y_pos])
+            ef_mag_net = np.sqrt(ef_mag_x**2 + ef_mag_y**2)
+            print(f"({round(x_pos,2)},{round(y_pos,2)}) - value: {ef_mag_net}")
 
     def get_color_from_mag(self, mag: float, min_mag_length: float,
                            max_mag_length: float) -> Tuple[int, int, int]:
