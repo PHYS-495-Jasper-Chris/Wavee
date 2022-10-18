@@ -50,6 +50,11 @@ class MainWindow(QtWidgets.QMainWindow):
              PointCharge([0, 1], -5)])
         self.refresh_button.clicked.connect(self._refresh_button_pressed)
 
+        graph_menu = self.menu_bar.addMenu("Graph")
+        refresh_graph_action = graph_menu.addAction("Refresh Graph")
+        refresh_graph_action.setShortcuts(["Ctrl+R", "F5"])
+        refresh_graph_action.triggered.connect(self._refresh_button_pressed)
+
         self._build_plots()
 
         self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
