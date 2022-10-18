@@ -39,6 +39,9 @@ class MainWindow(QtWidgets.QMainWindow):
     refresh_button: QtWidgets.QPushButton
     menu_bar: QtWidgets.QMenuBar
 
+    # Other class variables
+    graph_resolution : int = 25
+
     def __init__(self) -> None:
         super().__init__()
 
@@ -55,6 +58,18 @@ class MainWindow(QtWidgets.QMainWindow):
         refresh_graph_action = graph_menu.addAction("Refresh Graph")
         refresh_graph_action.setShortcuts(["Ctrl+R", "F5"])
         refresh_graph_action.triggered.connect(self._refresh_button_pressed)
+        
+        increase_graph_resolution = graph_menu.addAction("Increase resolution")
+        increase_graph_resolution.setShortcuts(["Ctrl+="])
+        increase_graph_resolution.triggered.connect(self._increase_resolution)
+
+        decrease_graph_resolution = graph_menu.addAction("Decrease resolution")
+        decrease_graph_resolution.setShortcuts(["Ctrl+-"])
+        decrease_graph_resolution.triggered.connect(self._decrease_resolution)
+
+        reset_graph_resolution = graph_menu.addAction("Reset resolution")
+        reset_graph_resolution.setShortcuts(["Ctrl+0"])
+        reset_graph_resolution.triggered.connect(self._reset_resolution)
 
         self._paint_shapes()
         self._build_plots()
@@ -80,7 +95,22 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.point_charge_circle.setPixmap(canvas)
 
-    def _refresh_button_pressed(self):
+    def _reset_resolution(self):
+        self.graph_resolution = 25
+        self._refresh_button_pressed(resolution=self.graph_resolution)
+    
+    def _increase_resolution(self):
+        self.graph_resolution += 1
+        self._refresh_button_pressed(resolution=self.graph_resolution)
+
+    def _decrease_resolution(self):
+        self.graph_resolution -= 1
+        self._refresh_button_pressed(resolution=self.graph_resolution)
+
+    def _refresh_button_pressed(self, 
+                               new_point_charges: Optional[List[PointCharge]] = None,
+                               max_mag_length: float = 20.0,
+                               resolution: int = 25):
         """
         When the refresh button is pressed, reload the graphs
         """
@@ -101,7 +131,8 @@ class MainWindow(QtWidgets.QMainWindow):
         view_box.disableAutoRange()
 
         # Regenerate the plots with the new positions (and same charges)
-        self._build_plots(dimensions=(top_left, bottom_right))
+        self._build_plots(dimensions=(top_left, bottom_right), new_point_charges=new_point_charges, 
+                         max_mag_length=max_mag_length, resolution=resolution)
 
     def _build_plots(self,
                      dimensions: Optional[Tuple[List[float], List[float]]] = None,
