@@ -1,13 +1,127 @@
+"""
+Equations used to calculate the electric field.
+"""
+
 from typing import List, Optional
 
-import matplotlib.pyplot as plt
 import numpy as np
 
+if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+    import mayavi.mlab as mplt
 
 COULOMB_CONSTANT = 8.99 * 10**9
 """
 Coulomb's constant, in N m^2 / C^2
 """
+
+
+class InfiniteLineCharge:
+    """
+    A single infinite line of charge, with a slope and offset (m & b), and a charge density.
+    """
+
+    def __init__(self, x_coef: float, y_coef: float, offset: float, charge_density: float) -> None:
+        """
+        Initialize the infinite line charge with its equation and charge density
+
+        The line equation is written in the form ``ax + by + c = 0``, where a is ``x_coef``, b is
+        ``y_coef``, and c is ``offset``.
+
+        @param x_coef The coefficient on x in the equation of the line (a)
+        @param y_coef The coefficient on y in the equation of the line (b)
+        @param offset The offset in the equation of the line (c)
+        @param charge_density The charge density, in C/m
+        """
+
+        if x_coef == 0 and y_coef == 0:
+            raise RuntimeError(
+                "Invalid infinite line charge equation: x_coef and y_coef cannot simultaneously be "
+                "0")
+
+        self.x_coef = x_coef
+        self.y_coef = y_coef
+        self.offset = offset
+        self.charge_density = charge_density
+
+    def radial_distance(self, point: List[float]) -> float:
+        """
+        The shortest distance from a point to the infinite line of charge
+
+        @param point The point to measure the distance from
+        """
+
+        return abs(self.x_coef * point[0] + self.y_coef * point[1]
+                   + self.offset) / np.sqrt(self.x_coef**2 + self.y_coef**2)
+
+    def closest_point(self, point: List[float]) -> List[float]:
+        """
+        The closest point on the line from a point
+
+        @param point The point to find the closest point to
+        """
+
+        x_pos = (self.y_coef * (self.y_coef * point[0] - self.x_coef * point[1])
+                 - self.x_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
+
+        y_pos = (self.x_coef * (self.x_coef * point[1] - self.y_coef * point[0])
+                 - self.y_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
+
+        return [x_pos, y_pos]
+
+    def electric_field_magnitude(self, point: List[float]) -> float:
+        """
+        The net magnitude of the electric field at point
+
+        @param point The point to measure the field at
+        """
+
+        # E = 2k λ/r
+        magnitude = 2 * COULOMB_CONSTANT * self.charge_density / self.radial_distance(point)
+
+        return 0 if np.isinf(magnitude) else magnitude
+
+    def electric_field_x(self, point: List[float]) -> float:
+        """
+        The x component of the electric field at a point
+
+        @param point The point to measure the field at
+        """
+
+        # The direction of the electric field is completely orthogonal to the direction of the line
+        # charge itself, so for x take the cos instead of sin.
+
+        line_angle: float = np.arctan2(self.y_coef, self.x_coef)
+
+        magnitude = abs(self.electric_field_magnitude(point) * np.cos(line_angle))
+
+        # If the x-component of the point is greater than that of the closest point on the line,
+        # then the magnitude should be positive, otherwise it should be negative.
+        if self.closest_point(point)[0] > point[0]:
+            magnitude *= -1
+
+        return magnitude
+
+    def electric_field_y(self, point: List[float]) -> float:
+        """
+        The y component of the electric field at a point
+
+        @param point The point to measure the field at
+        """
+
+        # The direction of the electric field is completely orthogonal to the direction of the line
+        # charge itself, so for y take the sin instead of cos.
+
+        line_angle: float = np.arctan2(self.y_coef, self.x_coef)
+
+        magnitude = abs(self.electric_field_magnitude(point) * np.sin(line_angle))
+
+        # If the y-component of the point is greater than that of the closest point on the line,
+        # then the magnitude should be positive, otherwise it should be negative.
+        if self.closest_point(point)[1] > point[1]:
+            magnitude *= -1
+
+        return magnitude
 
 
 class PointCharge:
@@ -100,8 +214,11 @@ class Window:
     A collection of charges, to be graphed
     """
 
-    def __init__(self, charges: Optional[List[PointCharge]] = None) -> None:
+    def __init__(self,
+                 charges: Optional[List[PointCharge]] = None,
+                 infinite_line_charges: Optional[List[InfiniteLineCharge]] = None) -> None:
         self.charges = charges if charges else []
+        self.infinite_line_charges = infinite_line_charges or []
 
     def add_point_charge(self, point_charge: PointCharge) -> None:
         """
@@ -111,6 +228,15 @@ class Window:
             point_charge (PointCharge): Point charge object
         """
         self.charges.append(point_charge)
+
+    def add_line_charge(self, line_charge: InfiniteLineCharge) -> None:
+        """
+        Add an infinite line charge to the test window
+
+        Args:
+            line_charge (InfiniteLineCharge): Infinite line charge object
+        """
+        self.infinite_line_charges.append(line_charge)
 
     def net_electric_field(self, position: List[float]) -> float:
         """
@@ -129,9 +255,14 @@ class Window:
 
         e_x = 0.0
         e_y = 0.0
+
         for point_charge in self.charges:
             e_x += point_charge.electric_field_x(position)
             e_y += point_charge.electric_field_y(position)
+
+        for line_charge in self.infinite_line_charges:
+            e_x += line_charge.electric_field_x(position)
+            e_y += line_charge.electric_field_y(position)
 
         return np.sqrt(pow(e_x, 2) + pow(e_y, 2))
 
@@ -148,6 +279,10 @@ class Window:
         e_x = 0
         for point_charge in self.charges:
             e_x += point_charge.electric_field_x(position)
+
+        for line_charge in self.infinite_line_charges:
+            e_x += line_charge.electric_field_x(position)
+
         return e_x
 
     def electric_field_y(self, position: List[float]) -> float:
@@ -163,6 +298,10 @@ class Window:
         e_y = 0
         for point_charge in self.charges:
             e_y += point_charge.electric_field_y(position)
+
+        for line_charge in self.infinite_line_charges:
+            e_y += line_charge.electric_field_y(position)
+
         return e_y
 
 
@@ -174,7 +313,9 @@ def main():
     a = PointCharge([10, 7], 10)
     b = PointCharge([-3, 5], 8)
 
-    window = Window([a, b, PointCharge([0, 1], -5)])
+    window = Window([a, b, PointCharge([0, 1], -5)],
+                    [InfiniteLineCharge(0, 2, 0, 1),
+                     InfiniteLineCharge(1, 0, 0, 1)])
 
     top_left = [-10, 10]
     bottom_right = [10, -10]
@@ -200,7 +341,7 @@ def main():
                 mag_y[i][j] = 0
 
     p_z = np.zeros_like(p_x)
-    fig: Scene = mplt.figure(fgcolor=(0, 0, 0), bgcolor=(1, 1, 1), size=(500, 500))
+    fig = mplt.figure(fgcolor=(0, 0, 0), bgcolor=(1, 1, 1), size=(500, 500))
     fig.scene.z_plus_view()
     fig.scene.parallel_projection = True
 
@@ -233,11 +374,27 @@ def main():
                  markersize=abs(point_charge.charge),
                  color="r" if point_charge.charge > 0.0 else "b")
 
+    # Plot line charges
+    x_range = np.linspace(top_left[0], bottom_right[0])
+    for line_charge in window.infinite_line_charges:
+        if line_charge.y_coef == 0:
+            # ax + c = 0 -> x = -c/a
+            plt.axvline(x=-line_charge.offset / line_charge.x_coef)
+        elif line_charge.x_coef == 0:
+            # by + c = 0 -> y = -c/b
+            plt.axhline(y=-line_charge.offset / line_charge.y_coef)
+        else:
+            # ax + by + c = 0 -> by = -ax - c -> y = -a/b x - c/b
+            plt.plot(
+                x_range, -line_charge.x_coef / line_charge.y_coef * x_range
+                - line_charge.offset / line_charge.y_coef)
+
     plt.quiver(p_x, p_y, mag_x, mag_y, color='b', units='xy', scale=10000000000)
     plt.title('Electric field')
 
     plt.grid()
     plt.show()
+
 
 if __name__ == "__main__":
     main()
