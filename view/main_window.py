@@ -14,10 +14,13 @@ import numpy as np
 
 from PyQt6 import QtCore, QtWidgets, QtGui, uic
 
+# pylint: disable=import-error
 from equations import PointCharge, Window
 from view.droppable_plot_widget import DroppablePlotWidget
+# pylint: enable=import-error
 
 RGBTuple = namedtuple("RGBTuple", ["r", "g", "b"])
+GraphBounds = namedtuple("GraphBounds", ["top_left", "bottom_right"])
 
 
 class CenterArrowItem(pyqtgraph.ArrowItem):
@@ -117,7 +120,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.graph_resolution = max(self.graph_resolution, 0)
         self._build_plots(dimensions=self._get_graph_bounds(), resolution=self.graph_resolution)
 
-    def _get_graph_bounds(self) -> Tuple[List[float], List[float]]:
+    def _get_graph_bounds(self) -> GraphBounds:
         """
         Get the top left and bottom right corners of the graph.
         """
@@ -130,11 +133,11 @@ class MainWindow(QtWidgets.QMainWindow):
             raise RuntimeError("Unable to rebuild plot")
 
         # Get the plot dimensions
-        view_range: List[List[float]] = view_box.getState()["viewRange"]
+        view_range: List[List[float]] = view_box.viewRange()
         top_left = [view_range[0][0], view_range[1][1]]
         bottom_right = [view_range[0][1], view_range[1][0]]
 
-        return top_left, bottom_right
+        return GraphBounds(top_left, bottom_right)
 
     def _refresh_button_pressed(self):
         """
@@ -146,7 +149,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._build_plots(dimensions=self._get_graph_bounds(), resolution=self.graph_resolution)
 
     def _build_plots(self,
-                     dimensions: Optional[Tuple[List[float], List[float]]] = None,
+                     dimensions: Optional[GraphBounds] = None,
                      new_point_charges: Optional[List[PointCharge]] = None,
                      max_mag_length: float = 20.0,
                      resolution: int = DEFAULT_GRAPH_RESOLUTION) -> None:
@@ -164,7 +167,7 @@ class MainWindow(QtWidgets.QMainWindow):
         should_autoscale = dimensions is None
 
         new_point_charges = new_point_charges or []
-        dimensions = dimensions or ([-5.0, 6.0], [4.0, -3.0])
+        dimensions = dimensions or GraphBounds([-5.0, 6.0], [4.0, -3.0])
 
         plot_item = self.graph_widget.getPlotItem()
         if not isinstance(plot_item, pyqtgraph.PlotItem):
@@ -200,8 +203,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.graph_widget.addItem(scatter_plot_item)
 
-        top_left = dimensions[0]
-        bottom_right = dimensions[1]
+        top_left: List[float] = dimensions.top_left
+        bottom_right: List[float] = dimensions.bottom_right
 
         x_indices = resolution
         y_indices = max(int(self.graph_widget.height() / self.graph_widget.width() * resolution), 1)
