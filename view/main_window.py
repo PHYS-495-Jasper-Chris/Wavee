@@ -96,16 +96,19 @@ class MainWindow(QtWidgets.QMainWindow):
         """
 
         canvas = QtGui.QPixmap(110, 110)
+        canvas.fill(self.palette().color(self.backgroundRole()))
 
         painter = QtGui.QPainter(canvas)
+        painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
         pen = QtGui.QPen()
         pen.setWidth(5)
-        pen.setColor(QtGui.QColor('red'))
+        pen.setColor(QtGui.QColor("red"))
         painter.setPen(pen)
         painter.drawEllipse(5, 5, 100, 100)
         painter.end()
 
         self.point_charge_circle.setPixmap(canvas)
+        self.point_charge_circle.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
     def _reset_resolution(self):
         self.graph_resolution = MainWindow.DEFAULT_GRAPH_RESOLUTION
