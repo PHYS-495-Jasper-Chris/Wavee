@@ -5,6 +5,7 @@ The main window
 import os
 import sys
 
+from collections import namedtuple
 from typing import List, Optional, Tuple
 
 import pyqtgraph
@@ -15,6 +16,8 @@ from PyQt6 import QtCore, QtWidgets, QtGui, uic
 
 from equations import PointCharge, Window
 from view.droppable_plot_widget import DroppablePlotWidget
+
+RGBTuple = namedtuple("RGBTuple", ["r", "g", "b"])
 
 
 class CenterArrowItem(pyqtgraph.ArrowItem):
@@ -297,9 +300,9 @@ class MainWindow(QtWidgets.QMainWindow):
         Returns:
             tuple: color to brush the arrow with
         """
-        low_mag_color = (0, 255, 0)
-        med_mag_color = (255, 255, 0)
-        high_mag_color = (255, 0, 0)
+        low_mag_color = RGBTuple(0, 255, 0)
+        med_mag_color = RGBTuple(255, 255, 0)
+        high_mag_color = RGBTuple(255, 0, 0)
 
         relative_strength = mag / max_mag_length
 
@@ -312,9 +315,8 @@ class MainWindow(QtWidgets.QMainWindow):
         return self.gradient_color_map(mag, min_mag_length, max_mag_length, med_mag_color,
                                        high_mag_color)
 
-    def gradient_color_map(self, number: float, min_num: float, max_num: float,
-                           min_color: Tuple[int, int, int],
-                           max_color: Tuple[int, int, int]) -> Tuple[int, int, int]:
+    def gradient_color_map(self, number: float, min_num: float, max_num: float, min_color: RGBTuple,
+                           max_color: RGBTuple) -> RGBTuple:
         """
         Takes in a range of numbers and maps it to the expected color given the start and end color
         of a gradient
@@ -352,4 +354,4 @@ class MainWindow(QtWidgets.QMainWindow):
         r = min_color[0] - r_shift
         g = min_color[1] - g_shift
         b = min_color[2] - b_shift
-        return (int(r), int(g), int(b))
+        return RGBTuple(int(r), int(g), int(b))
