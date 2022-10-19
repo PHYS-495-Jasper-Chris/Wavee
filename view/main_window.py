@@ -13,7 +13,6 @@ import pyqtgraph
 import numpy as np
 
 from PyQt6 import QtCore, QtWidgets, QtGui, uic
-
 # pylint: disable=import-error
 from equations import PointCharge, Window
 from view.droppable_plot_widget import DroppablePlotWidget
