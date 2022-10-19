@@ -93,7 +93,7 @@ class InfiniteLineCharge:
 
         line_angle: float = np.arctan2(self.y_coef, self.x_coef)
 
-        magnitude = abs(self.electric_field_magnitude(point) * np.cos(line_angle))
+        magnitude = self.electric_field_magnitude(point) * np.cos(line_angle)
 
         # If the x-component of the point is greater than that of the closest point on the line,
         # then the magnitude should be positive, otherwise it should be negative.
@@ -114,7 +114,7 @@ class InfiniteLineCharge:
 
         line_angle: float = np.arctan2(self.y_coef, self.x_coef)
 
-        magnitude = abs(self.electric_field_magnitude(point) * np.sin(line_angle))
+        magnitude = self.electric_field_magnitude(point) * np.sin(line_angle)
 
         # If the y-component of the point is greater than that of the closest point on the line,
         # then the magnitude should be positive, otherwise it should be negative.

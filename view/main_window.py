@@ -13,8 +13,9 @@ import pyqtgraph
 import numpy as np
 
 from PyQt6 import QtCore, QtWidgets, QtGui, uic
+
 # pylint: disable=import-error
-from equations import PointCharge, Window
+from equations import InfiniteLineCharge, PointCharge, Window
 from view.droppable_plot_widget import DroppablePlotWidget
 # pylint: enable=import-error
 
@@ -59,9 +60,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
 
         self.graph_window = Window(
-            [PointCharge([1, 4], 10),
-             PointCharge([-3, 5], 8),
-             PointCharge([0, 1], -5)])
+            charges=[PointCharge([1, 4], 10),
+                     PointCharge([-3, 5], 8),
+                     PointCharge([0, 1], -5)],
+            infinite_line_charges=[
+                InfiniteLineCharge(3, 2, 1, 0.5),
+                InfiniteLineCharge(0, 1, 1, 1),
+                InfiniteLineCharge(1, 0, 2, -1)
+            ])
         self.refresh_button.clicked.connect(self._refresh_button_pressed)
 
         graph_menu = self.menu_bar.addMenu("Graph")
@@ -204,6 +210,25 @@ class MainWindow(QtWidgets.QMainWindow):
                                         brush="r" if point_charge.charge > 0.0 else "b")
 
         self.graph_widget.addItem(scatter_plot_item)
+
+        for line_charge in self.graph_window.infinite_line_charges:
+            if line_charge.y_coef == 0:
+                # ax + c = 0 -> x = -c/a
+                pos = (-line_charge.offset / line_charge.x_coef, 0)
+            else:
+                # ax + by + c = 0 -> y = -a/b*c - c/b
+                pos = (0, -line_charge.offset / line_charge.y_coef)
+
+            angle = np.rad2deg(np.arctan2(-line_charge.x_coef, line_charge.y_coef))
+            line_plot_item = pyqtgraph.InfiniteLine(
+                pos=pos,
+                angle=angle,
+                pen={
+                    "color": "r" if line_charge.charge_density > 0 else "b",
+                    "width": 4
+                })
+
+            self.graph_widget.addItem(line_plot_item)
 
         top_left: List[float] = dimensions.top_left
         bottom_right: List[float] = dimensions.bottom_right
