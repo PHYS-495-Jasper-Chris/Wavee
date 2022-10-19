@@ -201,7 +201,7 @@ class MainWindow(QtWidgets.QMainWindow):
         bottom_right = dimensions[1]
 
         x_indices = resolution
-        y_indices = int(self.graph_widget.height() / self.graph_widget.width() * resolution)
+        y_indices = max(int(self.graph_widget.height() / self.graph_widget.width() * resolution), 1)
 
         x_distance = bottom_right[0] - top_left[0]
         y_distance = top_left[1] - bottom_right[1]
@@ -214,13 +214,25 @@ class MainWindow(QtWidgets.QMainWindow):
         net_mag = [[0.0] * y_indices for _ in range(x_indices)]
 
         for i in range(x_indices):
+            try:
+                x_percentage = i / (x_indices - 1)
+            except ZeroDivisionError:
+                x_percentage = 0.5
+
+            x_pos = x_percentage * x_distance + top_left[0]
+
             for j in range(y_indices):
                 try:
-                    x_pos = (i / (x_indices - 1)) * x_distance + top_left[0]
-                    y_pos = (j / (y_indices - 1)) * y_distance + bottom_right[1]
-                    p_x[i][j] = x_pos
-                    p_y[i][j] = y_pos
+                    y_percentage = j / (y_indices - 1)
+                except ZeroDivisionError:
+                    y_percentage = 0.5
 
+                y_pos = y_percentage * y_distance + bottom_right[1]
+
+                p_x[i][j] = x_pos
+                p_y[i][j] = y_pos
+
+                try:
                     ef_mag_x = self.graph_window.electric_field_x([x_pos, y_pos])
                     ef_mag_y = self.graph_window.electric_field_y([x_pos, y_pos])
                     ef_mag_net = np.sqrt(ef_mag_x**2 + ef_mag_y**2)
@@ -231,8 +243,13 @@ class MainWindow(QtWidgets.QMainWindow):
                 except ZeroDivisionError:
                     pass
 
-        max_mag: float = np.amax(net_mag)
-        min_mag: float = np.amin(net_mag)
+        if len(net_mag) > 0 and len(net_mag[0]) > 0:
+            max_mag: float = np.amax(net_mag)
+            min_mag: float = np.amin(net_mag)
+        else:
+            min_mag = 0.0
+            max_mag = 1.0
+
         min_mag_length = min_mag / max_mag * max_mag_length
 
         # Plot the vector arrows
@@ -251,7 +268,6 @@ class MainWindow(QtWidgets.QMainWindow):
                                              angle=angle)
                 self.graph_widget.addItem(arrow_item)
 
-
     def _mouse_moved(self, event):
         pos = event[0]
         if self.graph_widget.sceneBoundingRect().contains(pos):
@@ -268,48 +284,37 @@ class MainWindow(QtWidgets.QMainWindow):
     def get_color_from_mag(self, mag: float, min_mag_length: float,
                            max_mag_length: float) -> Tuple[int, int, int]:
         """
-        Return the color from the given mag. We use 4 different colors to draw brush our vectors
+        Return the color from the given mag. We use 3 different colors to draw brush our vectors
         with:
-        blue -> green   | (low magnitude)
-        green -> yellow | (med magnitude)
+        green -> yellow | (low magnitude)
         yellow -> red   | (high magnitude)
 
         Args:
             mag (float): magnitude of the current vector
+            min_mag_length (float): minimum possible magnitude value
             max_mag_length (float): maximum possible magnitude value
 
         Returns:
             tuple: color to brush the arrow with
         """
         low_mag_color = (0, 255, 0)
-        high_mag_color = (255, 255, 0)
-        max_mag_color = (255, 0, 0)
+        med_mag_color = (255, 255, 0)
+        high_mag_color = (255, 0, 0)
 
         relative_strength = mag / max_mag_length
 
         # Green -> Yellow
         if relative_strength <= 0.50:
-            return self.gradient_color_map(mag,
-                                           min_mag_length,
-                                           max_mag_length,
-                                           min_color=low_mag_color,
-                                           max_color=high_mag_color)
+            return self.gradient_color_map(mag, min_mag_length, max_mag_length, low_mag_color,
+                                           med_mag_color)
 
         # Yellow -> Red
-        return self.gradient_color_map(mag,
-                                       min_mag_length,
-                                       max_mag_length,
-                                       min_color=high_mag_color,
-                                       max_color=max_mag_color)
+        return self.gradient_color_map(mag, min_mag_length, max_mag_length, med_mag_color,
+                                       high_mag_color)
 
-    def gradient_color_map(
-        self,
-        number: float,
-        min_num: float = 0,
-        max_num: float = 100,
-        min_color: tuple = (0, 0, 255),
-        max_color: tuple = (255, 0, 0)
-    ) -> Tuple[int, int, int]:
+    def gradient_color_map(self, number: float, min_num: float, max_num: float,
+                           min_color: Tuple[int, int, int],
+                           max_color: Tuple[int, int, int]) -> Tuple[int, int, int]:
         """
         Takes in a range of numbers and maps it to the expected color given the start and end color
         of a gradient
@@ -333,7 +338,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # easier to have everything start from 0
         number -= min_num
-        max_num -= min_num
+        max_num -= min_num if max_num > min_num else 0
 
         # calculate how far to shift each color value
         percent = number / max_num
