@@ -16,6 +16,7 @@ from PyQt6 import QtCore, QtWidgets, QtGui, uic
 from equations import PointCharge, Window
 from view.droppable_plot_widget import DroppablePlotWidget
 
+
 class CenterArrowItem(pyqtgraph.ArrowItem):
     """
     An ArrowItem that loads its position from the center, not from the head of the arrow.
@@ -39,11 +40,15 @@ class MainWindow(QtWidgets.QMainWindow):
     refresh_button: QtWidgets.QPushButton
     menu_bar: QtWidgets.QMenuBar
 
-    # Other class variables
-    graph_resolution : int = 25
+    DEFAULT_GRAPH_RESOLUTION = 20
+    """
+    The default number of x-axis points to render.
+    """
 
     def __init__(self) -> None:
         super().__init__()
+
+        self.graph_resolution = MainWindow.DEFAULT_GRAPH_RESOLUTION
 
         uic.load_ui.loadUi(os.path.join(sys.path[0], "view/ui/main_window.ui"), self)
         self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
@@ -58,18 +63,19 @@ class MainWindow(QtWidgets.QMainWindow):
         refresh_graph_action = graph_menu.addAction("Refresh Graph")
         refresh_graph_action.setShortcuts(["Ctrl+R", "F5"])
         refresh_graph_action.triggered.connect(self._refresh_button_pressed)
-        
-        increase_graph_resolution = graph_menu.addAction("Increase resolution")
-        increase_graph_resolution.setShortcuts(["Ctrl+="])
+
+        increase_graph_resolution = graph_menu.addAction("Increase resolution", "Ctrl+=")
         increase_graph_resolution.triggered.connect(self._increase_resolution)
 
-        decrease_graph_resolution = graph_menu.addAction("Decrease resolution")
-        decrease_graph_resolution.setShortcuts(["Ctrl+-"])
+        decrease_graph_resolution = graph_menu.addAction("Decrease resolution", "Ctrl+-")
         decrease_graph_resolution.triggered.connect(self._decrease_resolution)
 
-        reset_graph_resolution = graph_menu.addAction("Reset resolution")
-        reset_graph_resolution.setShortcuts(["Ctrl+0"])
+        reset_graph_resolution = graph_menu.addAction("Reset resolution", "Ctrl+0")
         reset_graph_resolution.triggered.connect(self._reset_resolution)
+
+        self.proxy = pyqtgraph.SignalProxy(self.graph_widget.scene().sigMouseMoved,
+                                           rateLimit=60,
+                                           slot=self._mouse_moved)
 
         self._paint_shapes()
         self._build_plots()
@@ -96,23 +102,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self.point_charge_circle.setPixmap(canvas)
 
     def _reset_resolution(self):
-        self.graph_resolution = 25
-        self._refresh_button_pressed(resolution=self.graph_resolution)
-    
+        self.graph_resolution = MainWindow.DEFAULT_GRAPH_RESOLUTION
+        self._build_plots(dimensions=self._get_graph_bounds(), resolution=self.graph_resolution)
+
     def _increase_resolution(self):
         self.graph_resolution += 1
-        self._refresh_button_pressed(resolution=self.graph_resolution)
+        self._build_plots(dimensions=self._get_graph_bounds(), resolution=self.graph_resolution)
 
     def _decrease_resolution(self):
         self.graph_resolution -= 1
-        self._refresh_button_pressed(resolution=self.graph_resolution)
+        self.graph_resolution = max(self.graph_resolution, 0)
+        self._build_plots(dimensions=self._get_graph_bounds(), resolution=self.graph_resolution)
 
-    def _refresh_button_pressed(self, 
-                               new_point_charges: Optional[List[PointCharge]] = None,
-                               max_mag_length: float = 20.0,
-                               resolution: int = 25):
+    def _get_graph_bounds(self) -> Tuple[List[float], List[float]]:
         """
-        When the refresh button is pressed, reload the graphs
+        Get the top left and bottom right corners of the graph.
         """
 
         plot_item = self.graph_widget.getPlotItem()
@@ -127,18 +131,22 @@ class MainWindow(QtWidgets.QMainWindow):
         top_left = [view_range[0][0], view_range[1][1]]
         bottom_right = [view_range[0][1], view_range[1][0]]
 
-        # Don't change the scale
-        view_box.disableAutoRange()
+        return top_left, bottom_right
+
+    def _refresh_button_pressed(self):
+        """
+        When the refresh button is pressed, reload the graphs, keeping the
+        resolution the same and updating the dimensions.
+        """
 
         # Regenerate the plots with the new positions (and same charges)
-        self._build_plots(dimensions=(top_left, bottom_right), new_point_charges=new_point_charges, 
-                         max_mag_length=max_mag_length, resolution=resolution)
+        self._build_plots(dimensions=self._get_graph_bounds(), resolution=self.graph_resolution)
 
     def _build_plots(self,
                      dimensions: Optional[Tuple[List[float], List[float]]] = None,
                      new_point_charges: Optional[List[PointCharge]] = None,
                      max_mag_length: float = 20.0,
-                     resolution: int = 20) -> None:
+                     resolution: int = DEFAULT_GRAPH_RESOLUTION) -> None:
         """
         Build the plots of the electric field and the point charges.
 
@@ -147,8 +155,10 @@ class MainWindow(QtWidgets.QMainWindow):
         @param new_point_charges Any additional point charges to add to the Window. Defaults to no
                new charges
         @param max_mag_length The length of the largest magnitude arrow. Defaults to 20.0
-        @param resolution The number of x-axis arrows to plot. Defaults to 20
+        @param resolution The number of x-axis arrows to plot. Defaults to DEFAULT_GRAPH_RESOLUTION
         """
+
+        should_autoscale = dimensions is None
 
         new_point_charges = new_point_charges or []
         dimensions = dimensions or ([-5.0, 6.0], [4.0, -3.0])
@@ -161,6 +171,13 @@ class MainWindow(QtWidgets.QMainWindow):
         if not isinstance(view_box, pyqtgraph.ViewBox) or not isinstance(axes, dict):
             raise RuntimeError("Unable to build plot")
 
+        # Disable autoscaling if we are manually setting our dimensions
+        if should_autoscale:
+            view_box.enableAutoRange()
+        else:
+            view_box.disableAutoRange()
+
+        # Remove old graphs
         plot_item.clear()
 
         for axis in axes:
@@ -168,6 +185,17 @@ class MainWindow(QtWidgets.QMainWindow):
 
         for new_point_charge in new_point_charges:
             self.graph_window.add_point_charge(new_point_charge)
+
+        # Plot point charges themselves
+        scatter_plot_item = pyqtgraph.ScatterPlotItem()
+        for point_charge in self.graph_window.charges:
+            scatter_plot_item.addPoints(x=[point_charge.position[0]],
+                                        y=[point_charge.position[1]],
+                                        size=abs(point_charge.charge) * 4,
+                                        symbol="o",
+                                        brush="r" if point_charge.charge > 0.0 else "b")
+
+        self.graph_widget.addItem(scatter_plot_item)
 
         top_left = dimensions[0]
         bottom_right = dimensions[1]
@@ -187,12 +215,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
         for i in range(x_indices):
             for j in range(y_indices):
-                x_pos = (i / (x_indices - 1)) * x_distance + top_left[0]
-                y_pos = (j / (y_indices - 1)) * y_distance + bottom_right[1]
-                p_x[i][j] = x_pos
-                p_y[i][j] = y_pos
-
                 try:
+                    x_pos = (i / (x_indices - 1)) * x_distance + top_left[0]
+                    y_pos = (j / (y_indices - 1)) * y_distance + bottom_right[1]
+                    p_x[i][j] = x_pos
+                    p_y[i][j] = y_pos
+
                     ef_mag_x = self.graph_window.electric_field_x([x_pos, y_pos])
                     ef_mag_y = self.graph_window.electric_field_y([x_pos, y_pos])
                     ef_mag_net = np.sqrt(ef_mag_x**2 + ef_mag_y**2)
@@ -223,20 +251,6 @@ class MainWindow(QtWidgets.QMainWindow):
                                              angle=angle)
                 self.graph_widget.addItem(arrow_item)
 
-        # Plot point charges themselves
-        scatter_plot_item = pyqtgraph.ScatterPlotItem()
-        for point_charge in self.graph_window.charges:
-            scatter_plot_item.addPoints(x=[point_charge.position[0]],
-                                        y=[point_charge.position[1]],
-                                        size=abs(point_charge.charge) * 4,
-                                        symbol="o",
-                                        brush="r" if point_charge.charge > 0.0 else "b")
-
-        self.proxy = pyqtgraph.SignalProxy(self.graph_widget.scene().sigMouseMoved,
-                                           rateLimit=60,
-                                           slot=self._mouse_moved)
-
-        self.graph_widget.addItem(scatter_plot_item)
 
     def _mouse_moved(self, event):
         pos = event[0]
