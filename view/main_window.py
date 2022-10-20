@@ -294,14 +294,25 @@ class MainWindow(QtWidgets.QMainWindow):
                 except ZeroDivisionError:
                     pass
 
-        if len(net_mag) > 0 and len(net_mag[0]) > 0:
-            max_mag: float = np.amax(net_mag)
-            min_mag: float = np.amin(net_mag)
-        else:
-            min_mag = 0.0
-            max_mag = 1.0
+        # Build sorted array holding indexes of magnitude
+        MagIndexes = namedtuple("MagIndexes", ["magnitude", "x", "y"])
+        flat_arr: List[MagIndexes] = []
+        for i in range(x_indices):
+            for j in range(y_indices):
+                flat_arr.append(MagIndexes(net_mag[i][j], i, j))
 
-        min_mag_length = min_mag / max_mag * max_mag_length
+        flat_arr.sort(key=lambda mag_idx: mag_idx.magnitude)
+
+        net_mag_idx = [[(0.0, 0)] * y_indices for _ in range(x_indices)]
+
+        for idx, mag_idx in enumerate(flat_arr):
+            # Now build mapping from unsorted net_mag array to sorted array
+            net_mag_idx[mag_idx.x][mag_idx.y] = (mag_idx.magnitude, idx)
+
+        if len(flat_arr) > 0:
+            max_mag: float = np.amax(net_mag)
+        else:
+            max_mag = 1.0
 
         # Plot the vector arrows
         for i in range(x_indices):
@@ -309,10 +320,12 @@ class MainWindow(QtWidgets.QMainWindow):
                 if net_mag[i][j] <= 0.0:
                     continue
 
+                sorted_idx = net_mag_idx[i][j][1]
+
                 angle = 180 - np.rad2deg(np.arctan2(mag_y[i][j], mag_x[i][j]))
                 normalized_mag = net_mag[i][j] / max_mag
                 scaled_mag = normalized_mag * max_mag_length
-                brush_color = self.get_color_from_mag(scaled_mag, min_mag_length, max_mag_length)
+                brush_color = self.get_color_from_mag(sorted_idx, len(flat_arr))
                 arrow_item = CenterArrowItem(pos=(p_x[i][j], p_y[i][j]),
                                              tailLen=scaled_mag,
                                              brush=brush_color,
@@ -332,47 +345,42 @@ class MainWindow(QtWidgets.QMainWindow):
             self.graph_widget.setToolTip(
                 f"({round(x_pos,2)},{round(y_pos,2)}) - value: {ef_mag_net:.6g}")
 
-    def get_color_from_mag(self, mag: float, min_mag_length: float,
-                           max_mag_length: float) -> Tuple[int, int, int]:
+    def get_color_from_mag(self, index: int, max_index: int) -> Tuple[int, int, int]:
         """
-        Return the color from the given mag. We use 3 different colors to draw brush our vectors
+        Return the color from the given index. We use 3 different colors to draw brush our vectors
         with:
         green -> yellow | (low magnitude)
         yellow -> red   | (high magnitude)
 
         Args:
-            mag (float): magnitude of the current vector
-            min_mag_length (float): minimum possible magnitude value
-            max_mag_length (float): maximum possible magnitude value
+            index (int): The index into the sorted array
+            max_index (int): The length of the sorted array
 
         Returns:
             tuple: color to brush the arrow with
         """
+
         low_mag_color = RGBTuple(0, 255, 0)
         med_mag_color = RGBTuple(255, 255, 0)
         high_mag_color = RGBTuple(255, 0, 0)
 
-        relative_strength = mag / max_mag_length
+        percentile = (index + 1) / max_index
 
         # Green -> Yellow
-        if relative_strength <= 0.50:
-            return self.gradient_color_map(mag, min_mag_length, max_mag_length, low_mag_color,
-                                           med_mag_color)
+        if percentile <= 0.50:
+            return self.gradient_color_map(percentile * 2, low_mag_color, med_mag_color)
 
         # Yellow -> Red
-        return self.gradient_color_map(mag, min_mag_length, max_mag_length, med_mag_color,
-                                       high_mag_color)
+        return self.gradient_color_map((percentile - 0.50) * 2, med_mag_color, high_mag_color)
 
-    def gradient_color_map(self, number: float, min_num: float, max_num: float, min_color: RGBTuple,
+    def gradient_color_map(self, percentile: float, min_color: RGBTuple,
                            max_color: RGBTuple) -> RGBTuple:
         """
-        Takes in a range of numbers and maps it to the expected color given the start and end color
-        of a gradient
+        Takes in a percentile of an array and maps it to the expected color given the start and end
+        color of a gradient
 
         Args:
-            number (float): given number to get color map of
-            min_num (float): Smallest expected value
-            max_num (float): Largest expected value
+            percentile (float): The percentile of this index
             min_color (tuple): Left most color of gradient
             max_color (tuple): Right most color of gradient
 
@@ -380,24 +388,19 @@ class MainWindow(QtWidgets.QMainWindow):
             tuple: R, G, B color as integers
         """
 
-        if number < min_num:
+        if percentile <= 0.0:
             return min_color
 
-        if number > max_num:
+        if percentile >= 1.0:
             return max_color
 
-        # easier to have everything start from 0
-        number -= min_num
-        max_num -= min_num if max_num > min_num else 0
-
         # calculate how far to shift each color value
-        percent = number / max_num
         r_diff = min_color[0] - max_color[0]
         g_diff = min_color[1] - max_color[1]
         b_diff = min_color[2] - max_color[2]
-        r_shift = r_diff * percent
-        g_shift = g_diff * percent
-        b_shift = b_diff * percent
+        r_shift = r_diff * percentile
+        g_shift = g_diff * percentile
+        b_shift = b_diff * percentile
 
         r = min_color[0] - r_shift
         g = min_color[1] - g_shift
