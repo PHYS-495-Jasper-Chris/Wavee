@@ -1,4 +1,10 @@
+"""
+A PlotWidget that can be dropped into.
+"""
+
 import pyqtgraph
+
+from PyQt6 import QtGui
 
 
 class DroppablePlotWidget(pyqtgraph.PlotWidget):
@@ -12,14 +18,14 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         self.setAcceptDrops(True)
 
-    def dragEnterEvent(self, ev):
-        print("drag enter event:", ev)
+    def dragEnterEvent(self, event: QtGui.QDragEnterEvent):
+        print("drag enter event:", event)
 
-        ev.accept()
+        event.accept()
 
-    def dropEvent(self, ev):
+    def dropEvent(self, event: QtGui.QDropEvent):
         """
         A drop event has occurred. Forward it to a listening slot in the MainWindow.
         """
 
-        print("drop event:", ev)
+        print("drop event:", event)

@@ -17,6 +17,7 @@ from PyQt6 import QtCore, QtWidgets, QtGui, uic
 # pylint: disable=import-error
 from equations import InfiniteLineCharge, PointCharge, Window
 from view.droppable_plot_widget import DroppablePlotWidget
+from view.draggable_label import DraggableLabel
 # pylint: enable=import-error
 
 RGBTuple = namedtuple("RGBTuple", ["r", "g", "b"])
@@ -42,8 +43,8 @@ class MainWindow(QtWidgets.QMainWindow):
     central_widget: QtWidgets.QWidget
     grid_layout: QtWidgets.QGridLayout
     graph_widget: DroppablePlotWidget
-    point_charge_circle: QtWidgets.QLabel
-    line_charge_drawing: QtWidgets.QLabel
+    point_charge_circle: DraggableLabel
+    line_charge_drawing: DraggableLabel
     refresh_button: QtWidgets.QPushButton
     menu_bar: QtWidgets.QMenuBar
     status_bar = QtWidgets.QStatusBar
@@ -117,6 +118,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.point_charge_circle.setPixmap(canvas)
         self.point_charge_circle.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.point_charge_circle.label_type = DraggableLabel.LabelTypes.PointCharge
 
         # Paint straight line
         canvas = QtGui.QPixmap(110, 110)
@@ -133,6 +135,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.line_charge_drawing.setPixmap(canvas)
         self.line_charge_drawing.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.line_charge_drawing.label_type = DraggableLabel.LabelTypes.InfiniteLineCharge
 
     def _reset_resolution(self):
         self.graph_resolution = MainWindow.DEFAULT_GRAPH_RESOLUTION
