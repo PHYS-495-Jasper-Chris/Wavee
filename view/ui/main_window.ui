@@ -53,6 +53,29 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QLabel" name="line_charge_drawing">
+         <property name="textInteractionFlags">
+          <set>Qt::NoTextInteraction</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="line_charge_label">
+         <property name="text">
+          <string>Infinite Line Charge</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::PlainText</enum>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignHCenter|Qt::AlignTop</set>
+         </property>
+         <property name="textInteractionFlags">
+          <set>Qt::NoTextInteraction</set>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>

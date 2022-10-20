@@ -43,6 +43,7 @@ class MainWindow(QtWidgets.QMainWindow):
     grid_layout: QtWidgets.QGridLayout
     graph_widget: DroppablePlotWidget
     point_charge_circle: QtWidgets.QLabel
+    line_charge_drawing: QtWidgets.QLabel
     refresh_button: QtWidgets.QPushButton
     menu_bar: QtWidgets.QMenuBar
 
@@ -100,6 +101,7 @@ class MainWindow(QtWidgets.QMainWindow):
         Will also be used to draw other shapes.
         """
 
+        # Paint circle
         canvas = QtGui.QPixmap(110, 110)
         canvas.fill(self.palette().color(self.backgroundRole()))
 
@@ -114,6 +116,22 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.point_charge_circle.setPixmap(canvas)
         self.point_charge_circle.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+
+        # Paint straight line
+        canvas = QtGui.QPixmap(110, 110)
+        canvas.fill(self.palette().color(self.backgroundRole()))
+
+        painter = QtGui.QPainter(canvas)
+        painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
+        pen = QtGui.QPen()
+        pen.setWidth(5)
+        pen.setColor(QtGui.QColor("red"))
+        painter.setPen(pen)
+        painter.drawLine(55, 5, 55, 100)
+        painter.end()
+
+        self.line_charge_drawing.setPixmap(canvas)
+        self.line_charge_drawing.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
     def _reset_resolution(self):
         self.graph_resolution = MainWindow.DEFAULT_GRAPH_RESOLUTION
