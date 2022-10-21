@@ -16,6 +16,11 @@ class DraggableLabel(QtWidgets.QLabel):
     Implements mouseMoveEvent & mousePressEvent
     """
 
+    MIME_FORMAT = "application/drag-n-drop-data"
+    """
+    The MIME format to use for Drag and Drop data
+    """
+
     class LabelTypes(enum.Enum):
         PointCharge = enum.auto()
         InfiniteLineCharge = enum.auto()
@@ -51,10 +56,11 @@ class DraggableLabel(QtWidgets.QLabel):
             return
 
         data = QtCore.QByteArray()
-        data.append(bytes(self.label_type.value))
+        val: int = self.label_type.value
+        data.append(val.to_bytes((val.bit_length() + 7) // 8, "little"))
 
         mime_data = QtCore.QMimeData()
-        mime_data.setData("application/dragndrop-data", data)
+        mime_data.setData(DraggableLabel.MIME_FORMAT, data)
 
         drag = QtGui.QDrag(self)
         drag.setMimeData(mime_data)
