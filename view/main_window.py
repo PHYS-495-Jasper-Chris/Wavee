@@ -46,6 +46,7 @@ class MainWindow(QtWidgets.QMainWindow):
     line_charge_drawing: QtWidgets.QLabel
     refresh_button: QtWidgets.QPushButton
     menu_bar: QtWidgets.QMenuBar
+    status_bar = QtWidgets.QStatusBar
 
     DEFAULT_GRAPH_RESOLUTION = 20
     """
@@ -303,7 +304,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         flat_arr.sort(key=lambda mag_idx: mag_idx.magnitude)
 
-        net_mag_idx = [[(0.0, 0)] * y_indices for _ in range(x_indices)]
+        net_mag_idx = [[(0.0, int(0))] * y_indices for _ in range(x_indices)]
 
         for idx, mag_idx in enumerate(flat_arr):
             # Now build mapping from unsorted net_mag array to sorted array
@@ -342,8 +343,12 @@ class MainWindow(QtWidgets.QMainWindow):
             ef_mag_y = self.graph_window.electric_field_y([x_pos, y_pos])
             ef_mag_net = np.sqrt(ef_mag_x**2 + ef_mag_y**2)
 
-            self.graph_widget.setToolTip(
-                f"({round(x_pos,2)},{round(y_pos,2)}) - value: {ef_mag_net:.6g}")
+            x_fs = "e" if abs(x_pos) > 1e5 else "f"
+            y_fs = "e" if abs(y_pos) > 1e5 else "f"
+            text = f"X: {x_pos:+.2{x_fs}} Y: {y_pos:+.2{y_fs}} Magnitude: {ef_mag_net:.6g}"
+
+            self.graph_widget.setToolTip(text)
+            self.status_bar.showMessage(text)
 
     def get_color_from_mag(self, index: int, max_index: int) -> Tuple[int, int, int]:
         """
