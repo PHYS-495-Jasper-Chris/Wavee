@@ -152,7 +152,7 @@ class PointCharge:
         for i, point_n in enumerate(point):
             sides_sum += abs(self.position[i] - point_n)**2
 
-        return sides_sum**(1 / 2)
+        return np.sqrt(sides_sum)
 
     def electric_field_magnitude(self, point: List[float]) -> float:
         """

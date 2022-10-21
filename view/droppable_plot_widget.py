@@ -121,22 +121,24 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         mime_data = ev.mimeData().data(DraggableLabel.MIME_FORMAT)
         label_type = DraggableLabel.LabelTypes(int.from_bytes(mime_data[0], "little"))
 
-        print(x_pos, y_pos)
-        print(label_type)
+        if label_type == DraggableLabel.LabelTypes.PointCharge:
+            self.graph_window.add_point_charge(PointCharge([x_pos, y_pos], 1))
+        elif label_type == DraggableLabel.LabelTypes.InfiniteLineCharge:
+            self.graph_window.add_line_charge(InfiniteLineCharge(1, 0, -x_pos, 1))
+
+        self.build_plots(dimensions=self._get_graph_bounds())
 
         ev.accept()
 
     def build_plots(self,
                     dimensions: Optional[GraphBounds] = None,
-                    max_mag_length: float = 20.0,
-                    resolution: int = DEFAULT_GRAPH_RESOLUTION) -> None:
+                    max_mag_length: float = 20.0) -> None:
         """
         Build the plots of the electric field and the point charges.
 
         @param dimensions The dimensions to plot, (top_left, bottom_right). Defaults to
                ([-5, 6], [4, -3])
         @param max_mag_length The length of the largest magnitude arrow. Defaults to 20.0
-        @param resolution The number of x-axis arrows to plot. Defaults to DEFAULT_GRAPH_RESOLUTION
         """
 
         should_autoscale = dimensions is None
@@ -193,8 +195,8 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         top_left: List[float] = dimensions.top_left
         bottom_right: List[float] = dimensions.bottom_right
 
-        x_indices = resolution
-        y_indices = max(int(self.height() / self.width() * resolution), 1)
+        x_indices = self.graph_resolution
+        y_indices = max(int(self.height() / self.width() * x_indices), 1)
 
         x_distance = bottom_right[0] - top_left[0]
         y_distance = top_left[1] - bottom_right[1]
@@ -275,7 +277,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         """
 
         self.graph_resolution = DroppablePlotWidget.DEFAULT_GRAPH_RESOLUTION
-        self.build_plots(dimensions=self._get_graph_bounds(), resolution=self.graph_resolution)
+        self.build_plots(dimensions=self._get_graph_bounds())
 
     def increase_resolution(self):
         """
@@ -284,7 +286,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         """
 
         self.graph_resolution += 1
-        self.build_plots(dimensions=self._get_graph_bounds(), resolution=self.graph_resolution)
+        self.build_plots(dimensions=self._get_graph_bounds())
 
     def decrease_resolution(self):
         """
@@ -294,7 +296,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         self.graph_resolution -= 1
         self.graph_resolution = max(self.graph_resolution, 0)
-        self.build_plots(dimensions=self._get_graph_bounds(), resolution=self.graph_resolution)
+        self.build_plots(dimensions=self._get_graph_bounds())
 
     def refresh_button_pressed(self):
         """
@@ -303,7 +305,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         """
 
         # Regenerate the plots with the new positions (and same charges)
-        self.build_plots(dimensions=self._get_graph_bounds(), resolution=self.graph_resolution)
+        self.build_plots(dimensions=self._get_graph_bounds())
 
     def _get_graph_bounds(self) -> GraphBounds:
         """
