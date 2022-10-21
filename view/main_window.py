@@ -47,7 +47,7 @@ class MainWindow(QtWidgets.QMainWindow):
     line_charge_drawing: DraggableLabel
     refresh_button: QtWidgets.QPushButton
     menu_bar: QtWidgets.QMenuBar
-    status_bar = QtWidgets.QStatusBar
+    status_bar: QtWidgets.QStatusBar
 
     DEFAULT_GRAPH_RESOLUTION = 20
     """
