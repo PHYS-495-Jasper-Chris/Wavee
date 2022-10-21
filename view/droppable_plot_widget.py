@@ -18,14 +18,18 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         self.setAcceptDrops(True)
 
-    def dragEnterEvent(self, event: QtGui.QDragEnterEvent):
-        print("drag enter event:", event)
+    def dragEnterEvent(self, ev: QtGui.QDragEnterEvent):
+        """
+        A drag has entered the widget
+        """
 
-        event.accept()
+        print("drag enter event:", ev)
 
-    def dropEvent(self, event: QtGui.QDropEvent):
+        ev.accept()
+
+    def dropEvent(self, ev: QtGui.QDropEvent):
         """
         A drop event has occurred. Forward it to a listening slot in the MainWindow.
         """
 
-        print("drop event:", event)
+        print("drop event:", ev)

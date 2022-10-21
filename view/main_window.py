@@ -403,9 +403,9 @@ class MainWindow(QtWidgets.QMainWindow):
             return max_color
 
         # calculate how far to shift each color value
-        r_diff = min_color[0] - max_color[0]
-        g_diff = min_color[1] - max_color[1]
-        b_diff = min_color[2] - max_color[2]
+        r_diff = min_color.r - max_color.r
+        g_diff = min_color.g - max_color.g
+        b_diff = min_color.b - max_color.b
         r_shift = r_diff * percentile
         g_shift = g_diff * percentile
         b_shift = b_diff * percentile

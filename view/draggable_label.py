@@ -42,7 +42,7 @@ class DraggableLabel(QtWidgets.QLabel):
         When the mouse is moved, update its position.
         """
 
-        if event.buttons() & QtCore.Qt.MouseButton.LeftButton:
+        if not event.buttons() & QtCore.Qt.MouseButton.LeftButton:
             return
 
         if ((event.pos() - self.drag_start_pos).manhattanLength() <
@@ -51,7 +51,7 @@ class DraggableLabel(QtWidgets.QLabel):
             return
 
         data = QtCore.QByteArray()
-        data.append(self.label_type.value)
+        data.append(bytes(self.label_type.value))
 
         mime_data = QtCore.QMimeData()
         mime_data.setData("application/dragndrop-data", data)
@@ -59,3 +59,5 @@ class DraggableLabel(QtWidgets.QLabel):
         drag = QtGui.QDrag(self)
         drag.setMimeData(mime_data)
         drag.setPixmap(self.pixmap())
+
+        drag.exec()
