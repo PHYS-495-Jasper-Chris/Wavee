@@ -31,7 +31,7 @@
      <widget class="QWidget" name="charge_widget" native="true">
       <layout class="QVBoxLayout" name="charge_layout">
        <item>
-        <widget class="QLabel" name="point_charge_circle">
+        <widget class="DraggableLabel" name="point_charge_circle">
          <property name="textInteractionFlags">
           <set>Qt::NoTextInteraction</set>
          </property>
@@ -54,7 +54,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="line_charge_drawing">
+        <widget class="DraggableLabel" name="line_charge_drawing">
          <property name="textInteractionFlags">
           <set>Qt::NoTextInteraction</set>
          </property>
@@ -151,6 +151,11 @@
    <extends>QWidget</extends>
    <header>view.droppable_plot_widget</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DraggableLabel</class>
+   <extends>QLabel</extends>
+   <header>view.draggable_label</header>
   </customwidget>
  </customwidgets>
  <resources/>

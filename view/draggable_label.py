@@ -3,6 +3,9 @@ A draggable QLabel.
 """
 
 import enum
+
+from typing import Optional
+
 from PyQt6 import QtWidgets, QtGui, QtCore
 
 
@@ -19,10 +22,12 @@ class DraggableLabel(QtWidgets.QLabel):
 
         INVALID = enum.auto()
 
-    def __init__(self):
+    def __init__(self, parent: Optional[QtWidgets.QWidget]):
         """
         Initialize class vars
         """
+
+        super().__init__(parent)
 
         self.drag_start_pos = QtCore.QPoint()
 
