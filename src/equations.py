@@ -10,7 +10,8 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import mayavi.mlab as mplt
 
-COULOMB_CONSTANT = 8.99 * 10**9
+EPSILON_NOUGHT = 1/(4 * np.pi * 10**-7 * 299792458**2)
+COULOMB_CONSTANT = 1/(4 * np.pi * EPSILON_NOUGHT)
 """
 Coulomb's constant, in N m^2 / C^2
 """
