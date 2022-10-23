@@ -238,34 +238,6 @@ class Window:
         """
         self.infinite_line_charges.append(line_charge)
 
-    def net_electric_field(self, position: List[float]) -> float:
-        """
-        Calculate the net electric field magnitude at a point
-
-        Args:
-            position (List[float]): The position to measure the electric field at
-
-        Returns:
-            float: magnitude of electric field
-        """
-        dims = len(self.charges[0].position) if len(self.charges) > 0 else 0
-
-        if dims <= 1:
-            return self.electric_field_x(position)
-
-        e_x = 0.0
-        e_y = 0.0
-
-        for point_charge in self.charges:
-            e_x += point_charge.electric_field_x(position)
-            e_y += point_charge.electric_field_y(position)
-
-        for line_charge in self.infinite_line_charges:
-            e_x += line_charge.electric_field_x(position)
-            e_y += line_charge.electric_field_y(position)
-
-        return np.sqrt(pow(e_x, 2) + pow(e_y, 2))
-
     def electric_field_x(self, position: List[float]) -> float:
         """
         Calculate the x component of the electric field at a point
@@ -277,9 +249,12 @@ class Window:
             float: x component of electric field
         """
         e_x = 0
+
+        # Sum up electric field x component for each point charge
         for point_charge in self.charges:
             e_x += point_charge.electric_field_x(position)
 
+        # Sum up electric field x component for each line charge
         for line_charge in self.infinite_line_charges:
             e_x += line_charge.electric_field_x(position)
 
@@ -296,9 +271,12 @@ class Window:
             float: y component of electric field
         """
         e_y = 0
+
+        # Sum up electric field y component for each point charge
         for point_charge in self.charges:
             e_y += point_charge.electric_field_y(position)
 
+        # Sum up electric field y component for each line charge
         for line_charge in self.infinite_line_charges:
             e_y += line_charge.electric_field_y(position)
 
