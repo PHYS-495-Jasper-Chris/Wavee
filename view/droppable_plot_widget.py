@@ -100,7 +100,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
     def dropEvent(self, ev: QtGui.QDropEvent):
         """
-        A drop event has occurred. Forward it to a listening slot in the MainWindow.
+        A drop event has occurred. Add the relevant charge to the window and rebuild the plots.
         """
 
         if not ev.mimeData().hasFormat(DraggableLabel.MIME_FORMAT):
@@ -125,6 +125,9 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
             self.graph_window.add_point_charge(PointCharge([x_pos, y_pos], 1))
         elif label_type == DraggableLabel.LabelTypes.InfiniteLineCharge:
             self.graph_window.add_line_charge(InfiniteLineCharge(1, 0, -x_pos, 1))
+        else:
+            raise RuntimeWarning(
+                f"Unexpected label type {label_type} encountered in DroppablePlotWidget.dropEvent")
 
         self.build_plots(dimensions=self._get_graph_bounds())
 
@@ -271,7 +274,6 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         # Enable autoscaling if no dimension set
         if should_autoscale:
             view_box.enableAutoRange()
-
 
     def reset_resolution(self):
         """
