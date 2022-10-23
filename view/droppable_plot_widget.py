@@ -150,11 +150,8 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         if not isinstance(axes, dict):
             raise RuntimeError("Unable to build plot!")
 
-        # Disable autoscaling if we are manually setting our dimensions
-        if should_autoscale:
-            view_box.enableAutoRange()
-        else:
-            view_box.disableAutoRange()
+        #  Disable autoscaling before adding items to graph for improved performance
+        view_box.disableAutoRange()
 
         # Remove old graphs
         plot_item.clear()
@@ -270,6 +267,11 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                                              brush=brush_color,
                                              angle=angle)
                 self.addItem(arrow_item)
+
+        # Enable autoscaling if no dimension set
+        if should_autoscale:
+            view_box.enableAutoRange()
+
 
     def reset_resolution(self):
         """
