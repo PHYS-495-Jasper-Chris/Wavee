@@ -10,11 +10,12 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import mayavi.mlab as mplt
 
-EPSILON_NOUGHT = 1/(4 * np.pi * 10**-7 * 299792458**2)
-COULOMB_CONSTANT = 1/(4 * np.pi * EPSILON_NOUGHT)
+EPSILON_NOUGHT = 1 / (4 * np.pi * 10**-7 * 299792458**2)
+COULOMB_CONSTANT = 1 / (4 * np.pi * EPSILON_NOUGHT)
 """
-Coulomb's constant, in N m^2 / C^2
+Coulomb's constant, in N m^2 / C^2.
 """
+
 
 class InfiniteLineCharge:
     """
@@ -35,7 +36,7 @@ class InfiniteLineCharge:
             charge_density (float): The charge density, in C/m.
 
         Raises:
-            RuntimeError: Cannot have both the x and y coefficient equating to zero
+            RuntimeError: Cannot have both the x and y coefficient equating to zero.
         """
 
         if x_coef == 0 and y_coef == 0:
@@ -53,25 +54,24 @@ class InfiniteLineCharge:
         The shortest distance from a point to the infinite line of charge.
 
         Args:
-            point (List[float]): The point to measure the distance from
+            point (List[float]): The point to measure the distance from.
 
         Returns:
-            float: minimal radial distance from ``point`` to line charge
+            float: minimal radial distance from ``point`` to line charge.
         """
 
         return abs(self.x_coef * point[0] + self.y_coef * point[1]
                    + self.offset) / np.sqrt(self.x_coef**2 + self.y_coef**2)
-
 
     def closest_point(self, point: List[float]) -> List[float]:
         """
         The closest point on the line from a given point.
 
         Args:
-            point (List[float]): The point to find the closest point to in the form `[x, y]`.
+            point (List[float]): The point to find the closest point to in the form ``[x, y]``.
 
         Returns:
-            List[float]: list representation of closest point `[x, y]`.
+            List[float]: list representation of closest point ``[x, y]``.
         """
 
         x_pos = (self.y_coef * (self.y_coef * point[0] - self.x_coef * point[1])
@@ -82,22 +82,22 @@ class InfiniteLineCharge:
 
         return [x_pos, y_pos]
 
-
     def electric_field_magnitude(self, point: List[float]) -> float:
         """
         The net magnitude of the electric field at point.
 
         Args:
-            point (List[float]): The point to measure the field at in the form `[x, y]`
+            point (List[float]): The point to measure the field at in the form ``[x, y]``.
 
         Returns:
-            float: The net (signed) magnitude of the electric field at the given point, value is zero if the magnitude is infinite
+            float: The net (signed) magnitude of the electric field at the given point, or zero if
+            the magnitude is infinite.
         """
 
         # E = 2k λ/r
         magnitude = 2 * COULOMB_CONSTANT * self.charge_density / self.radial_distance(point)
 
-        return 0 if np.isinf(magnitude) else magnitude
+        return 0.0 if np.isinf(magnitude) else magnitude
 
     def electric_field_x(self, point: List[float]) -> float:
         """
@@ -130,7 +130,7 @@ class InfiniteLineCharge:
         The y component of the electric field at a given point.
 
         Args:
-            point (List[float]): The point to measure the field at
+            point (List[float]): The point to measure the field at.
 
         Returns:
             float: Magnitude of the electric field's y-component due to the infinite line charge at
@@ -171,6 +171,7 @@ class PointCharge:
         Returns:
             float: radial distance from given point.
         """
+
         if len(point) != len(self.position):
             raise RuntimeError(
                 "Point given does not match dimension of point charge position. point dim: "
@@ -192,6 +193,7 @@ class PointCharge:
         Returns:
             float: magnitude of electric field.
         """
+
         return COULOMB_CONSTANT * self.charge / self.radius(point)**2
 
     def theta(self, point: List[float]) -> float:
@@ -204,6 +206,7 @@ class PointCharge:
         Returns:
             float: angle.
         """
+
         return np.arccos(abs((point[0] - self.position[0])) / self.radius(point))
 
     def electric_field_x(self, point: List[float]) -> float:
@@ -217,6 +220,7 @@ class PointCharge:
         Returns:
             float: x component of electric field.
         """
+
         magnitude = self.electric_field_magnitude(point) * np.cos(self.theta(point))
         magnitude = magnitude * -1 if point[0] < self.position[0] else magnitude
         return magnitude
@@ -232,6 +236,7 @@ class PointCharge:
         Returns:
             float: y component of electric field.
         """
+
         magnitude = self.electric_field_magnitude(point) * np.sin(self.theta(point))
         magnitude = magnitude * -1 if point[1] < self.position[1] else magnitude
         return magnitude
@@ -265,6 +270,7 @@ class Window:
         Args:
             point_charge (PointCharge): Point charge to be added.
         """
+
         self.charges.append(point_charge)
 
     def add_line_charge(self, line_charge: InfiniteLineCharge) -> None:
@@ -274,6 +280,7 @@ class Window:
         Args:
             line_charge (InfiniteLineCharge): Infinite line charge to be added.
         """
+
         self.infinite_line_charges.append(line_charge)
 
     def net_electric_field(self, position: List[float]) -> float:
@@ -286,6 +293,7 @@ class Window:
         Returns:
             float: magnitude of electric field
         """
+
         dims = len(self.charges[0].position) if len(self.charges) > 0 else 0
 
         if dims <= 1:
@@ -314,6 +322,7 @@ class Window:
         Returns:
             float: x component of electric field.
         """
+
         e_x = 0
 
         # Sum up electric field x component for each point charge
@@ -336,6 +345,7 @@ class Window:
         Returns:
             float: y component of electric field.
         """
+
         e_y = 0
 
         # Sum up electric field y component for each point charge
