@@ -2,6 +2,8 @@
 A PlotWidget that can be dropped into.
 """
 
+import sys
+
 from collections import namedtuple
 from typing import List, Optional, Tuple
 
@@ -63,7 +65,13 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
     def get_pi_vb(self) -> Tuple[pyqtgraph.PlotItem, pyqtgraph.ViewBox]:
         """
-        Get the PlotItem & ViewBox or raise a RuntimeError if it does not exist
+        Get the PlotItem & ViewBox or raise a RuntimeError if it does not exist.
+
+        Returns:
+            Tuple of the current PlotItem and the current ViewBox if they exist.
+
+        Raises:
+            RuntimeError: An error occurred getting the current PlotItem or ViewBox.
         """
 
         plot_item = self.getPlotItem()
@@ -75,32 +83,44 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         return plot_item, view_box
 
-    def dragEnterEvent(self, ev: QtGui.QDragEnterEvent):
+    def dragEnterEvent(self, ev: QtGui.QDragEnterEvent):  # pylint: disable=invalid-name
         """
-        A drag has entered the widget
+        A drag has entered the widget.
+
+        Args:
+            ev (QDragEnterEvent): The QDragEnterEvent to handle.
         """
 
         if ev.mimeData().hasFormat(DraggableLabel.MIME_FORMAT):
             ev.accept()
 
-    def dragMoveEvent(self, ev: QtGui.QDragMoveEvent):
+    def dragMoveEvent(self, ev: QtGui.QDragMoveEvent):  # pylint: disable=invalid-name
         """
-        A drag is moving in the widget
+        A drag is moving in the widget.
+
+        Args:
+            ev (QDragMoveEvent): The QDragMoveEvent to handle.
         """
 
         if ev.mimeData().hasFormat(DraggableLabel.MIME_FORMAT):
             ev.accept()
 
-    def dragLeaveEvent(self, ev: QtGui.QDragLeaveEvent):
+    def dragLeaveEvent(self, ev: QtGui.QDragLeaveEvent):  # pylint: disable=invalid-name
         """
-        A drag left the widget
+        A drag left the widget.
+
+        Args:
+            ev (QDragLeaveEvent): The QDragLeaveEvent to handle.
         """
 
         ev.accept()
 
-    def dropEvent(self, ev: QtGui.QDropEvent):
+    def dropEvent(self, ev: QtGui.QDropEvent):  # pylint: disable=invalid-name
         """
         A drop event has occurred. Add the relevant charge to the window and rebuild the plots.
+
+        Args:
+            ev (QDropEvent): The QDropEvent to handle.
         """
 
         if not ev.mimeData().hasFormat(DraggableLabel.MIME_FORMAT):
@@ -119,11 +139,11 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         y_pos = mouse_point.y()
 
         mime_data = ev.mimeData().data(DraggableLabel.MIME_FORMAT)
-        label_type = DraggableLabel.LabelTypes(int.from_bytes(mime_data[0], "little"))
+        label_type = DraggableLabel.LabelTypes(int.from_bytes(mime_data[0], sys.byteorder))
 
-        if label_type == DraggableLabel.LabelTypes.PointCharge:
+        if label_type == DraggableLabel.LabelTypes.POINT_CHARGE:
             self.graph_window.add_point_charge(PointCharge([x_pos, y_pos], 1))
-        elif label_type == DraggableLabel.LabelTypes.InfiniteLineCharge:
+        elif label_type == DraggableLabel.LabelTypes.INFINITE_LINE_CHARGE:
             self.graph_window.add_line_charge(InfiniteLineCharge(1, 0, -x_pos, 1))
         else:
             raise RuntimeWarning(
@@ -139,9 +159,10 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         """
         Build the plots of the electric field and the point charges.
 
-        @param dimensions The dimensions to plot, (top_left, bottom_right). Defaults to
-               ([-5, 6], [4, -3])
-        @param max_mag_length The length of the largest magnitude arrow. Defaults to 20.0
+        Args:
+            dimensions (Optional[GraphBounds]): The dimensions to plot, (top_left, bottom_right).
+                Defaults to GraphBounds([-5, 6], [4, -3]).
+            max_mag_length (float): The length of the largest magnitude arrow. Defaults to 20.0.
         """
 
         should_autoscale = dimensions is None
@@ -314,6 +335,10 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
     def _get_graph_bounds(self) -> GraphBounds:
         """
         Get the top left and bottom right corners of the graph.
+
+        Returns:
+            A 'GraphBounds' tuple of the top left point in [x, y] and the bottom right point in
+            [x, y] of the currently viewable section of the graph.
         """
 
         view_box = self.get_pi_vb()[1]
@@ -333,11 +358,11 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         yellow -> red   | (high magnitude)
 
         Args:
-            index (int): The index into the sorted array
-            length (int): The length of the sorted array
+            index (int): The index into the sorted array.
+            length (int): The length of the sorted array.
 
         Returns:
-            tuple: color to brush the arrow with
+            An RGBTuple of R, G, B colors to brush the arrow with.
         """
 
         low_mag_color = RGBTuple(0, 255, 0)
@@ -357,15 +382,15 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                             max_color: RGBTuple) -> RGBTuple:
         """
         Takes in a percentile of an array and maps it to the expected color given the start and end
-        color of a gradient
+        color of a gradient.
 
         Args:
-            percentile (float): The percentile of this index
-            min_color (tuple): Left most color of gradient
-            max_color (tuple): Right most color of gradient
+            percentile (float): The percentile of this index.
+            min_color (RGBTuple): Left most color of gradient.
+            max_color (RGBTuple): Right most color of gradient.
 
         Returns:
-            tuple: R, G, B color as integers
+            An RGBTuple of R, G, B colors as integers.
         """
 
         if percentile <= 0.0:

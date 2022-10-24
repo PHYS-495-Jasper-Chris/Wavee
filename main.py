@@ -1,5 +1,5 @@
 """
-Instantiate the graphical user interface
+Instantiate the graphical user interface.
 """
 
 import sys
@@ -11,7 +11,7 @@ from view.main_window import MainWindow
 
 def main():
     """
-    Start the graphical user interface
+    Start the graphical user interface.
     """
 
     app = QtWidgets.QApplication(sys.argv)
