@@ -23,6 +23,9 @@ GraphBounds = namedtuple("GraphBounds", ["top_left", "bottom_right"])
 class CenterArrowItem(pyqtgraph.ArrowItem):
     """
     An ArrowItem that loads its position from the center, not from the head of the arrow.
+
+    Args:
+        pyqtgraph (ArrowItem): Arrow to be centered
     """
 
     def paint(self, p, *args):
@@ -63,8 +66,16 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
     def get_pi_vb(self) -> Tuple[pyqtgraph.PlotItem, pyqtgraph.ViewBox]:
         """
-        Get the PlotItem & ViewBox or raise a RuntimeError if it does not exist
+        Get the PlotItem & ViewBox
+
+        Raises:
+            RuntimeError: Raise if PlotItem does not exist
+            RuntimeError: Raises if ViewBox does not exist
+
+        Returns:
+            Tuple[pyqtgraph.PlotItem, pyqtgraph.ViewBox]: PlotItem and ViewBox tuple
         """
+
 
         plot_item = self.getPlotItem()
         if not isinstance(plot_item, pyqtgraph.PlotItem):
@@ -78,6 +89,9 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
     def dragEnterEvent(self, ev: QtGui.QDragEnterEvent):
         """
         A drag has entered the widget
+
+        Args:
+            ev (QtGui.QDragEnterEvent): Qt drag state enter event
         """
 
         if ev.mimeData().hasFormat(DraggableLabel.MIME_FORMAT):
@@ -86,6 +100,9 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
     def dragMoveEvent(self, ev: QtGui.QDragMoveEvent):
         """
         A drag is moving in the widget
+
+        Args:
+            ev (QtGui.QDragMoveEvent): Qt drag state enter event
         """
 
         if ev.mimeData().hasFormat(DraggableLabel.MIME_FORMAT):
@@ -94,6 +111,9 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
     def dragLeaveEvent(self, ev: QtGui.QDragLeaveEvent):
         """
         A drag left the widget
+
+        Args:
+            ev (QtGui.QDragLeaveEvent): Qt drag state enter event
         """
 
         ev.accept()
@@ -101,17 +121,15 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
     def dropEvent(self, ev: QtGui.QDropEvent):
         """
         A drop event has occurred. Forward it to a listening slot in the MainWindow.
+
+        Args:
+            ev (QtGui.QDropEvent): Qt drag state enter event
         """
 
         if not ev.mimeData().hasFormat(DraggableLabel.MIME_FORMAT):
             ev.ignore()
 
-        plot_item = self.getPlotItem()
-        if not isinstance(plot_item, pyqtgraph.PlotItem):
-            raise RuntimeError("Unable to build plot!")
-        view_box = plot_item.getViewBox()
-        if not isinstance(view_box, pyqtgraph.ViewBox):
-            raise RuntimeError("Unable to rebuild plot")
+        view_box = self.get_pi_vb()[1]
 
         mouse_point = view_box.mapSceneToView(ev.position())
 
@@ -121,11 +139,13 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         mime_data = ev.mimeData().data(DraggableLabel.MIME_FORMAT)
         label_type = DraggableLabel.LabelTypes(int.from_bytes(mime_data[0], "little"))
 
+        # Add in the correct charge shape
         if label_type == DraggableLabel.LabelTypes.PointCharge:
             self.graph_window.add_point_charge(PointCharge([x_pos, y_pos], 1))
         elif label_type == DraggableLabel.LabelTypes.InfiniteLineCharge:
             self.graph_window.add_line_charge(InfiniteLineCharge(1, 0, -x_pos, 1))
 
+        # Rebuild the plot after new charge is added
         self.build_plots(dimensions=self._get_graph_bounds())
 
         ev.accept()
@@ -136,9 +156,14 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         """
         Build the plots of the electric field and the point charges.
 
-        @param dimensions The dimensions to plot, (top_left, bottom_right). Defaults to
-               ([-5, 6], [4, -3])
-        @param max_mag_length The length of the largest magnitude arrow. Defaults to 20.0
+        Args:
+            dimensions (Optional[GraphBounds], optional): The dimensions to plot, (top_left,
+            bottom_right). Defaults to None.
+            max_mag_length (float, optional): The length of the largest magnitude arrow.
+            Defaults to 20.0.
+
+        Raises:
+            RuntimeError: Cant interpret the axes
         """
 
         should_autoscale = dimensions is None
@@ -170,6 +195,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         self.addItem(scatter_plot_item)
 
+        # Plot the line charges
         for line_charge in self.graph_window.infinite_line_charges:
             if line_charge.y_coef == 0:
                 # ax + c = 0 -> x = -c/a
@@ -189,6 +215,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
             self.addItem(line_plot_item)
 
+        # Draw arrows at uniform test points based current view and resolution
         top_left: List[float] = dimensions.top_left
         bottom_right: List[float] = dimensions.bottom_right
 
@@ -272,7 +299,6 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         if should_autoscale:
             view_box.enableAutoRange()
 
-
     def reset_resolution(self):
         """
         Reset the graph resolution and rebuild the plots based on currently viewable dimensions.
@@ -312,6 +338,9 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
     def _get_graph_bounds(self) -> GraphBounds:
         """
         Get the top left and bottom right corners of the graph.
+
+        Returns:
+            GraphBounds: Bounds of graph
         """
 
         view_box = self.get_pi_vb()[1]
