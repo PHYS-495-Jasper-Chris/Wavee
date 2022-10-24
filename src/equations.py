@@ -23,16 +23,16 @@ class InfiniteLineCharge:
 
     def __init__(self, x_coef: float, y_coef: float, offset: float, charge_density: float) -> None:
         """
-        Initialize the infinite line charge with its equation and charge density
+        Initialize the infinite line charge with its equation and charge density.
 
         The line equation is written in the form ``ax + by + c = 0``, where a is ``x_coef``, b is
         ``y_coef``, and c is ``offset``.
 
         Args:
-            x_coef (float): The coefficient on x in the equation of the line (a)
-            y_coef (float): The coefficient on y in the equation of the line (b)
-            offset (float): The offset in the equation of the line (c)
-            charge_density (float): The charge density, in C/m
+            x_coef (float): The coefficient on x in the equation of the line (a).
+            y_coef (float): The coefficient on y in the equation of the line (b).
+            offset (float): The offset in the equation of the line (c).
+            charge_density (float): The charge density, in C/m.
 
         Raises:
             RuntimeError: Cannot have both the x and y coefficient equating to zero
@@ -50,13 +50,13 @@ class InfiniteLineCharge:
 
     def radial_distance(self, point: List[float]) -> float:
         """
-        The shortest distance from a point to the infinite line of charge
+        The shortest distance from a point to the infinite line of charge.
 
         Args:
             point (List[float]): The point to measure the distance from
 
         Returns:
-            float: minimal radial distance from point to line charge
+            float: minimal radial distance from ``point`` to line charge
         """
 
         return abs(self.x_coef * point[0] + self.y_coef * point[1]
@@ -65,13 +65,13 @@ class InfiniteLineCharge:
 
     def closest_point(self, point: List[float]) -> List[float]:
         """
-        The closest point on the line from a given point
+        The closest point on the line from a given point.
 
         Args:
-            point (List[float]): The point to find the closest point to in the form `[x, y]`
+            point (List[float]): The point to find the closest point to in the form `[x, y]`.
 
         Returns:
-            List[float]: list representation of closest point `[x, y]`
+            List[float]: list representation of closest point `[x, y]`.
         """
 
         x_pos = (self.y_coef * (self.y_coef * point[0] - self.x_coef * point[1])
@@ -85,13 +85,13 @@ class InfiniteLineCharge:
 
     def electric_field_magnitude(self, point: List[float]) -> float:
         """
-        The net magnitude of the electric field at point
+        The net magnitude of the electric field at point.
 
         Args:
             point (List[float]): The point to measure the field at in the form `[x, y]`
 
         Returns:
-            float: Magnitude of the electric field at the given point, value is zero if the magnitude is infinite
+            float: The net (signed) magnitude of the electric field at the given point, value is zero if the magnitude is infinite
         """
 
         # E = 2k λ/r
@@ -101,13 +101,14 @@ class InfiniteLineCharge:
 
     def electric_field_x(self, point: List[float]) -> float:
         """
-        The x component of the electric field at a given point
+        The x component of the electric field at a given point.
 
         Args:
-            point (List[float]): The point to measure the field at
+            point (List[float]): The point to measure the field at.
 
         Returns:
-            float: Magnitude of the electric field's x-component
+            float: Magnitude of the electric field's x-component due to the infinite line charge at
+            this point.
         """
 
         # The direction of the electric field is completely orthogonal to the direction of the line
@@ -118,7 +119,7 @@ class InfiniteLineCharge:
         magnitude = self.electric_field_magnitude(point) * np.cos(line_angle)
 
         # If the x-component of the point is greater than that of the closest point on the line,
-        # then the magnitude should be positive, otherwise it should be negative.
+        # then the magnitude should be kept the same, otherwise it should be negated.
         if self.closest_point(point)[0] > point[0]:
             magnitude *= -1
 
@@ -126,13 +127,14 @@ class InfiniteLineCharge:
 
     def electric_field_y(self, point: List[float]) -> float:
         """
-        The y component of the electric field at a given point
+        The y component of the electric field at a given point.
 
         Args:
             point (List[float]): The point to measure the field at
 
         Returns:
-            float: Magnitude of the electric field's y-component
+            float: Magnitude of the electric field's y-component due to the infinite line charge at
+            this point.
         """
 
         # The direction of the electric field is completely orthogonal to the direction of the line
@@ -143,7 +145,7 @@ class InfiniteLineCharge:
         magnitude = self.electric_field_magnitude(point) * np.sin(line_angle)
 
         # If the y-component of the point is greater than that of the closest point on the line,
-        # then the magnitude should be positive, otherwise it should be negative.
+        # then the magnitude should be kept the same, otherwise it should be negated.
         if self.closest_point(point)[1] > point[1]:
             magnitude *= -1
 
@@ -152,7 +154,7 @@ class InfiniteLineCharge:
 
 class PointCharge:
     """
-    A single point charge, with a position and a charge
+    A single point charge, with a position and a charge.
     """
 
     def __init__(self, position: List[float], charge: float) -> None:
@@ -161,13 +163,13 @@ class PointCharge:
 
     def radius(self, point: List[float]) -> float:
         """
-        Returns the radial distance from the given point
+        Returns the radial distance from the given point.
 
         Args:
-            point (List[float]): point to get radial distance from
+            point (List[float]): point to get radial distance from.
 
         Returns:
-            float: radial distance from given point
+            float: radial distance from given point.
         """
         if len(point) != len(self.position):
             raise RuntimeError(
@@ -182,38 +184,38 @@ class PointCharge:
 
     def electric_field_magnitude(self, point: List[float]) -> float:
         """
-        Return the electric field magnitude generated by this point charge at a given point
+        Return the electric field magnitude generated by this point charge at a given point.
 
         Args:
-            point (List[float]): x,y location of test point
+            point (List[float]): x, y location of test point.
 
         Returns:
-            float: magnitude of electric field
+            float: magnitude of electric field.
         """
         return COULOMB_CONSTANT * self.charge / self.radius(point)**2
 
     def theta(self, point: List[float]) -> float:
         """
-        Calculate the angle from point charge location to test point
+        Calculate the angle from point charge location to test point.
 
         Args:
-            point (List[float]): test point
+            point (List[float]): test point.
 
         Returns:
-            float: angle
+            float: angle.
         """
         return np.arccos(abs((point[0] - self.position[0])) / self.radius(point))
 
     def electric_field_x(self, point: List[float]) -> float:
         """
         Calculate the x component of the magnetic field generated by the point charge at a given
-        point
+        point.
 
         Args:
-            point (List[float]): test point to check
+            point (List[float]): test point to check.
 
         Returns:
-            float: x component of electric field
+            float: x component of electric field.
         """
         magnitude = self.electric_field_magnitude(point) * np.cos(self.theta(point))
         magnitude = magnitude * -1 if point[0] < self.position[0] else magnitude
@@ -222,13 +224,13 @@ class PointCharge:
     def electric_field_y(self, point: List[float]) -> float:
         """
         Calculate the y component of the magnetic field generated by the point charge at a given
-        point
+        point.
 
         Args:
-            point (List[float]): test point to check
+            point (List[float]): test point to check.
 
         Returns:
-            float: y component of electric field
+            float: y component of electric field.
         """
         magnitude = self.electric_field_magnitude(point) * np.sin(self.theta(point))
         magnitude = magnitude * -1 if point[1] < self.position[1] else magnitude
@@ -243,36 +245,74 @@ class Window:
     def __init__(self,
                  charges: Optional[List[PointCharge]] = None,
                  infinite_line_charges: Optional[List[InfiniteLineCharge]] = None) -> None:
-        self.charges = charges if charges else []
+        """
+        Initialize a collection of charges, both point charges and infinite line charges.
+
+        Args:
+            charges (Optional[List[PointCharge]]): The list of point charges. Defaults to an empty
+                list.
+            infinite_line_charges (Optional[List[InfiniteLineCharge]]): The list of infinite line
+                charges. Defaults to an empty list.
+        """
+
+        self.charges = charges or []
         self.infinite_line_charges = infinite_line_charges or []
 
     def add_point_charge(self, point_charge: PointCharge) -> None:
         """
-        Add point charge to the test window
+        Add point charge to the test window.
 
         Args:
-            point_charge (PointCharge): Point charge object
+            point_charge (PointCharge): Point charge to be added.
         """
         self.charges.append(point_charge)
 
     def add_line_charge(self, line_charge: InfiniteLineCharge) -> None:
         """
-        Add an infinite line charge to the test window
+        Add an infinite line charge to the test window.
 
         Args:
-            line_charge (InfiniteLineCharge): Infinite line charge object
+            line_charge (InfiniteLineCharge): Infinite line charge to be added.
         """
         self.infinite_line_charges.append(line_charge)
 
-    def electric_field_x(self, position: List[float]) -> float:
+    def net_electric_field(self, position: List[float]) -> float:
         """
-        Calculate the x component of the electric field at a point
+        Calculate the net electric field magnitude at a point
 
         Args:
             position (List[float]): The position to measure the electric field at
 
         Returns:
-            float: x component of electric field
+            float: magnitude of electric field
+        """
+        dims = len(self.charges[0].position) if len(self.charges) > 0 else 0
+
+        if dims <= 1:
+            return self.electric_field_x(position)
+
+        e_x = 0.0
+        e_y = 0.0
+
+        for point_charge in self.charges:
+            e_x += point_charge.electric_field_x(position)
+            e_y += point_charge.electric_field_y(position)
+
+        for line_charge in self.infinite_line_charges:
+            e_x += line_charge.electric_field_x(position)
+            e_y += line_charge.electric_field_y(position)
+
+        return np.sqrt(pow(e_x, 2) + pow(e_y, 2))
+
+    def electric_field_x(self, position: List[float]) -> float:
+        """
+        Calculate the x component of the electric field at a point.
+
+        Args:
+            position (List[float]): The position to measure the electric field at.
+
+        Returns:
+            float: x component of electric field.
         """
         e_x = 0
 
@@ -288,13 +328,13 @@ class Window:
 
     def electric_field_y(self, position: List[float]) -> float:
         """
-        Calculate the y component of the electric field at a point
+        Calculate the y component of the electric field at a point.
 
         Args:
-            position (List[float]): The position to measure the electric field at
+            position (List[float]): The position to measure the electric field at.
 
         Returns:
-            float: y component of electric field
+            float: y component of electric field.
         """
         e_y = 0
 
@@ -311,7 +351,7 @@ class Window:
 
 def main():
     """
-    Generate graphs for a set of point charges
+    Generate graphs for a set of point charges.
     """
 
     a = PointCharge([10, 7], 10)

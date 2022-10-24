@@ -1,9 +1,11 @@
 """
-The main window
+The main window.
 """
 
 import os
 import sys
+
+from typing import Tuple
 
 import pyqtgraph
 
@@ -19,7 +21,7 @@ from view.draggable_label import DraggableLabel
 
 class MainWindow(QtWidgets.QMainWindow):
     """
-    The main window, holding sub-views
+    The main window, holding sub-views.
     """
 
     # Type annotations for UI elements
@@ -85,7 +87,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.point_charge_circle.setPixmap(canvas)
         self.point_charge_circle.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.point_charge_circle.label_type = DraggableLabel.LabelTypes.PointCharge
+        self.point_charge_circle.label_type = DraggableLabel.LabelTypes.POINT_CHARGE
 
         # Paint straight line
         canvas = QtGui.QPixmap(110, 110)
@@ -102,9 +104,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.line_charge_drawing.setPixmap(canvas)
         self.line_charge_drawing.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.line_charge_drawing.label_type = DraggableLabel.LabelTypes.InfiniteLineCharge
+        self.line_charge_drawing.label_type = DraggableLabel.LabelTypes.INFINITE_LINE_CHARGE
 
-    def _mouse_moved(self, event):
+    def _mouse_moved(self, event: Tuple):
+        """
+        Callback executed when the mouse moves in the graph widget.
+
+        Args:
+            event (Tuple): A tuple containing the position of the mouse.
+        """
+
         pos = event[0]
         if self.graph_widget.sceneBoundingRect().contains(pos):
             mouse_point = self.graph_widget.get_pi_vb()[1].mapSceneToView(pos)
