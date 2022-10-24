@@ -16,7 +16,6 @@ COULOMB_CONSTANT = 1/(4 * np.pi * EPSILON_NOUGHT)
 Coulomb's constant, in N m^2 / C^2
 """
 
-
 class InfiniteLineCharge:
     """
     A single infinite line of charge, with a slope and offset (m & b), and a charge density.
@@ -29,10 +28,14 @@ class InfiniteLineCharge:
         The line equation is written in the form ``ax + by + c = 0``, where a is ``x_coef``, b is
         ``y_coef``, and c is ``offset``.
 
-        @param x_coef The coefficient on x in the equation of the line (a)
-        @param y_coef The coefficient on y in the equation of the line (b)
-        @param offset The offset in the equation of the line (c)
-        @param charge_density The charge density, in C/m
+        Args:
+            x_coef (float): The coefficient on x in the equation of the line (a)
+            y_coef (float): The coefficient on y in the equation of the line (b)
+            offset (float): The offset in the equation of the line (c)
+            charge_density (float): The charge density, in C/m
+
+        Raises:
+            RuntimeError: Cannot have both the x and y coefficient equating to zero
         """
 
         if x_coef == 0 and y_coef == 0:
@@ -49,17 +52,26 @@ class InfiniteLineCharge:
         """
         The shortest distance from a point to the infinite line of charge
 
-        @param point The point to measure the distance from
+        Args:
+            point (List[float]): The point to measure the distance from
+
+        Returns:
+            float: minimal radial distance from point to line charge
         """
 
         return abs(self.x_coef * point[0] + self.y_coef * point[1]
                    + self.offset) / np.sqrt(self.x_coef**2 + self.y_coef**2)
 
+
     def closest_point(self, point: List[float]) -> List[float]:
         """
-        The closest point on the line from a point
+        The closest point on the line from a given point
 
-        @param point The point to find the closest point to
+        Args:
+            point (List[float]): The point to find the closest point to in the form `[x, y]`
+
+        Returns:
+            List[float]: list representation of closest point `[x, y]`
         """
 
         x_pos = (self.y_coef * (self.y_coef * point[0] - self.x_coef * point[1])
@@ -70,11 +82,16 @@ class InfiniteLineCharge:
 
         return [x_pos, y_pos]
 
+
     def electric_field_magnitude(self, point: List[float]) -> float:
         """
         The net magnitude of the electric field at point
 
-        @param point The point to measure the field at
+        Args:
+            point (List[float]): The point to measure the field at in the form `[x, y]`
+
+        Returns:
+            float: Magnitude of the electric field at the given point, value is zero if the magnitude is infinite
         """
 
         # E = 2k λ/r
@@ -84,9 +101,13 @@ class InfiniteLineCharge:
 
     def electric_field_x(self, point: List[float]) -> float:
         """
-        The x component of the electric field at a point
+        The x component of the electric field at a given point
 
-        @param point The point to measure the field at
+        Args:
+            point (List[float]): The point to measure the field at
+
+        Returns:
+            float: Magnitude of the electric field's x-component
         """
 
         # The direction of the electric field is completely orthogonal to the direction of the line
@@ -105,9 +126,13 @@ class InfiniteLineCharge:
 
     def electric_field_y(self, point: List[float]) -> float:
         """
-        The y component of the electric field at a point
+        The y component of the electric field at a given point
 
-        @param point The point to measure the field at
+        Args:
+            point (List[float]): The point to measure the field at
+
+        Returns:
+            float: Magnitude of the electric field's y-component
         """
 
         # The direction of the electric field is completely orthogonal to the direction of the line

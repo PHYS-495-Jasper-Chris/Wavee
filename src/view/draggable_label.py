@@ -57,7 +57,7 @@ class DraggableLabel(QtWidgets.QLabel):
 
         data = QtCore.QByteArray()
         val: int = self.label_type.value
-        data.append(val.to_bytes((val.bit_length() + 7) // 8, "little"))
+        data.append(int(val).to_bytes((int(val).bit_length() + 7) // 8, "little"))
 
         mime_data = QtCore.QMimeData()
         mime_data.setData(DraggableLabel.MIME_FORMAT, data)
