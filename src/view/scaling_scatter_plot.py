@@ -27,15 +27,12 @@ class ScalingScatterPlotItem(pyqtgraph.ScatterPlotItem):
         y_range = view_range[1][1] - view_range[1][0]
 
         # Assume that the size is set for a 1x1 range.
-        # If this is the case, then the radius should decrease as the square of each side.
+        # If this is the case, then the radius should decrease linearly with each side.
         # However, we're not guaranteed that the x and y ranges are equal (or even close to equal).
         # Let's assume that the smaller range is more representative, and use that as our scaling
         # factor.
 
-        # TODO: decide if this is the best way to approach this, and figure out what I'm doing
-        # that's stupid here.
-
-        divisor = min(x_range, y_range)**2
+        divisor = min(x_range, y_range)
 
         item: pyqtgraph.SpotItem
         for item in self.points():
@@ -45,7 +42,7 @@ class ScalingScatterPlotItem(pyqtgraph.ScatterPlotItem):
             except (KeyError, TypeError):
                 continue
 
-            new_size = max(initial_size / divisor, 25)
+            new_size = min(max(initial_size / divisor, 25), 1000)
             item.setSize(new_size)
             item.setBrush(brush)
 
