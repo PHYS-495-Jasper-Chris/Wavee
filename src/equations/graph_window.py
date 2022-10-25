@@ -1,0 +1,93 @@
+"""
+A graph window, holding the electric field of arbitrary charge distributions.
+"""
+
+from typing import List, Optional
+
+import numpy as np
+
+from equations.base_charge import BaseCharge  # pylint: disable=import-error
+
+
+class Window:
+    """
+    A collection of charges, to be graphed
+    """
+
+    def __init__(self, charges: Optional[List[BaseCharge]] = None) -> None:
+        """
+        Initialize a collection of charges of any kind.
+
+        Args:
+            charges (Optional[List[PointCharge]]): The list of charges. Defaults to an empty list.
+        """
+
+        self.charges = charges or []
+
+    def add_charge(self, point_charge: BaseCharge) -> None:
+        """
+        Add point charge to the test window.
+
+        Args:
+            point_charge (PointCharge): Point charge to be added.
+        """
+
+        self.charges.append(point_charge)
+
+    def net_electric_field(self, position: List[float]) -> float:
+        """
+        Calculate the net electric field magnitude at a point
+
+        Args:
+            position (List[float]): The position to measure the electric field at
+
+        Returns:
+            float: magnitude of electric field
+        """
+
+        e_x = 0.0
+        e_y = 0.0
+
+        for charge in self.charges:
+            e_x += charge.electric_field_x(position)
+            e_y += charge.electric_field_y(position)
+
+        return np.sqrt(pow(e_x, 2) + pow(e_y, 2))
+
+    def electric_field_x(self, position: List[float]) -> float:
+        """
+        Calculate the x component of the electric field at a point.
+
+        Args:
+            position (List[float]): The position to measure the electric field at.
+
+        Returns:
+            float: x component of electric field.
+        """
+
+        e_x = 0.0
+
+        # Sum up electric field x component for each charge
+        for charge in self.charges:
+            e_x += charge.electric_field_x(position)
+
+        return e_x
+
+    def electric_field_y(self, position: List[float]) -> float:
+        """
+        Calculate the y component of the electric field at a point.
+
+        Args:
+            position (List[float]): The position to measure the electric field at.
+
+        Returns:
+            float: y component of electric field.
+        """
+
+        e_y = 0.0
+
+        # Sum up electric field y component for each point charge
+        for charge in self.charges:
+            e_y += charge.electric_field_y(position)
+
+        return e_y
