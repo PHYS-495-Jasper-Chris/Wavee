@@ -19,6 +19,7 @@ from equations.circle_charge import CircleCharge
 from equations.infinite_line_charge import InfiniteLineCharge
 from equations.point_charge import PointCharge
 from view.draggable_label import DraggableLabel
+from view.scaling_scatter_plot import ScalingScatterPlotItem
 # pylint: enable=import-error
 
 RGBTuple = namedtuple("RGBTuple", ["r", "g", "b"])
@@ -189,7 +190,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         for axis in axes:
             plot_item.getAxis(axis).setGrid(255)
 
-        scatter_plot_item = pyqtgraph.ScatterPlotItem()
+        scatter_plot_item = ScalingScatterPlotItem()
         self.addItem(scatter_plot_item)
 
         # Plot point and line charges themselves
@@ -197,9 +198,10 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
             if isinstance(charge, PointCharge):
                 scatter_plot_item.addPoints(x=[charge.position[0]],
                                             y=[charge.position[1]],
-                                            size=abs(charge.charge) * 4,
-                                            symbol="o",
-                                            brush="r" if charge.charge > 0.0 else "b")
+                                            data={
+                                                "initial_size": abs(charge.charge) * 2500,
+                                                "brush": "r" if charge.charge > 0.0 else "b"
+                                            })
             elif isinstance(charge, InfiniteLineCharge):
                 if charge.y_coef == 0:
                     # ax + c = 0 -> x = -c/a
@@ -222,9 +224,10 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                 scatter_plot_item.addPoints(
                     x=[charge.center[0]],
                     y=[charge.center[1]],
-                    symbol="o",
-                    size=charge.radius * 10,
-                    brush="#F008" if charge.charge_density > 0.0 else "#00F8")
+                    data={
+                        "initial_size": abs(charge.radius) * 1000,
+                        "brush": "#F008" if charge.charge_density > 0.0 else "#00F8"
+                    })
             else:
                 raise RuntimeWarning(f"Unexpected charge type {type(charge)}")
 
@@ -308,9 +311,12 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                                              angle=angle)
                 self.addItem(arrow_item)
 
-        # Enable autoscaling if no dimension set
         if should_autoscale:
+            # Enable autoscaling if no dimension set.
             view_box.enableAutoRange()
+        else:
+            # Fix the scale factors if we are reloading an existing graph.
+            scatter_plot_item.viewRangeChanged()
 
     def reset_resolution(self):
         """
