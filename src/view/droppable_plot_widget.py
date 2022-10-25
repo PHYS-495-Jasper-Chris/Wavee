@@ -199,7 +199,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                 scatter_plot_item.addPoints(x=[charge.position[0]],
                                             y=[charge.position[1]],
                                             data={
-                                                "initial_size": abs(charge.charge) * 2500,
+                                                "initial_size": abs(charge.charge) * 200,
                                                 "brush": "r" if charge.charge > 0.0 else "b"
                                             })
             elif isinstance(charge, InfiniteLineCharge):
@@ -225,7 +225,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                     x=[charge.center[0]],
                     y=[charge.center[1]],
                     data={
-                        "initial_size": abs(charge.radius) * 1000,
+                        "initial_size": abs(charge.radius) * 300,
                         "brush": "#F008" if charge.charge_density > 0.0 else "#00F8"
                     })
             else:
