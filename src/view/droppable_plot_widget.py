@@ -11,7 +11,7 @@ import pyqtgraph
 
 import numpy as np
 
-from PyQt6 import QtGui
+from PyQt6 import QtGui, QtWidgets, QtCore
 
 # pylint: disable=import-error
 from equations.graph_window import Window
@@ -165,7 +165,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         Args:
             dimensions (Optional[GraphBounds]): The dimensions to plot, (top_left, bottom_right).
-                Defaults to ``GraphBounds([-5.0, 6.0], [4.0, -3.0])``.
+                Defaults to ``GraphBounds([-8.0, 5.5], [8.0, -3.5])``.
             max_mag_length (float): The length of the largest magnitude arrow. Defaults to 20.0.
 
         Raises:
@@ -174,7 +174,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         should_autoscale = dimensions is None
 
-        dimensions = dimensions or GraphBounds([-5.0, 6.0], [4.0, -3.0])
+        dimensions = dimensions or GraphBounds([-8.0, 5.5], [8.0, -3.5])
 
         plot_item, view_box = self.get_pi_vb()
         axes = plot_item.axes
@@ -221,13 +221,15 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
                 self.addItem(line_plot_item)
             elif isinstance(charge, CircleCharge):
-                scatter_plot_item.addPoints(
-                    x=[charge.center[0]],
-                    y=[charge.center[1]],
-                    data={
-                        "initial_size": abs(charge.radius) * 300,
-                        "brush": "#F008" if charge.charge_density > 0.0 else "#00F8"
-                    })
+                ellipse_item = QtWidgets.QGraphicsEllipseItem(charge.center[0] - charge.radius / 2,
+                                                              charge.center[1] - charge.radius / 2,
+                                                              charge.radius, charge.radius)
+                ellipse_item.setPen(QtGui.QPen(QtCore.Qt.PenStyle.NoPen))
+                ellipse_item.pen().setWidth(0)
+                brush = (QtGui.QColor(255, 0, 0, alpha=128)
+                         if charge.charge_density > 0 else QtGui.QColor(0, 0, 255, alpha=128))
+                ellipse_item.setBrush(brush)
+                self.addItem(ellipse_item)
             else:
                 raise RuntimeWarning(f"Unexpected charge type {type(charge)}")
 
