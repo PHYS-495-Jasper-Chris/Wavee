@@ -15,6 +15,7 @@ from PyQt6 import QtGui
 
 # pylint: disable=import-error
 from equations.graph_window import Window
+from equations.circle_charge import CircleCharge
 from equations.infinite_line_charge import InfiniteLineCharge
 from equations.point_charge import PointCharge
 from view.draggable_label import DraggableLabel
@@ -61,7 +62,8 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
             PointCharge([0, 1], -5),
             InfiniteLineCharge(3, 2, 1, 0.5),
             InfiniteLineCharge(0, 1, 1, 1),
-            InfiniteLineCharge(1, 0, 2, -1)
+            InfiniteLineCharge(1, 0, 2, -1),
+            CircleCharge([1, 2], 6.5, 2.0)
         ])
 
     def get_pi_vb(self) -> Tuple[pyqtgraph.PlotItem, pyqtgraph.ViewBox]:
@@ -143,6 +145,8 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
             self.graph_window.add_charge(PointCharge([x_pos, y_pos], 1))
         elif label_type == DraggableLabel.LabelTypes.INFINITE_LINE_CHARGE:
             self.graph_window.add_charge(InfiniteLineCharge(1, 0, -x_pos, 1))
+        elif label_type == DraggableLabel.LabelTypes.CIRCLE_CHARGE:
+            self.graph_window.add_charge(CircleCharge([x_pos, y_pos], 1, 1))
         else:
             raise RuntimeWarning(
                 f"Unexpected label type {label_type} encountered in DroppablePlotWidget.dropEvent")
@@ -214,6 +218,13 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                     })
 
                 self.addItem(line_plot_item)
+            elif isinstance(charge, CircleCharge):
+                scatter_plot_item.addPoints(
+                    x=[charge.center[0]],
+                    y=[charge.center[1]],
+                    symbol="o",
+                    size=charge.radius * 10,
+                    brush="#F008" if charge.charge_density > 0.0 else "#00F8")
             else:
                 raise RuntimeWarning(f"Unexpected charge type {type(charge)}")
 
