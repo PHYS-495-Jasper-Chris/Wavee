@@ -14,7 +14,9 @@ import numpy as np
 from PyQt6 import QtGui
 
 # pylint: disable=import-error
-from equations import InfiniteLineCharge, PointCharge, Window
+from equations.graph_window import Window
+from equations.infinite_line_charge import InfiniteLineCharge
+from equations.point_charge import PointCharge
 from view.draggable_label import DraggableLabel
 # pylint: enable=import-error
 
@@ -53,15 +55,14 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         The number of x-axis points to render.
         """
 
-        self.graph_window = Window(
-            charges=[PointCharge([1, 4], 10),
-                     PointCharge([-3, 5], 8),
-                     PointCharge([0, 1], -5)],
-            infinite_line_charges=[
-                InfiniteLineCharge(3, 2, 1, 0.5),
-                InfiniteLineCharge(0, 1, 1, 1),
-                InfiniteLineCharge(1, 0, 2, -1)
-            ])
+        self.graph_window = Window([
+            PointCharge([1, 4], 10),
+            PointCharge([-3, 5], 8),
+            PointCharge([0, 1], -5),
+            InfiniteLineCharge(3, 2, 1, 0.5),
+            InfiniteLineCharge(0, 1, 1, 1),
+            InfiniteLineCharge(1, 0, 2, -1)
+        ])
 
     def get_pi_vb(self) -> Tuple[pyqtgraph.PlotItem, pyqtgraph.ViewBox]:
         """
@@ -139,9 +140,9 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         # Add in the correct charge shape
         if label_type == DraggableLabel.LabelTypes.POINT_CHARGE:
-            self.graph_window.add_point_charge(PointCharge([x_pos, y_pos], 1))
+            self.graph_window.add_charge(PointCharge([x_pos, y_pos], 1))
         elif label_type == DraggableLabel.LabelTypes.INFINITE_LINE_CHARGE:
-            self.graph_window.add_line_charge(InfiniteLineCharge(1, 0, -x_pos, 1))
+            self.graph_window.add_charge(InfiniteLineCharge(1, 0, -x_pos, 1))
         else:
             raise RuntimeWarning(
                 f"Unexpected label type {label_type} encountered in DroppablePlotWidget.dropEvent")
@@ -184,36 +185,37 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         for axis in axes:
             plot_item.getAxis(axis).setGrid(255)
 
-        # Plot point charges themselves
         scatter_plot_item = pyqtgraph.ScatterPlotItem()
-        for point_charge in self.graph_window.charges:
-            scatter_plot_item.addPoints(x=[point_charge.position[0]],
-                                        y=[point_charge.position[1]],
-                                        size=abs(point_charge.charge) * 4,
-                                        symbol="o",
-                                        brush="r" if point_charge.charge > 0.0 else "b")
-
         self.addItem(scatter_plot_item)
 
-        # Plot the line charges
-        for line_charge in self.graph_window.infinite_line_charges:
-            if line_charge.y_coef == 0:
-                # ax + c = 0 -> x = -c/a
-                pos = (-line_charge.offset / line_charge.x_coef, 0)
+        # Plot point and line charges themselves
+        for charge in self.graph_window.charges:
+            if isinstance(charge, PointCharge):
+                scatter_plot_item.addPoints(x=[charge.position[0]],
+                                            y=[charge.position[1]],
+                                            size=abs(charge.charge) * 4,
+                                            symbol="o",
+                                            brush="r" if charge.charge > 0.0 else "b")
+            elif isinstance(charge, InfiniteLineCharge):
+                if charge.y_coef == 0:
+                    # ax + c = 0 -> x = -c/a
+                    pos = (-charge.offset / charge.x_coef, 0)
+                else:
+                    # ax + by + c = 0 -> y = -a/b*c - c/b
+                    pos = (0, -charge.offset / charge.y_coef)
+
+                angle = np.rad2deg(np.arctan2(-charge.x_coef, charge.y_coef))
+                line_plot_item = pyqtgraph.InfiniteLine(
+                    pos=pos,
+                    angle=angle,
+                    pen={
+                        "color": "r" if charge.charge_density > 0 else "b",
+                        "width": 4
+                    })
+
+                self.addItem(line_plot_item)
             else:
-                # ax + by + c = 0 -> y = -a/b*c - c/b
-                pos = (0, -line_charge.offset / line_charge.y_coef)
-
-            angle = np.rad2deg(np.arctan2(-line_charge.x_coef, line_charge.y_coef))
-            line_plot_item = pyqtgraph.InfiniteLine(
-                pos=pos,
-                angle=angle,
-                pen={
-                    "color": "r" if line_charge.charge_density > 0 else "b",
-                    "width": 4
-                })
-
-            self.addItem(line_plot_item)
+                raise RuntimeWarning(f"Unexpected charge type {type(charge)}")
 
         # Draw arrows at uniform test points based current view and resolution
         top_left: List[float] = dimensions.top_left
