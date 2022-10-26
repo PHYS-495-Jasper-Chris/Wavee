@@ -163,9 +163,12 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         """
         Build the plots of the electric field and the point charges.
 
+        If this is the first time building the plots, add all the points and then autoscale.
+        Otherwise, use the provided dimensions (likely from the graph bounds).
+
         Args:
             dimensions (Optional[GraphBounds]): The dimensions to plot, (top_left, bottom_right).
-                Defaults to ``GraphBounds([-8.0, 5.5], [8.0, -3.5])``.
+                Defaults to the range set by the point charges.
             max_mag_length (float): The length of the largest magnitude arrow. Defaults to 20.0.
 
         Raises:
@@ -173,8 +176,6 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         """
 
         should_autoscale = dimensions is None
-
-        dimensions = dimensions or GraphBounds([-8.0, 5.5], [8.0, -3.5])
 
         plot_item, view_box = self.get_pi_vb()
         axes = plot_item.axes
@@ -190,12 +191,19 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         for axis in axes:
             plot_item.getAxis(axis).setGrid(255)
 
+        leftmost, rightmost, topmost, bottommost = np.inf, -np.inf, -np.inf, np.inf
+
         scatter_plot_item = ScalingScatterPlotItem()
         self.addItem(scatter_plot_item)
 
         # Plot point and line charges themselves
         for charge in self.graph_window.charges:
             if isinstance(charge, PointCharge):
+                leftmost = min(leftmost, charge.position[0])
+                rightmost = max(rightmost, charge.position[0])
+                topmost = max(topmost, charge.position[1])
+                bottommost = min(bottommost, charge.position[0])
+
                 scatter_plot_item.addPoints(x=[charge.position[0]],
                                             y=[charge.position[1]],
                                             data={
@@ -206,9 +214,17 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                 if charge.y_coef == 0:
                     # ax + c = 0 -> x = -c/a
                     pos = (-charge.offset / charge.x_coef, 0)
+
+                    leftmost = min(leftmost, pos[0])
+                    rightmost = max(rightmost, pos[0])
                 else:
                     # ax + by + c = 0 -> y = -a/b*x - c/b
                     pos = (0, -charge.offset / charge.y_coef)
+
+                    if charge.x_coef == 0:
+                        topmost = max(topmost, pos[1])
+                        bottommost = min(bottommost, pos[1])
+
 
                 angle = np.rad2deg(np.arctan2(-charge.x_coef, charge.y_coef))
                 line_plot_item = pyqtgraph.InfiniteLine(
@@ -221,6 +237,11 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
                 self.addItem(line_plot_item)
             elif isinstance(charge, CircleCharge):
+                leftmost = min(leftmost, charge.center[0] - abs(charge.radius))
+                rightmost = max(rightmost, charge.center[0] + abs(charge.radius))
+                topmost = max(topmost, charge.center[1] + abs(charge.radius))
+                bottommost = min(bottommost, charge.center[1] - abs(charge.radius))
+
                 ellipse_item = QtWidgets.QGraphicsEllipseItem(charge.center[0] - charge.radius / 2,
                                                               charge.center[1] - charge.radius / 2,
                                                               charge.radius, charge.radius)
@@ -232,6 +253,15 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                 self.addItem(ellipse_item)
             else:
                 raise RuntimeWarning(f"Unexpected charge type {type(charge)}")
+
+        if True in np.isinf([leftmost, rightmost, topmost, bottommost]):
+            dimensions = dimensions or GraphBounds([-1, 1], [1, -1])
+
+        rightmost = max(rightmost, leftmost + 1.0)
+        topmost = max(topmost, bottommost + 1)
+
+        # Build the dimensions based solely on the charges, or the provided dimensions.
+        dimensions = dimensions or GraphBounds([leftmost, topmost], [rightmost, bottommost])
 
         # Draw arrows at uniform test points based current view and resolution
         top_left: List[float] = dimensions.top_left
