@@ -371,7 +371,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         x_component = current_bounds.bottom_right[0] + current_bounds.top_left[0]
         y_component = current_bounds.top_left[1] + current_bounds.bottom_right[1]
 
-        view_box.translateBy(-x_component / 2, -y_component / 2)
+        view_box.translateBy((-x_component / 2, -y_component / 2))
 
     def _get_graph_bounds(self) -> GraphBounds:
         """
