@@ -207,7 +207,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                     # ax + c = 0 -> x = -c/a
                     pos = (-charge.offset / charge.x_coef, 0)
                 else:
-                    # ax + by + c = 0 -> y = -a/b*c - c/b
+                    # ax + by + c = 0 -> y = -a/b*x - c/b
                     pos = (0, -charge.offset / charge.y_coef)
 
                 angle = np.rad2deg(np.arctan2(-charge.x_coef, charge.y_coef))
@@ -355,6 +355,23 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         # Regenerate the plots with the new positions (and same charges)
         self.build_plots(dimensions=self._get_graph_bounds())
+
+    def center_origin(self):
+        """
+        Center the ViewBox around the origin without changing the scale factors.
+        """
+
+        view_box = self.get_pi_vb()[1]
+
+        # Ideally, our bounds would be centered around [0, 0], so that
+        # (bottom_right_x + top_left_x == 0) and (top_left_y + bottom_right_y == 0).
+        # This means we need to shift left by half the x component and down by half the y component.
+
+        current_bounds = self._get_graph_bounds()
+        x_component = current_bounds.bottom_right[0] + current_bounds.top_left[0]
+        y_component = current_bounds.top_left[1] + current_bounds.bottom_right[1]
+
+        view_box.translateBy(-x_component / 2, -y_component / 2)
 
     def _get_graph_bounds(self) -> GraphBounds:
         """

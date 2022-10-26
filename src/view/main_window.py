@@ -56,6 +56,9 @@ class MainWindow(QtWidgets.QMainWindow):
         reset_graph_resolution = graph_menu.addAction("Reset resolution", "Ctrl+0")
         reset_graph_resolution.triggered.connect(self.graph_widget.reset_resolution)
 
+        center_origin = graph_menu.addAction("Center at origin", "Ctrl+O")
+        center_origin.triggered.connect(self.graph_widget.center_origin)
+
         self.proxy = pyqtgraph.SignalProxy(self.graph_widget.scene().sigMouseMoved,
                                            rateLimit=60,
                                            slot=self._mouse_moved)
