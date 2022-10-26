@@ -6,7 +6,10 @@ from typing import List, Optional
 
 import numpy as np
 
-from equations.base_charge import BaseCharge  # pylint: disable=import-error
+# pylint: disable=import-error
+from equations.base_charge import BaseCharge
+from equations.constants import Point2D
+# pylint: enable=import-error
 
 
 class Window:
@@ -34,12 +37,12 @@ class Window:
 
         self.charges.append(point_charge)
 
-    def net_electric_field(self, position: List[float]) -> float:
+    def net_electric_field(self, position: Point2D) -> float:
         """
         Calculate the net electric field magnitude at a point
 
         Args:
-            position (List[float]): The position to measure the electric field at
+            position (Point2D): The position to measure the electric field at
 
         Returns:
             float: magnitude of electric field
@@ -54,12 +57,12 @@ class Window:
 
         return np.sqrt(pow(e_x, 2) + pow(e_y, 2))
 
-    def electric_field_x(self, position: List[float]) -> float:
+    def electric_field_x(self, position: Point2D) -> float:
         """
         Calculate the x component of the electric field at a point.
 
         Args:
-            position (List[float]): The position to measure the electric field at.
+            position (Point2D): The position to measure the electric field at.
 
         Returns:
             float: x component of electric field.
@@ -73,12 +76,12 @@ class Window:
 
         return e_x
 
-    def electric_field_y(self, position: List[float]) -> float:
+    def electric_field_y(self, position: Point2D) -> float:
         """
         Calculate the y component of the electric field at a point.
 
         Args:
-            position (List[float]): The position to measure the electric field at.
+            position (Point2D): The position to measure the electric field at.
 
         Returns:
             float: y component of electric field.

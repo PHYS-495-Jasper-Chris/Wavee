@@ -5,7 +5,7 @@ A PlotWidget that can be dropped into.
 import sys
 
 from collections import namedtuple
-from typing import List, Optional, Tuple
+from typing import List, NamedTuple, Optional, Tuple
 
 import pyqtgraph
 
@@ -14,16 +14,17 @@ import numpy as np
 from PyQt6 import QtGui, QtWidgets, QtCore
 
 # pylint: disable=import-error
-from equations.graph_window import Window
 from equations.circle_charge import CircleCharge
+from equations.constants import Point2D
+from equations.graph_window import Window
 from equations.infinite_line_charge import InfiniteLineCharge
 from equations.point_charge import PointCharge
 from view.draggable_label import DraggableLabel
 from view.scaling_scatter_plot import ScalingScatterPlotItem
 # pylint: enable=import-error
 
-RGBTuple = namedtuple("RGBTuple", ["r", "g", "b"])
-GraphBounds = namedtuple("GraphBounds", ["top_left", "bottom_right"])
+RGBTuple = NamedTuple("RGBTuple", [("r", int), ("g", int), ("b", int)])
+GraphBounds = NamedTuple("GraphBounds", [("top_left", Point2D), ("bottom_right", Point2D)])
 
 
 class CenterArrowItem(pyqtgraph.ArrowItem):
@@ -31,7 +32,7 @@ class CenterArrowItem(pyqtgraph.ArrowItem):
     An ArrowItem that loads its position from the center, not from the head of the arrow.
     """
 
-    def paint(self, p, *args):
+    def paint(self, p: QtGui.QPainter, *args) -> None:
         p.translate(-self.boundingRect().center())
         return super().paint(p, *args)
 
@@ -46,8 +47,11 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
     The default number of x-axis points to render.
     """
 
-    def __init__(self, parent=None, background='default', plotItem=None, **kargs):
-
+    def __init__(self,
+                 parent: Optional[QtWidgets.QWidget] = None,
+                 background: str = 'default',
+                 plotItem: Optional[pyqtgraph.PlotItem] = None,
+                 **kargs) -> None:
         super().__init__(parent, background, plotItem, **kargs)
 
         self.setAcceptDrops(True)
@@ -58,13 +62,13 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         """
 
         self.graph_window = Window([
-            PointCharge([1, 4], 10),
-            PointCharge([-3, 5], 8),
-            PointCharge([0, 1], -5),
+            PointCharge(Point2D(1, 4), 10),
+            PointCharge(Point2D(-3, 5), 8),
+            PointCharge(Point2D(0, 1), -5),
             InfiniteLineCharge(3, 2, 1, 0.5),
             InfiniteLineCharge(0, 1, 1, 1),
             InfiniteLineCharge(1, 0, 2, -1),
-            CircleCharge([1, 2], 6.5, 2.0)
+            CircleCharge(Point2D(1, 2), 6.5, 2.0)
         ])
 
     def get_pi_vb(self) -> Tuple[pyqtgraph.PlotItem, pyqtgraph.ViewBox]:
@@ -88,7 +92,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         return plot_item, view_box
 
-    def dragEnterEvent(self, ev: QtGui.QDragEnterEvent):  # pylint: disable=invalid-name
+    def dragEnterEvent(self, ev: QtGui.QDragEnterEvent) -> None:  # pylint: disable=invalid-name
         """
         A drag has entered the widget.
 
@@ -99,7 +103,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         if ev.mimeData().hasFormat(DraggableLabel.MIME_FORMAT):
             ev.accept()
 
-    def dragMoveEvent(self, ev: QtGui.QDragMoveEvent):  # pylint: disable=invalid-name
+    def dragMoveEvent(self, ev: QtGui.QDragMoveEvent) -> None:  # pylint: disable=invalid-name
         """
         A drag is moving in the widget.
 
@@ -110,7 +114,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         if ev.mimeData().hasFormat(DraggableLabel.MIME_FORMAT):
             ev.accept()
 
-    def dragLeaveEvent(self, ev: QtGui.QDragLeaveEvent):  # pylint: disable=invalid-name
+    def dragLeaveEvent(self, ev: QtGui.QDragLeaveEvent) -> None:  # pylint: disable=invalid-name
         """
         A drag left the widget.
 
@@ -120,7 +124,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         ev.accept()
 
-    def dropEvent(self, ev: QtGui.QDropEvent):  # pylint: disable=invalid-name
+    def dropEvent(self, ev: QtGui.QDropEvent) -> None:  # pylint: disable=invalid-name
         """
         A drop event has occurred. Forward it to a listening slot in the MainWindow.
 
@@ -143,11 +147,11 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         # Add in the correct charge shape
         if label_type == DraggableLabel.LabelTypes.POINT_CHARGE:
-            self.graph_window.add_charge(PointCharge([x_pos, y_pos], 1))
+            self.graph_window.add_charge(PointCharge(Point2D(x_pos, y_pos), 1))
         elif label_type == DraggableLabel.LabelTypes.INFINITE_LINE_CHARGE:
             self.graph_window.add_charge(InfiniteLineCharge(1, 0, -x_pos, 1))
         elif label_type == DraggableLabel.LabelTypes.CIRCLE_CHARGE:
-            self.graph_window.add_charge(CircleCharge([x_pos, y_pos], 1, 1))
+            self.graph_window.add_charge(CircleCharge(Point2D(x_pos, y_pos), 1, 1))
         else:
             raise RuntimeWarning(
                 f"Unexpected label type {label_type} encountered in DroppablePlotWidget.dropEvent")
@@ -199,13 +203,13 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         # Plot point and line charges themselves
         for charge in self.graph_window.charges:
             if isinstance(charge, PointCharge):
-                leftmost = min(leftmost, charge.position[0])
-                rightmost = max(rightmost, charge.position[0])
-                topmost = max(topmost, charge.position[1])
-                bottommost = min(bottommost, charge.position[0])
+                leftmost = min(leftmost, charge.position.x)
+                rightmost = max(rightmost, charge.position.x)
+                topmost = max(topmost, charge.position.y)
+                bottommost = min(bottommost, charge.position.y)
 
-                scatter_plot_item.addPoints(x=[charge.position[0]],
-                                            y=[charge.position[1]],
+                scatter_plot_item.addPoints(x=[charge.position.x],
+                                            y=[charge.position.y],
                                             data={
                                                 "initial_size": abs(charge.charge) * 200,
                                                 "brush": "r" if charge.charge > 0.0 else "b"
@@ -213,18 +217,17 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
             elif isinstance(charge, InfiniteLineCharge):
                 if charge.y_coef == 0:
                     # ax + c = 0 -> x = -c/a
-                    pos = (-charge.offset / charge.x_coef, 0)
+                    pos = Point2D(-charge.offset / charge.x_coef, 0)
 
-                    leftmost = min(leftmost, pos[0])
-                    rightmost = max(rightmost, pos[0])
+                    leftmost = min(leftmost, pos.x)
+                    rightmost = max(rightmost, pos.x)
                 else:
                     # ax + by + c = 0 -> y = -a/b*x - c/b
-                    pos = (0, -charge.offset / charge.y_coef)
+                    pos = Point2D(0, -charge.offset / charge.y_coef)
 
                     if charge.x_coef == 0:
-                        topmost = max(topmost, pos[1])
-                        bottommost = min(bottommost, pos[1])
-
+                        topmost = max(topmost, pos.y)
+                        bottommost = min(bottommost, pos.y)
 
                 angle = np.rad2deg(np.arctan2(-charge.x_coef, charge.y_coef))
                 line_plot_item = pyqtgraph.InfiniteLine(
@@ -237,13 +240,13 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
                 self.addItem(line_plot_item)
             elif isinstance(charge, CircleCharge):
-                leftmost = min(leftmost, charge.center[0] - abs(charge.radius))
-                rightmost = max(rightmost, charge.center[0] + abs(charge.radius))
-                topmost = max(topmost, charge.center[1] + abs(charge.radius))
-                bottommost = min(bottommost, charge.center[1] - abs(charge.radius))
+                leftmost = min(leftmost, charge.center.x - abs(charge.radius))
+                rightmost = max(rightmost, charge.center.x + abs(charge.radius))
+                topmost = max(topmost, charge.center.y + abs(charge.radius))
+                bottommost = min(bottommost, charge.center.y - abs(charge.radius))
 
-                ellipse_item = QtWidgets.QGraphicsEllipseItem(charge.center[0] - charge.radius / 2,
-                                                              charge.center[1] - charge.radius / 2,
+                ellipse_item = QtWidgets.QGraphicsEllipseItem(charge.center.x - charge.radius / 2,
+                                                              charge.center.y - charge.radius / 2,
                                                               charge.radius, charge.radius)
                 ellipse_item.setPen(QtGui.QPen(QtCore.Qt.PenStyle.NoPen))
                 ellipse_item.pen().setWidth(0)
@@ -254,24 +257,25 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
             else:
                 raise RuntimeWarning(f"Unexpected charge type {type(charge)}")
 
-        if True in np.isinf([leftmost, rightmost, topmost, bottommost]):
-            dimensions = dimensions or GraphBounds([-1, 1], [1, -1])
+        if False in np.isfinite([leftmost, rightmost, topmost, bottommost]):
+            dimensions = dimensions or GraphBounds(Point2D(-1, 1), Point2D(1, -1))
 
         rightmost = max(rightmost, leftmost + 1.0)
         topmost = max(topmost, bottommost + 1)
 
         # Build the dimensions based solely on the charges, or the provided dimensions.
-        dimensions = dimensions or GraphBounds([leftmost, topmost], [rightmost, bottommost])
+        dimensions = dimensions or GraphBounds(Point2D(leftmost, topmost),
+                                               Point2D(rightmost, bottommost))
 
         # Draw arrows at uniform test points based current view and resolution
-        top_left: List[float] = dimensions.top_left
-        bottom_right: List[float] = dimensions.bottom_right
+        top_left = dimensions.top_left
+        bottom_right = dimensions.bottom_right
 
         x_indices = self.graph_resolution
         y_indices = max(int(self.height() / self.width() * x_indices), 1)
 
-        x_distance = bottom_right[0] - top_left[0]
-        y_distance = top_left[1] - bottom_right[1]
+        x_distance = bottom_right.x - top_left.x
+        y_distance = top_left.y - bottom_right.y
 
         p_x = [[0.0] * y_indices for _ in range(x_indices)]
         p_y = [[0.0] * y_indices for _ in range(x_indices)]
@@ -286,7 +290,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
             except ZeroDivisionError:
                 x_percentage = 0.5
 
-            x_pos = x_percentage * x_distance + top_left[0]
+            x_pos = x_percentage * x_distance + top_left.x
 
             for j in range(y_indices):
                 try:
@@ -294,14 +298,14 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                 except ZeroDivisionError:
                     y_percentage = 0.5
 
-                y_pos = y_percentage * y_distance + bottom_right[1]
+                y_pos = y_percentage * y_distance + bottom_right.y
 
                 p_x[i][j] = x_pos
                 p_y[i][j] = y_pos
 
                 try:
-                    ef_mag_x = self.graph_window.electric_field_x([x_pos, y_pos])
-                    ef_mag_y = self.graph_window.electric_field_y([x_pos, y_pos])
+                    ef_mag_x = self.graph_window.electric_field_x(Point2D(x_pos, y_pos))
+                    ef_mag_y = self.graph_window.electric_field_y(Point2D(x_pos, y_pos))
                     ef_mag_net = np.sqrt(ef_mag_x**2 + ef_mag_y**2)
                     mag_x[i][j] = ef_mag_x
                     mag_y[i][j] = ef_mag_y
@@ -316,14 +320,12 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         for i in range(x_indices):
             for j in range(y_indices):
                 flat_arr.append(MagIndexes(net_mag[i][j], i, j))
-
         flat_arr.sort(key=lambda mag_idx: mag_idx.magnitude)
 
-        net_mag_idx = [[(0.0, int(0))] * y_indices for _ in range(x_indices)]
-
+        net_mag_idx = [[0] * y_indices for _ in range(x_indices)]
         for idx, mag_idx in enumerate(flat_arr):
             # Now build mapping from unsorted net_mag array to sorted array
-            net_mag_idx[mag_idx.x][mag_idx.y] = (mag_idx.magnitude, idx)
+            net_mag_idx[mag_idx.x][mag_idx.y] = idx
 
         # Plot the vector arrows
         for i in range(x_indices):
@@ -331,12 +333,10 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                 if net_mag[i][j] <= 0.0:
                     continue
 
-                sorted_idx = net_mag_idx[i][j][1]
-
                 angle = 180 - np.rad2deg(np.arctan2(mag_y[i][j], mag_x[i][j]))
                 normalized_mag = net_mag[i][j] / flat_arr[-1].magnitude
                 scaled_mag = normalized_mag * max_mag_length
-                brush_color = self._get_color_from_mag(sorted_idx, len(flat_arr))
+                brush_color = self._get_color_from_mag(net_mag_idx[i][j], len(flat_arr))
                 arrow_item = CenterArrowItem(pos=(p_x[i][j], p_y[i][j]),
                                              tailLen=scaled_mag,
                                              brush=brush_color,
@@ -350,7 +350,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
             # Fix the scale factors if we are reloading an existing graph.
             scatter_plot_item.viewRangeChanged()
 
-    def reset_resolution(self):
+    def reset_resolution(self) -> None:
         """
         Reset the graph resolution and rebuild the plots based on currently viewable dimensions.
         """
@@ -358,7 +358,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         self.graph_resolution = DroppablePlotWidget.DEFAULT_GRAPH_RESOLUTION
         self.build_plots(dimensions=self._get_graph_bounds())
 
-    def increase_resolution(self):
+    def increase_resolution(self) -> None:
         """
         Increase the graph resolution by 1 and rebuild the plots based on currently viewable
         dimensions.
@@ -367,7 +367,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         self.graph_resolution += 1
         self.build_plots(dimensions=self._get_graph_bounds())
 
-    def decrease_resolution(self):
+    def decrease_resolution(self) -> None:
         """
         Decrease the graph resolution by 1 (keeping above 0) and rebuild the plots based on
         currently viewable dimensions.
@@ -377,7 +377,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         self.graph_resolution = max(self.graph_resolution, 0)
         self.build_plots(dimensions=self._get_graph_bounds())
 
-    def refresh_button_pressed(self):
+    def refresh_button_pressed(self) -> None:
         """
         When the refresh button is pressed, reload the graphs, keeping the resolution the same and
         updating the dimensions.
@@ -386,7 +386,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         # Regenerate the plots with the new positions (and same charges)
         self.build_plots(dimensions=self._get_graph_bounds())
 
-    def center_origin(self):
+    def center_origin(self) -> None:
         """
         Center the ViewBox around the origin without changing the scale factors.
         """
@@ -398,8 +398,8 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         # This means we need to shift left by half the x component and down by half the y component.
 
         current_bounds = self._get_graph_bounds()
-        x_component = current_bounds.bottom_right[0] + current_bounds.top_left[0]
-        y_component = current_bounds.top_left[1] + current_bounds.bottom_right[1]
+        x_component = current_bounds.bottom_right.x + current_bounds.top_left.x
+        y_component = current_bounds.top_left.y + current_bounds.bottom_right.y
 
         view_box.translateBy((-x_component / 2, -y_component / 2))
 
@@ -408,16 +408,16 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         Get the top left and bottom right corners of the graph.
 
         Returns:
-            GraphBounds: A GraphBounds tuple of the top left point in [x, y] and the bottom right
-            point in [x, y] of the currently viewable section of the graph.
+            GraphBounds: A GraphBounds tuple of the top left point and the bottom right point of the
+            currently viewable section of the graph.
         """
 
         view_box = self.get_pi_vb()[1]
 
         # Get the plot dimensions
         view_range: List[List[float]] = view_box.viewRange()
-        top_left = [view_range[0][0], view_range[1][1]]
-        bottom_right = [view_range[0][1], view_range[1][0]]
+        top_left = Point2D(view_range[0][0], view_range[1][1])
+        bottom_right = Point2D(view_range[0][1], view_range[1][0])
 
         return GraphBounds(top_left, bottom_right)
 

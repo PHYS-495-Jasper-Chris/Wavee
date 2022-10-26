@@ -32,7 +32,7 @@ class DraggableLabel(QtWidgets.QLabel):
 
         INVALID = enum.auto()
 
-    def __init__(self, parent: Optional[QtWidgets.QWidget]):
+    def __init__(self, parent: Optional[QtWidgets.QWidget]) -> None:
         """
         Initialize class variables.
 

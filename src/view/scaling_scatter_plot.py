@@ -12,7 +12,7 @@ class ScalingScatterPlotItem(pyqtgraph.ScatterPlotItem):
     A ScatterPlotItem with elements whose radii scale depending on the zoom.
     """
 
-    def viewRangeChanged(self):
+    def viewRangeChanged(self) -> None:
         """
         When the ViewBox range changes, update every point charge's size accordingly.
         """
@@ -20,7 +20,7 @@ class ScalingScatterPlotItem(pyqtgraph.ScatterPlotItem):
         view_box = self.getViewBox()
         if not isinstance(view_box, pyqtgraph.ViewBox):
             # The ViewBox does not exist yet. That's fine.
-            return
+            return super().viewRangeChanged()
 
         view_range: List[List[float]] = view_box.viewRange()
         x_range = view_range[0][1] - view_range[0][0]

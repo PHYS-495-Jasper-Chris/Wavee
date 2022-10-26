@@ -2,13 +2,11 @@
 Calculate the electric field of an infinite line charge.
 """
 
-from typing import List
-
 import numpy as np
 
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
-from equations.constants import COULOMB_CONSTANT
+from equations.constants import COULOMB_CONSTANT, Point2D
 # pylint: enable=import-error
 
 
@@ -44,45 +42,45 @@ class InfiniteLineCharge(BaseCharge):
         self.offset = offset
         self.charge_density = charge_density
 
-    def radial_distance(self, point: List[float]) -> float:
+    def radial_distance(self, point: Point2D) -> float:
         """
         The shortest distance from a point to the infinite line of charge.
 
         Args:
-            point (List[float]): The point to measure the distance from.
+            point (Point2D): The point to measure the distance from.
 
         Returns:
             float: minimal radial distance from ``point`` to line charge.
         """
 
-        return abs(self.x_coef * point[0] + self.y_coef * point[1]
-                   + self.offset) / np.sqrt(self.x_coef**2 + self.y_coef**2)
+        return (abs(self.x_coef * point.x + self.y_coef * point.y + self.offset)
+                / np.sqrt(self.x_coef**2 + self.y_coef**2))
 
-    def closest_point(self, point: List[float]) -> List[float]:
+    def closest_point(self, point: Point2D) -> Point2D:
         """
         The closest point on the line from a given point.
 
         Args:
-            point (List[float]): The point to find the closest point to in the form ``[x, y]``.
+            point (Point2D): The point to find the closest point to.
 
         Returns:
-            List[float]: list representation of closest point ``[x, y]``.
+            Point2D: The closest point.
         """
 
-        x_pos = (self.y_coef * (self.y_coef * point[0] - self.x_coef * point[1])
+        x_pos = (self.y_coef * (self.y_coef * point.x - self.x_coef * point.y)
                  - self.x_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
 
-        y_pos = (self.x_coef * (self.x_coef * point[1] - self.y_coef * point[0])
+        y_pos = (self.x_coef * (self.x_coef * point.y - self.y_coef * point.x)
                  - self.y_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
 
-        return [x_pos, y_pos]
+        return Point2D(x_pos, y_pos)
 
-    def electric_field_magnitude(self, point: List[float]) -> float:
+    def electric_field_magnitude(self, point: Point2D) -> float:
         """
         The net magnitude of the electric field at the given point.
 
         Args:
-            point (List[float]): The point to measure the field at in the form ``[x, y]``.
+            point (Point2D): The point to measure the field at.
 
         Returns:
             float: The net (signed) magnitude of the electric field at the given point, or zero if
@@ -94,12 +92,12 @@ class InfiniteLineCharge(BaseCharge):
 
         return 0.0 if np.isinf(magnitude) else magnitude
 
-    def electric_field_x(self, point: List[float]) -> float:
+    def electric_field_x(self, point: Point2D) -> float:
         """
         The x component of the electric field at a given point.
 
         Args:
-            point (List[float]): The point to measure the field at.
+            point (Point2D): The point to measure the field at.
 
         Returns:
             float: Magnitude of the electric field's x-component due to the infinite line charge at
@@ -115,17 +113,17 @@ class InfiniteLineCharge(BaseCharge):
 
         # If the x-component of the point is greater than that of the closest point on the line,
         # then the magnitude should be kept the same, otherwise it should be negated.
-        if self.closest_point(point)[0] > point[0]:
+        if self.closest_point(point).x > point.x:
             magnitude *= -1
 
         return magnitude
 
-    def electric_field_y(self, point: List[float]) -> float:
+    def electric_field_y(self, point: Point2D) -> float:
         """
         The y component of the electric field at a given point.
 
         Args:
-            point (List[float]): The point to measure the field at.
+            point (Point2D): The point to measure the field at.
 
         Returns:
             float: Magnitude of the electric field's y-component due to the infinite line charge at
@@ -141,7 +139,7 @@ class InfiniteLineCharge(BaseCharge):
 
         # If the y-component of the point is greater than that of the closest point on the line,
         # then the magnitude should be kept the same, otherwise it should be negated.
-        if self.closest_point(point)[1] > point[1]:
+        if self.closest_point(point).y > point.y:
             magnitude *= -1
 
         return magnitude
