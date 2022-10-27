@@ -62,6 +62,11 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         The number of x-axis points to render.
         """
 
+        self.scatter_plot_item = ScalingScatterPlotItem()
+        """
+        A scaling ScatterPlotItem holding point charges.
+        """
+
         self.graph_window = Window([
             PointCharge(Point2D(1, 4), 10),
             PointCharge(Point2D(-3, 5), 8),
@@ -195,97 +200,16 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         # Remove old graphs
         plot_item.clear()
+        self.scatter_plot_item.clear()
 
         for axis in axes:
             plot_item.getAxis(axis).setGrid(255)
 
-        leftmost, rightmost, topmost, bottommost = np.inf, -np.inf, -np.inf, np.inf
-
-        scatter_plot_item = ScalingScatterPlotItem()
-        self.addItem(scatter_plot_item)
-
-        # Plot point and line charges themselves
-        for charge in self.graph_window.charges:
-            if isinstance(charge, PointCharge):
-                leftmost = min(leftmost, charge.position.x)
-                rightmost = max(rightmost, charge.position.x)
-                topmost = max(topmost, charge.position.y)
-                bottommost = min(bottommost, charge.position.y)
-
-                scatter_plot_item.addPoints(x=[charge.position.x],
-                                            y=[charge.position.y],
-                                            data={
-                                                "initial_size": abs(charge.charge) * 200,
-                                                "brush": "r" if charge.charge > 0.0 else "b"
-                                            })
-            elif isinstance(charge, InfiniteLineCharge):
-                if charge.y_coef == 0:
-                    # ax + c = 0 -> x = -c/a
-                    pos = Point2D(-charge.offset / charge.x_coef, 0)
-
-                    leftmost = min(leftmost, pos.x)
-                    rightmost = max(rightmost, pos.x)
-                else:
-                    # ax + by + c = 0 -> y = -a/b*x - c/b
-                    pos = Point2D(0, -charge.offset / charge.y_coef)
-
-                    if charge.x_coef == 0:
-                        topmost = max(topmost, pos.y)
-                        bottommost = min(bottommost, pos.y)
-
-                angle = np.rad2deg(np.arctan2(-charge.x_coef, charge.y_coef))
-                line_plot_item = pyqtgraph.InfiniteLine(
-                    pos=pos,
-                    angle=angle,
-                    pen={
-                        "color": "r" if charge.charge_density > 0 else "b",
-                        "width": 4
-                    })
-
-                self.addItem(line_plot_item)
-            elif isinstance(charge, CircleCharge):
-                leftmost = min(leftmost, charge.center.x - charge.radius)
-                rightmost = max(rightmost, charge.center.x + charge.radius)
-                topmost = max(topmost, charge.center.y + charge.radius)
-                bottommost = min(bottommost, charge.center.y - charge.radius)
-
-                ellipse_item = QtWidgets.QGraphicsEllipseItem(charge.center.x - charge.radius / 2,
-                                                              charge.center.y - charge.radius / 2,
-                                                              charge.radius, charge.radius)
-                ellipse_item.setPen(QtGui.QPen(QtCore.Qt.PenStyle.NoPen))
-                ellipse_item.pen().setWidth(0)
-                brush = (QtGui.QColor(255, 0, 0, alpha=128)
-                         if charge.charge_density > 0 else QtGui.QColor(0, 0, 255, alpha=128))
-                ellipse_item.setBrush(brush)
-                self.addItem(ellipse_item)
-            elif isinstance(charge, RingCharge):
-                leftmost = min(leftmost, charge.center.x - charge.outer_radius)
-                rightmost = max(rightmost, charge.center.x + charge.outer_radius)
-                topmost = max(topmost, charge.center.y + charge.outer_radius)
-                bottommost = min(bottommost, charge.center.y - charge.outer_radius)
-
-                middle_radii = (charge.outer_radius + charge.inner_radius) / 2
-                ellipse_item = QtWidgets.QGraphicsEllipseItem(charge.center.x - middle_radii,
-                                                              charge.center.y - middle_radii,
-                                                              middle_radii * 2, middle_radii * 2)
-                pen_color = (QtGui.QColor(255, 0, 0, alpha=128)
-                             if charge.charge_density > 0 else QtGui.QColor(0, 0, 255, alpha=128))
-                ellipse_item.setPen(QtGui.QPen(pen_color,
-                                               charge.outer_radius - charge.inner_radius))
-                ellipse_item.setBrush(QtGui.QColor(0, 0, 0, alpha=0))  # transparent
-                self.addItem(ellipse_item)
-            else:
-                raise RuntimeWarning(f"Unexpected charge type {type(charge)}")
-
-        if False in np.isfinite([leftmost, rightmost, topmost, bottommost]):
-            dimensions = dimensions or GraphBounds(Point2D(-1, 1), Point2D(1, -1))
-
-        rightmost = max(rightmost, leftmost + 1.0)
-        topmost = max(topmost, bottommost + 1)
+        self.addItem(self.scatter_plot_item)
+        default_dimensions = self._plot_charges()
 
         # Build the dimensions based solely on the charges, or the provided dimensions.
-        dimensions = dimensions or GraphBounds(Point2D(leftmost, topmost),
-                                               Point2D(rightmost, bottommost))
+        dimensions = dimensions or default_dimensions
 
         # Draw arrows at uniform test points based current view and resolution
         top_left = dimensions.top_left
@@ -368,7 +292,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
             view_box.enableAutoRange()
         else:
             # Fix the scale factors if we are reloading an existing graph.
-            scatter_plot_item.viewRangeChanged()
+            self.scatter_plot_item.viewRangeChanged()
 
     def reset_resolution(self) -> None:
         """
@@ -429,6 +353,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         """
 
         self.build_plots()
+        self.scatter_plot_item.viewRangeChanged()
 
     def remove_charge(self) -> None:
         """
@@ -447,6 +372,96 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         self.graph_window.undo_charge_removal()
 
         self.build_plots(dimensions=self._get_graph_bounds())
+
+    def _plot_charges(self) -> GraphBounds:
+        """
+        Plot the charges themselves.
+        """
+
+        leftmost, rightmost, topmost, bottommost = np.inf, -np.inf, -np.inf, np.inf
+
+        # Plot point and line charges themselves
+        for charge in self.graph_window.charges:
+            if isinstance(charge, PointCharge):
+                leftmost = min(leftmost, charge.position.x)
+                rightmost = max(rightmost, charge.position.x)
+                topmost = max(topmost, charge.position.y)
+                bottommost = min(bottommost, charge.position.y)
+
+                self.scatter_plot_item.addPoints(x=[charge.position.x],
+                                                 y=[charge.position.y],
+                                                 data={
+                                                     "initial_size": abs(charge.charge) * 200,
+                                                     "brush": "r" if charge.charge > 0.0 else "b"
+                                                 })
+            elif isinstance(charge, InfiniteLineCharge):
+                if charge.y_coef == 0:
+                    # ax + c = 0 -> x = -c/a
+                    pos = Point2D(-charge.offset / charge.x_coef, 0)
+
+                    leftmost = min(leftmost, pos.x)
+                    rightmost = max(rightmost, pos.x)
+                else:
+                    # ax + by + c = 0 -> y = -a/b*x - c/b
+                    pos = Point2D(0, -charge.offset / charge.y_coef)
+
+                    if charge.x_coef == 0:
+                        topmost = max(topmost, pos.y)
+                        bottommost = min(bottommost, pos.y)
+
+                angle = np.rad2deg(np.arctan2(-charge.x_coef, charge.y_coef))
+                line_plot_item = pyqtgraph.InfiniteLine(
+                    pos=pos,
+                    angle=angle,
+                    pen={
+                        "color": "r" if charge.charge_density > 0 else "b",
+                        "width": 4
+                    })
+
+                self.addItem(line_plot_item)
+            elif isinstance(charge, CircleCharge):
+                leftmost = min(leftmost, charge.center.x - charge.radius)
+                rightmost = max(rightmost, charge.center.x + charge.radius)
+                topmost = max(topmost, charge.center.y + charge.radius)
+                bottommost = min(bottommost, charge.center.y - charge.radius)
+
+                ellipse_item = QtWidgets.QGraphicsEllipseItem(charge.center.x - charge.radius / 2,
+                                                              charge.center.y - charge.radius / 2,
+                                                              charge.radius, charge.radius)
+                ellipse_item.setPen(QtGui.QPen(QtCore.Qt.PenStyle.NoPen))
+                ellipse_item.pen().setWidth(0)
+                brush = (QtGui.QColor(255, 0, 0, alpha=128)
+                         if charge.charge_density > 0 else QtGui.QColor(0, 0, 255, alpha=128))
+                ellipse_item.setBrush(brush)
+                self.addItem(ellipse_item)
+            elif isinstance(charge, RingCharge):
+                leftmost = min(leftmost, charge.center.x - charge.outer_radius)
+                rightmost = max(rightmost, charge.center.x + charge.outer_radius)
+                topmost = max(topmost, charge.center.y + charge.outer_radius)
+                bottommost = min(bottommost, charge.center.y - charge.outer_radius)
+
+                middle_radii = (charge.outer_radius + charge.inner_radius) / 2
+                ellipse_item = QtWidgets.QGraphicsEllipseItem(charge.center.x - middle_radii,
+                                                              charge.center.y - middle_radii,
+                                                              middle_radii * 2, middle_radii * 2)
+                pen_color = (QtGui.QColor(255, 0, 0, alpha=128)
+                             if charge.charge_density > 0 else QtGui.QColor(0, 0, 255, alpha=128))
+                ellipse_item.setPen(QtGui.QPen(pen_color,
+                                               charge.outer_radius - charge.inner_radius))
+                ellipse_item.setBrush(QtGui.QColor(0, 0, 0, alpha=0))  # transparent
+                self.addItem(ellipse_item)
+            else:
+                raise RuntimeWarning(f"Unexpected charge type {type(charge)}")
+
+        dimensions = None
+
+        if False in np.isfinite([leftmost, rightmost, topmost, bottommost]):
+            dimensions = GraphBounds(Point2D(-1, 1), Point2D(1, -1))
+
+        rightmost = max(rightmost, leftmost + 1.0)
+        topmost = max(topmost, bottommost + 1)
+
+        return dimensions or GraphBounds(Point2D(leftmost, topmost), Point2D(rightmost, bottommost))
 
     def _get_graph_bounds(self) -> GraphBounds:
         """
