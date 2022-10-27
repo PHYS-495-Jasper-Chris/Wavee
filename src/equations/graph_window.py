@@ -27,6 +27,8 @@ class Window:
 
         self.charges = charges or []
 
+        self._removed_charges = []
+
     def add_charge(self, point_charge: BaseCharge) -> None:
         """
         Add point charge to the test window.
@@ -36,6 +38,22 @@ class Window:
         """
 
         self.charges.append(point_charge)
+
+    def remove_last_charge(self) -> None:
+        """
+        Remove the last charge that was added (ie, the charge at the end of the list of charges).
+        """
+
+        if len(self.charges) > 0:
+            self._removed_charges.append(self.charges.pop())
+
+    def undo_charge_removal(self) -> None:
+        """
+        Undo the latest removal if any exists.
+        """
+
+        if len(self._removed_charges) > 0:
+            self.charges.append(self._removed_charges.pop())
 
     def net_electric_field(self, position: Point2D) -> float:
         """

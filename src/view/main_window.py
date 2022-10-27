@@ -60,6 +60,16 @@ class MainWindow(QtWidgets.QMainWindow):
         center_origin = graph_menu.addAction("Center at origin", "Ctrl+O")
         center_origin.triggered.connect(self.graph_widget.center_origin)
 
+        default_range = graph_menu.addAction("Default range", "Ctrl+D")
+        default_range.triggered.connect(self.graph_widget.default_range)
+
+        charge_menu = self.menu_bar.addMenu("Charges")
+        remove_charge = charge_menu.addAction("Remove last charge", "Ctrl+Backspace")
+        remove_charge.triggered.connect(self.graph_widget.remove_charge)
+
+        undo_remove_charge = charge_menu.addAction("Undo last removal", "Ctrl+Shift+Backspace")
+        undo_remove_charge.triggered.connect(self.graph_widget.undo_remove_charge)
+
         self.proxy = pyqtgraph.SignalProxy(self.graph_widget.scene().sigMouseMoved,
                                            rateLimit=60,
                                            slot=self._mouse_moved)
