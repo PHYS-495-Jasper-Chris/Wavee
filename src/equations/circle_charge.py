@@ -4,6 +4,8 @@ Calculate the electric field of solid circle of charge.
 
 import numpy as np
 
+from PyQt6 import QtWidgets, QtCore
+
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
 from equations.constants import COULOMB_CONSTANT, Point2D
@@ -72,6 +74,42 @@ class CircleCharge(BaseCharge):
         # The direction of the electric field is in the r direction. Get the angle of the shifted
         # coordinates, and take the sin of that.
         return self.electric_field_magnitude(point) * np.sin(self._theta(point))
+
+    def open_menu(self, pos: QtCore.QPointF) -> bool:
+        """
+        Open a context menu for this charge.
+
+        Configures options associated with the charge.
+
+        Args:
+            pos (QPointF): The location to open the menu at.
+
+        Returns:
+            bool: True if this charge should be deleted, False otherwise.
+        """
+
+        menu = QtWidgets.QMenu()
+        set_charge = menu.addAction("Set Charge Density")
+        set_radius = menu.addAction("Set Radius")
+        set_center = menu.addAction("Set Center")
+        rmv_charge = menu.addAction("Remove Charge")
+
+        action = menu.exec(pos.toPoint())
+
+        if action == set_charge:
+            print("Need to set charge")
+            val, ok = QtWidgets.QInputDialog().getDouble(menu, "Set Charge Density",
+                                                         "Set Charge Density (C/m^2)")
+            if ok:
+                self.charge_density = val
+        elif action == set_radius:
+            print("Need to set radius")
+        elif action == set_center:
+            print("Need to set center")
+        elif action == rmv_charge:
+            return True
+
+        return False
 
     def _relative_pos(self, point: Point2D) -> Point2D:
         """

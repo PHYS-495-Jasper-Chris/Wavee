@@ -167,10 +167,15 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
             raise RuntimeWarning(
                 f"Unexpected label type {label_type} encountered in DroppablePlotWidget.dropEvent")
 
+        ev.accept()
+
         # Rebuild the plot after new charge is added
         self.build_plots(dimensions=self._get_graph_bounds())
 
-        ev.accept()
+        # Open the relevant menu
+        rmv_charge = self.graph_window.charges[-1].open_menu(self.mapToGlobal(ev.position()))
+        if rmv_charge:
+            self.remove_charge()
 
     def build_plots(self,
                     dimensions: Optional[GraphBounds] = None,
@@ -197,7 +202,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         if not isinstance(axes, dict):
             raise RuntimeError("Unable to build plot!")
 
-        #  Disable autoscaling before adding items to graph for improved performance
+        # Disable autoscaling before adding items to graph for improved performance
         view_box.disableAutoRange()
 
         # Remove old graphs

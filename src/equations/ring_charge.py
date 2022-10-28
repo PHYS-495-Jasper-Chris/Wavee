@@ -4,6 +4,8 @@ A cylindrical hollow ring of charge.
 
 import numpy as np
 
+from PyQt6 import QtWidgets, QtCore
+
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
 from equations.constants import COULOMB_CONSTANT, Point2D
@@ -99,6 +101,41 @@ class RingCharge(BaseCharge):
         """
 
         return self.electric_field_magnitude(point) * np.sin(self._theta(point))
+
+    def open_menu(self, pos: QtCore.QPointF) -> bool:
+        """
+        Open a context menu for this charge.
+
+        Configures options associated with the charge.
+
+        Args:
+            pos (QPointF): The location to open the menu at.
+
+        Returns:
+            bool: True if this charge should be deleted, False otherwise.
+        """
+
+        menu = QtWidgets.QMenu()
+        set_charge = menu.addAction("Set Charge Density")
+        set_inner_radius = menu.addAction("Set Inner Radius")
+        set_outer_radius = menu.addAction("Set Outer Radius")
+        set_center = menu.addAction("Set Center")
+        rmv_charge = menu.addAction("Remove Charge")
+
+        action = menu.exec(pos.toPoint())
+
+        if action == set_charge:
+            print("Need to set charge")
+        elif action == set_inner_radius:
+            print("Need to set inner radius")
+        elif action == set_outer_radius:
+            print("Need to set outer radius")
+        elif action == set_center:
+            print("Need to set center")
+        elif action == rmv_charge:
+            return True
+
+        return False
 
     def _relative_pos(self, point: Point2D) -> Point2D:
         """

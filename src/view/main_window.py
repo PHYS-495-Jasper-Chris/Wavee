@@ -42,6 +42,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         uic.load_ui.loadUi(os.path.join(sys.path[0], "view/ui/main_window.ui"), self)
         self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
+        self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
 
         self.refresh_button.clicked.connect(self.graph_widget.refresh_button_pressed)
 
