@@ -9,7 +9,7 @@ from PyQt6 import QtWidgets, QtCore
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
 from equations.constants import COULOMB_CONSTANT, Point2D
-from view.two_line_dialog import MultiLineInputDialog
+from view.multi_line_input_dialog import MultiLineInputDialog
 # pylint: enable=import-error
 
 
