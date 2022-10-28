@@ -9,7 +9,7 @@ from PyQt6 import QtWidgets, QtCore
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
 from equations.constants import COULOMB_CONSTANT, Point2D
-from view.two_line_dialog import TwoLineDialog
+from view.two_line_dialog import MultiLineInputDialog
 # pylint: enable=import-error
 
 
@@ -109,11 +109,11 @@ class CircleCharge(BaseCharge):
                 if success:
                     self.radius = val
             elif action == set_center:
-                x_pos, y_pos, success = TwoLineDialog("X Position", "Y Position",
-                                                      menu).get_doubles()
+                new_center, success = MultiLineInputDialog(["X Position", "Y Position"],
+                                                           menu).get_doubles()
 
-                if success and False not in np.isfinite([x_pos, y_pos]):
-                    self.center = Point2D(x_pos, y_pos)
+                if success and False not in np.isfinite(new_center):
+                    self.center = Point2D(*new_center)
             elif action == rmv_charge:
                 return True
             elif action is None:
