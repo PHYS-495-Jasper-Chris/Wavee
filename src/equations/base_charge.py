@@ -4,6 +4,8 @@ An abstract charge, from which subclasses overload.
 
 import abc
 
+from PyQt6 import QtCore
+
 from equations.constants import Point2D  # pylint: disable=import-error
 
 
@@ -46,4 +48,18 @@ class BaseCharge(abc.ABC):
 
         Returns:
             float: y component of electric field.
+        """
+
+    @abc.abstractmethod
+    def open_menu(self, pos: QtCore.QPointF) -> bool:
+        """
+        Open a context menu for this charge.
+
+        Configures options associated with the charge.
+
+        Args:
+            pos (QPointF): The location to open the menu at.
+
+        Returns:
+            bool: True if this charge should be deleted, False otherwise.
         """
