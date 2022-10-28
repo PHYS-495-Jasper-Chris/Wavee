@@ -29,6 +29,7 @@ class DraggableLabel(QtWidgets.QLabel):
         POINT_CHARGE = enum.auto()
         INFINITE_LINE_CHARGE = enum.auto()
         CIRCLE_CHARGE = enum.auto()
+        RING_CHARGE = enum.auto()
 
         INVALID = enum.auto()
 

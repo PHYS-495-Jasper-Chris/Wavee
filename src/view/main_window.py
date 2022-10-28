@@ -31,6 +31,8 @@ class MainWindow(QtWidgets.QMainWindow):
     graph_widget: DroppablePlotWidget
     point_charge_circle: DraggableLabel
     line_charge_drawing: DraggableLabel
+    circle_charge_drawing: DraggableLabel
+    ring_charge_drawing: DraggableLabel
     refresh_button: QtWidgets.QPushButton
     menu_bar: QtWidgets.QMenuBar
     status_bar: QtWidgets.QStatusBar
@@ -92,10 +94,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         painter = QtGui.QPainter(canvas)
         painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
-        pen = QtGui.QPen()
-        pen.setWidth(5)
-        pen.setColor(QtGui.QColor("red"))
-        painter.setPen(pen)
+        painter.setPen(QtGui.QPen(QtCore.Qt.GlobalColor.red, 5))
+        painter.setBrush(QtCore.Qt.GlobalColor.red)
         painter.drawEllipse(5, 5, 100, 100)
         painter.end()
 
@@ -109,16 +109,42 @@ class MainWindow(QtWidgets.QMainWindow):
 
         painter = QtGui.QPainter(canvas)
         painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
-        pen = QtGui.QPen()
-        pen.setWidth(5)
-        pen.setColor(QtGui.QColor("red"))
-        painter.setPen(pen)
+        painter.setPen(QtGui.QPen(QtCore.Qt.GlobalColor.red, 5))
         painter.drawLine(55, 5, 55, 100)
         painter.end()
 
         self.line_charge_drawing.setPixmap(canvas)
         self.line_charge_drawing.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.line_charge_drawing.label_type = DraggableLabel.LabelTypes.INFINITE_LINE_CHARGE
+
+        # Paint circle charge
+        canvas = QtGui.QPixmap(110, 110)
+        canvas.fill(self.palette().color(self.backgroundRole()))
+
+        painter = QtGui.QPainter(canvas)
+        painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
+        painter.setPen(QtGui.QPen(QtCore.Qt.GlobalColor.red, 5))
+        painter.setBrush(QtGui.QBrush(QtGui.QColor(255, 0, 0, alpha=50)))
+        painter.drawEllipse(5, 5, 100, 100)
+        painter.end()
+
+        self.circle_charge_drawing.setPixmap(canvas)
+        self.circle_charge_drawing.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.circle_charge_drawing.label_type = DraggableLabel.LabelTypes.CIRCLE_CHARGE
+
+        # Paint ring charge
+        canvas = QtGui.QPixmap(110, 110)
+        canvas.fill(self.palette().color(self.backgroundRole()))
+
+        painter = QtGui.QPainter(canvas)
+        painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
+        painter.setPen(QtGui.QPen(QtCore.Qt.GlobalColor.red, 20))
+        painter.drawEllipse(10, 10, 90, 90)
+        painter.end()
+
+        self.ring_charge_drawing.setPixmap(canvas)
+        self.ring_charge_drawing.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.ring_charge_drawing.label_type = DraggableLabel.LabelTypes.RING_CHARGE
 
     def _mouse_moved(self, event: Tuple) -> None:
         """
