@@ -74,7 +74,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
             InfiniteLineCharge(3, 2, 1, 0.5),
             InfiniteLineCharge(0, 1, 1, 1),
             InfiniteLineCharge(1, 0, 2, -1),
-            CircleCharge(Point2D(1, 2), 6.5, 2.0),
+            CircleCharge(Point2D(1, 2), 2.5, 2.0),
             RingCharge(Point2D(0, 0), 2, 3, -4),
             RingCharge(Point2D(0, 0), 5, 6, -4),
             RingCharge(Point2D(0, 0), 0, 1, 20)
@@ -425,9 +425,9 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                 topmost = max(topmost, charge.center.y + charge.radius)
                 bottommost = min(bottommost, charge.center.y - charge.radius)
 
-                ellipse_item = QtWidgets.QGraphicsEllipseItem(charge.center.x - charge.radius / 2,
-                                                              charge.center.y - charge.radius / 2,
-                                                              charge.radius, charge.radius)
+                ellipse_item = QtWidgets.QGraphicsEllipseItem(charge.center.x - charge.radius,
+                                                              charge.center.y - charge.radius,
+                                                              charge.radius * 2, charge.radius * 2)
                 ellipse_item.setPen(QtGui.QPen(QtCore.Qt.PenStyle.NoPen))
                 ellipse_item.pen().setWidth(0)
                 brush = (QtGui.QColor(255, 0, 0, alpha=128)
