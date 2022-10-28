@@ -161,6 +161,8 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
             self.graph_window.add_charge(InfiniteLineCharge(1, 0, -x_pos, 1))
         elif label_type == DraggableLabel.LabelTypes.CIRCLE_CHARGE:
             self.graph_window.add_charge(CircleCharge(Point2D(x_pos, y_pos), 1, 1))
+        elif label_type == DraggableLabel.LabelTypes.RING_CHARGE:
+            self.graph_window.add_charge(RingCharge(Point2D(x_pos, y_pos), 0.5, 1, 1))
         else:
             raise RuntimeWarning(
                 f"Unexpected label type {label_type} encountered in DroppablePlotWidget.dropEvent")
