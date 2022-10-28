@@ -9,6 +9,7 @@ from PyQt6 import QtWidgets, QtCore
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
 from equations.constants import COULOMB_CONSTANT, Point2D
+from view.two_line_dialog import TwoLineDialog
 # pylint: enable=import-error
 
 
@@ -94,22 +95,29 @@ class CircleCharge(BaseCharge):
         set_center = menu.addAction("Set Center")
         rmv_charge = menu.addAction("Remove Charge")
 
-        action = menu.exec(pos.toPoint())
+        while True:
+            action = menu.exec(pos.toPoint())
 
-        if action == set_charge:
-            print("Need to set charge")
-            val, ok = QtWidgets.QInputDialog().getDouble(menu, "Set Charge Density",
-                                                         "Set Charge Density (C/m^2)")
-            if ok:
-                self.charge_density = val
-        elif action == set_radius:
-            print("Need to set radius")
-        elif action == set_center:
-            print("Need to set center")
-        elif action == rmv_charge:
-            return True
+            if action == set_charge:
+                val, success = QtWidgets.QInputDialog().getDouble(menu, "Set Charge Density",
+                                                                  "Set Charge Density (C/m^2)")
+                if success:
+                    self.charge_density = val
+            elif action == set_radius:
+                val, success = QtWidgets.QInputDialog().getDouble(menu, "Set Radius",
+                                                                  "Set Radius (m)")
+                if success:
+                    self.radius = val
+            elif action == set_center:
+                x_pos, y_pos, success = TwoLineDialog("X Position", "Y Position",
+                                                      menu).get_doubles()
 
-        return False
+                if success and False not in np.isfinite([x_pos, y_pos]):
+                    self.center = Point2D(x_pos, y_pos)
+            elif action == rmv_charge:
+                return True
+            elif action is None:
+                return False
 
     def _relative_pos(self, point: Point2D) -> Point2D:
         """
