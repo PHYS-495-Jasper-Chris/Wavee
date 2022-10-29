@@ -165,18 +165,19 @@ class InfiniteLineCharge(BaseCharge):
         set_eqn = menu.addAction("Set Equation of Line")
         rmv_charge = menu.addAction("Remove Charge")
 
-        action = menu.exec(pos.toPoint())
+        while True:
+            action = menu.exec(pos.toPoint())
 
-        if action == set_charge:
-            print("Need to set charge")
-        elif action == set_eqn:
-            new_eqn, success = MultiLineInputDialog(
-                ["X Coefficient", "Y Coefficient", "Offset"], menu,
-                "Set equation of the line in the form ax + by + c = 0").get_doubles()
+            if action == set_charge:
+                print("Need to set charge")
+            elif action == set_eqn:
+                new_eqn, success = MultiLineInputDialog(
+                    ["X Coefficient", "Y Coefficient", "Offset"], menu,
+                    "Set equation of the line in the form ax + by + c = 0").get_doubles()
 
-            if success and False not in np.isfinite(new_eqn):
-                self.x_coef, self.y_coef, self.offset = new_eqn
-        elif action == rmv_charge:
-            return True
-
-        return False
+                if success and False not in np.isfinite(new_eqn):
+                    self.x_coef, self.y_coef, self.offset = new_eqn
+            elif action == rmv_charge:
+                return True
+            elif action is None:
+                return False

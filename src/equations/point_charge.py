@@ -120,19 +120,21 @@ class PointCharge(BaseCharge):
         set_charge = menu.addAction("Set Charge")
         rmv_charge = menu.addAction("Remove Charge")
 
-        action = menu.exec(pos.toPoint())
+        while True:
+            action = menu.exec(pos.toPoint())
 
-        if action == set_charge:
-            val, success = QtWidgets.QInputDialog().getDouble(menu, "Set Charge", "Set Charge (C)")
-            if success:
-                self.charge = val
-        elif action == set_center:
-            new_center, success = MultiLineInputDialog(["X Position", "Y Position"],
-                                                       menu).get_doubles()
+            if action == set_charge:
+                val, success = QtWidgets.QInputDialog().getDouble(menu, "Set Charge",
+                                                                  "Set Charge (C)")
+                if success:
+                    self.charge = val
+            elif action == set_center:
+                new_center, success = MultiLineInputDialog(["X Position", "Y Position"],
+                                                           menu).get_doubles()
 
-            if success and False not in np.isfinite(new_center):
-                self.position = Point2D(*new_center)
-        elif action == rmv_charge:
-            return True
-
-        return False
+                if success and False not in np.isfinite(new_center):
+                    self.position = Point2D(*new_center)
+            elif action == rmv_charge:
+                return True
+            elif action is None:
+                return False

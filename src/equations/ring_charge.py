@@ -122,31 +122,32 @@ class RingCharge(BaseCharge):
         set_center = menu.addAction("Set Center")
         rmv_charge = menu.addAction("Remove Charge")
 
-        action = menu.exec(pos.toPoint())
+        while True:
+            action = menu.exec(pos.toPoint())
 
-        if action == set_charge:
-            val, success = QtWidgets.QInputDialog().getDouble(menu, "Set Charge Density",
-                                                              "Set Charge Density (C/m^2)")
-            if success:
-                self.charge_density = val
-        elif action == set_radii:
-            (inner_radius,
-             outer_radius), success = MultiLineInputDialog(["Inner Radius", "Outer Radius"],
-                                                           menu).get_doubles(minimum=0.0)
+            if action == set_charge:
+                val, success = QtWidgets.QInputDialog().getDouble(menu, "Set Charge Density",
+                                                                  "Set Charge Density (C/m^2)")
+                if success:
+                    self.charge_density = val
+            elif action == set_radii:
+                (inner_radius,
+                 outer_radius), success = MultiLineInputDialog(["Inner Radius", "Outer Radius"],
+                                                               menu).get_doubles(minimum=0.0)
 
-            if success and False not in np.isfinite([inner_radius, outer_radius
-                                                    ]) and 0 <= inner_radius < outer_radius:
-                self.inner_radius, self.outer_radius = inner_radius, outer_radius
-        elif action == set_center:
-            new_center, success = MultiLineInputDialog(["X Position", "Y Position"],
-                                                       menu).get_doubles()
+                if success and False not in np.isfinite([inner_radius, outer_radius
+                                                        ]) and 0 <= inner_radius < outer_radius:
+                    self.inner_radius, self.outer_radius = inner_radius, outer_radius
+            elif action == set_center:
+                new_center, success = MultiLineInputDialog(["X Position", "Y Position"],
+                                                           menu).get_doubles()
 
-            if success and False not in np.isfinite(new_center):
-                self.center = Point2D(*new_center)
-        elif action == rmv_charge:
-            return True
-
-        return False
+                if success and False not in np.isfinite(new_center):
+                    self.center = Point2D(*new_center)
+            elif action == rmv_charge:
+                return True
+            elif action is None:
+                return False
 
     def _relative_pos(self, point: Point2D) -> Point2D:
         """
