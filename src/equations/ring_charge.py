@@ -9,6 +9,7 @@ from PyQt6 import QtWidgets, QtCore
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
 from equations.constants import COULOMB_CONSTANT, Point2D
+from view.multi_line_input_dialog import MultiLineInputDialog
 # pylint: enable=import-error
 
 
@@ -117,21 +118,31 @@ class RingCharge(BaseCharge):
 
         menu = QtWidgets.QMenu()
         set_charge = menu.addAction("Set Charge Density")
-        set_inner_radius = menu.addAction("Set Inner Radius")
-        set_outer_radius = menu.addAction("Set Outer Radius")
+        set_radii = menu.addAction("Set Radii")
         set_center = menu.addAction("Set Center")
         rmv_charge = menu.addAction("Remove Charge")
 
         action = menu.exec(pos.toPoint())
 
         if action == set_charge:
-            print("Need to set charge")
-        elif action == set_inner_radius:
-            print("Need to set inner radius")
-        elif action == set_outer_radius:
-            print("Need to set outer radius")
+            val, success = QtWidgets.QInputDialog().getDouble(menu, "Set Charge Density",
+                                                              "Set Charge Density (C/m^2)")
+            if success:
+                self.charge_density = val
+        elif action == set_radii:
+            (inner_radius,
+             outer_radius), success = MultiLineInputDialog(["Inner Radius", "Outer Radius"],
+                                                           menu).get_doubles(minimum=0.0)
+
+            if success and False not in np.isfinite([inner_radius, outer_radius
+                                                    ]) and 0 <= inner_radius < outer_radius:
+                self.inner_radius, self.outer_radius = inner_radius, outer_radius
         elif action == set_center:
-            print("Need to set center")
+            new_center, success = MultiLineInputDialog(["X Position", "Y Position"],
+                                                       menu).get_doubles()
+
+            if success and False not in np.isfinite(new_center):
+                self.center = Point2D(*new_center)
         elif action == rmv_charge:
             return True
 
