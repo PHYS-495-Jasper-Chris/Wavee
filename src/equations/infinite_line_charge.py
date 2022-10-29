@@ -9,6 +9,7 @@ from PyQt6 import QtWidgets, QtCore
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
 from equations.constants import COULOMB_CONSTANT, Point2D
+from view.multi_line_input_dialog import MultiLineInputDialog
 # pylint: enable=import-error
 
 
@@ -161,21 +162,20 @@ class InfiniteLineCharge(BaseCharge):
 
         menu = QtWidgets.QMenu()
         set_charge = menu.addAction("Set Charge Density")
-        set_x_coef = menu.addAction("Set X Coefficient")
-        set_y_coef = menu.addAction("Set Y Coefficient")
-        set_offset = menu.addAction("Set Offset")
+        set_eqn = menu.addAction("Set Equation of Line")
         rmv_charge = menu.addAction("Remove Charge")
 
         action = menu.exec(pos.toPoint())
 
         if action == set_charge:
             print("Need to set charge")
-        elif action == set_x_coef:
-            print("Need to set radius")
-        elif action == set_y_coef:
-            print("Need to set center")
-        elif action == set_offset:
-            print("Need to set center")
+        elif action == set_eqn:
+            new_eqn, success = MultiLineInputDialog(
+                ["X Coefficient", "Y Coefficient", "Offset"], menu,
+                "Set equation of the line in the form ax + by + c = 0").get_doubles()
+
+            if success and False not in np.isfinite(new_eqn):
+                self.x_coef, self.y_coef, self.offset = new_eqn
         elif action == rmv_charge:
             return True
 

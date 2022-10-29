@@ -9,6 +9,7 @@ from PyQt6 import QtWidgets, QtCore
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
 from equations.constants import COULOMB_CONSTANT, Point2D
+from view.multi_line_input_dialog import MultiLineInputDialog
 # pylint: enable=import-error
 
 
@@ -122,9 +123,15 @@ class PointCharge(BaseCharge):
         action = menu.exec(pos.toPoint())
 
         if action == set_charge:
-            print("Need to set charge")
+            val, success = QtWidgets.QInputDialog().getDouble(menu, "Set Charge", "Set Charge (C)")
+            if success:
+                self.charge = val
         elif action == set_center:
-            print("Need to set center")
+            new_center, success = MultiLineInputDialog(["X Position", "Y Position"],
+                                                       menu).get_doubles()
+
+            if success and False not in np.isfinite(new_center):
+                self.position = Point2D(*new_center)
         elif action == rmv_charge:
             return True
 
