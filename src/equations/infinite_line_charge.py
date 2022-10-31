@@ -86,8 +86,7 @@ class InfiniteLineCharge(BaseCharge):
             point (Point2D): The point to measure the field at.
 
         Returns:
-            float: The net (signed) magnitude of the electric field at the given point, or zero if
-            the magnitude is infinite.
+            float: The net (signed) magnitude of the electric field at the given point.
         """
 
         radial_distance = self.radial_distance(point)
@@ -97,9 +96,7 @@ class InfiniteLineCharge(BaseCharge):
             return 0.0
 
         # E = 2k λ/r
-        magnitude = 2 * COULOMB_CONSTANT * self.charge_density / radial_distance
-
-        return 0.0 if np.isinf(magnitude) else magnitude
+        return 2 * COULOMB_CONSTANT * self.charge_density / radial_distance
 
     def electric_field_x(self, point: Point2D) -> float:
         """

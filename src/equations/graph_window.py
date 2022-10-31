@@ -70,8 +70,9 @@ class Window:
         e_y = 0.0
 
         for charge in self.charges:
-            e_x += charge.electric_field_x(position)
-            e_y += charge.electric_field_y(position)
+            x_inc, y_inc = charge.electric_field_x(position), charge.electric_field_y(position)
+            e_x += x_inc if np.isfinite(x_inc) else 0.0
+            e_y += y_inc if np.isfinite(y_inc) else 0.0
 
         return np.sqrt(pow(e_x, 2) + pow(e_y, 2))
 
@@ -90,7 +91,8 @@ class Window:
 
         # Sum up electric field x component for each charge
         for charge in self.charges:
-            e_x += charge.electric_field_x(position)
+            x_inc = charge.electric_field_x(position)
+            e_x += x_inc if np.isfinite(x_inc) else 0.0
 
         return e_x
 
@@ -109,6 +111,7 @@ class Window:
 
         # Sum up electric field y component for each point charge
         for charge in self.charges:
-            e_y += charge.electric_field_y(position)
+            y_inc = charge.electric_field_x(position)
+            e_y += y_inc if np.isfinite(y_inc) else 0.0
 
         return e_y
