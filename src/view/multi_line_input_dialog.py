@@ -46,7 +46,7 @@ class MultiLineInputDialog(QtWidgets.QDialog):
             maximum (float): The maximum possible value. Defaults to INF.
 
         Returns:
-            tuple(List[float], bool): Every line's value as a float and the success as a bool.
+            Tuple[List[float], bool]: Every line's value as a float and the success as a bool.
         """
 
         spin_boxes = self._make_layout(QtWidgets.QDoubleSpinBox)
@@ -77,7 +77,7 @@ class MultiLineInputDialog(QtWidgets.QDialog):
         If the dialog was accepted, then success is set to True. Otherwise, the success is False.
 
         Returns:
-            tuple(List[str], bool): Every line's text as a str and the success as a bool.
+            tuple[List[str], bool]: Every line's text as a str and the success as a bool.
         """
 
         line_edits = self._make_layout(QtWidgets.QLineEdit)
