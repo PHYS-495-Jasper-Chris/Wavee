@@ -9,8 +9,6 @@ from typing import Tuple
 
 import pyqtgraph
 
-import numpy as np
-
 from PyQt6 import QtCore, QtWidgets, QtGui, uic
 
 # pylint: disable=import-error
@@ -176,25 +174,22 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ring_charge_drawing.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ring_charge_drawing.label_type = DraggableLabel.LabelTypes.RING_CHARGE
 
-    def _mouse_moved(self, event: Tuple) -> None:
+    def _mouse_moved(self, event: Tuple[QtCore.QPointF]) -> None:
         """
         Callback executed when the mouse moves in the graph widget.
 
         Args:
-            event (Tuple): A tuple containing the position of the mouse.
+            event (Tuple[QPointF]): A tuple containing the position of the mouse.
         """
 
         pos = event[0]
         if self.graph_widget.sceneBoundingRect().contains(pos):
-            mouse_point = self.graph_widget.get_pi_vb()[1].mapSceneToView(pos)
-            x_pos = mouse_point.x()
-            y_pos = mouse_point.y()
-            ef_mag_x = self.graph_widget.graph_window.electric_field_x(Point2D(x_pos, y_pos))
-            ef_mag_y = self.graph_widget.graph_window.electric_field_y(Point2D(x_pos, y_pos))
-            ef_mag_net = np.sqrt(ef_mag_x**2 + ef_mag_y**2)
+            mouse_point: QtCore.QPointF = self.graph_widget.get_pi_vb()[1].mapSceneToView(pos)
+            x_pos, y_pos = mouse_point.x(), mouse_point.y()
+            ef_mag_net = self.graph_widget.graph_window.net_electric_field(Point2D(x_pos, y_pos))
 
-            x_fs = "e" if abs(x_pos) > 1e5 else "f"
-            y_fs = "e" if abs(y_pos) > 1e5 else "f"
+            x_fs = "e" if abs(x_pos) > 1e5 or (x_pos != 0.0 and abs(x_pos) < 1e-2) else "f"
+            y_fs = "e" if abs(y_pos) > 1e5 or (y_pos != 0.0 and abs(y_pos) < 1e-2) else "f"
             text = f"X: {x_pos:+.2{x_fs}} Y: {y_pos:+.2{y_fs}} Magnitude: {ef_mag_net:.6g}"
 
             self.graph_widget.setToolTip(text)
