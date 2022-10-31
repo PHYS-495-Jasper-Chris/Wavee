@@ -66,6 +66,9 @@ class MainWindow(QtWidgets.QMainWindow):
         default_range = graph_menu.addAction("Default range", "Ctrl+D")
         default_range.triggered.connect(self.graph_widget.default_range)
 
+        aspect_ratio_toggle = graph_menu.addAction("Toggle fixed aspect ratio", "Ctrl+A")
+        aspect_ratio_toggle.triggered.connect(self.graph_widget.toggle_even_aspect_ratio)
+
         charge_menu = self.menu_bar.addMenu("Charges")
         remove_charge = charge_menu.addAction("Remove last charge", "Ctrl+Backspace")
         remove_charge.triggered.connect(self.graph_widget.remove_charge)
