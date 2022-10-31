@@ -436,14 +436,15 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
             # Circle charges
             elif isinstance(charge, CircleCharge):
-                leftmost = min(leftmost, charge.center.x - charge.radius)
-                rightmost = max(rightmost, charge.center.x + charge.radius)
-                topmost = max(topmost, charge.center.y + charge.radius)
-                bottommost = min(bottommost, charge.center.y - charge.radius)
+                leftmost = min(leftmost, charge.center.x - charge.outer_radius)
+                rightmost = max(rightmost, charge.center.x + charge.outer_radius)
+                topmost = max(topmost, charge.center.y + charge.outer_radius)
+                bottommost = min(bottommost, charge.center.y - charge.outer_radius)
 
-                ellipse_item = QtWidgets.QGraphicsEllipseItem(charge.center.x - charge.radius,
-                                                              charge.center.y - charge.radius,
-                                                              charge.radius * 2, charge.radius * 2)
+                ellipse_item = QtWidgets.QGraphicsEllipseItem(charge.center.x - charge.outer_radius,
+                                                              charge.center.y - charge.outer_radius,
+                                                              charge.outer_radius * 2,
+                                                              charge.outer_radius * 2)
                 ellipse_item.setPen(QtGui.QPen(QtCore.Qt.PenStyle.NoPen))
                 ellipse_item.pen().setWidth(0)
                 brush = (QtGui.QColor(255, 0, 0, alpha=128)

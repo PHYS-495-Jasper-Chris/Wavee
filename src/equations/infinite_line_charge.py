@@ -90,8 +90,14 @@ class InfiniteLineCharge(BaseCharge):
             the magnitude is infinite.
         """
 
+        radial_distance = self.radial_distance(point)
+
+        # Make sure we don't divide by 0
+        if radial_distance == 0.0:
+            return 0.0
+
         # E = 2k λ/r
-        magnitude = 2 * COULOMB_CONSTANT * self.charge_density / self.radial_distance(point)
+        magnitude = 2 * COULOMB_CONSTANT * self.charge_density / radial_distance
 
         return 0.0 if np.isinf(magnitude) else magnitude
 

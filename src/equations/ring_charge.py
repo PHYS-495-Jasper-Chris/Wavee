@@ -67,6 +67,10 @@ class RingCharge(BaseCharge):
         x_pos, y_pos = self._relative_pos(point)
         radial_distance: float = np.sqrt(x_pos**2 + y_pos**2)
 
+        # Make sure we don't divide by 0
+        if radial_distance == 0.0:
+            return 0.0
+
         q_enc = 0.0
         if radial_distance > self.inner_radius:
             effective_rad = min(radial_distance, self.outer_radius)
@@ -74,8 +78,8 @@ class RingCharge(BaseCharge):
             # Since ρ is constant, this is Pi * (rad^2 - inner^2) * ρ
             q_enc = self.charge_density * np.pi * (effective_rad**2 - self.inner_radius**2)
 
-        # E = k * q_enc / r^2
-        return COULOMB_CONSTANT * q_enc / radial_distance**2
+        # E = k * q_enc / 2 * pi * r
+        return COULOMB_CONSTANT * q_enc / (2 * np.pi * radial_distance)
 
     def electric_field_x(self, point: Point2D) -> float:
         """
