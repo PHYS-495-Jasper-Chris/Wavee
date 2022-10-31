@@ -84,11 +84,17 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _paint_shapes(self) -> None:
         """
-        Create a circle for the point charge.
-
-        Will also be used to draw other shapes.
+        Create an icon for each charge type in the right hand drag and drop menu.
         """
+        self._paint_point_charge_icon()
+        self._paint_infinite_line_charge_icon()
+        self._paint_circle_charge_icon()
+        self._paint_ring_charge_icon()
 
+    def _paint_point_charge_icon(self) -> None:
+        """
+        Paint the drag and drop circle for point charge on the right hand column
+        """
         # Paint circle
         canvas = QtGui.QPixmap(110, 110)
         canvas.fill(self.palette().color(self.backgroundRole()))
@@ -100,10 +106,15 @@ class MainWindow(QtWidgets.QMainWindow):
         painter.drawEllipse(5, 5, 100, 100)
         painter.end()
 
+        # set the drag label variables
         self.point_charge_circle.setPixmap(canvas)
         self.point_charge_circle.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.point_charge_circle.label_type = DraggableLabel.LabelTypes.POINT_CHARGE
 
+    def _paint_infinite_line_charge_icon(self) -> None:
+        """
+        Paint the drag and drop line for line charge elements on the right hand column
+        """
         # Paint straight line
         canvas = QtGui.QPixmap(110, 110)
         canvas.fill(self.palette().color(self.backgroundRole()))
@@ -118,6 +129,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.line_charge_drawing.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.line_charge_drawing.label_type = DraggableLabel.LabelTypes.INFINITE_LINE_CHARGE
 
+    def _paint_circle_charge_icon(self) -> None:
+        """
+        Paint the drag and drop circle for circle charge elements on the right hand column
+        """
         # Paint circle charge
         canvas = QtGui.QPixmap(110, 110)
         canvas.fill(self.palette().color(self.backgroundRole()))
@@ -133,6 +148,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.circle_charge_drawing.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.circle_charge_drawing.label_type = DraggableLabel.LabelTypes.CIRCLE_CHARGE
 
+    def _paint_ring_charge_icon(self) -> None:
+        """
+        Paint the drag and drop ring for ring charge elements on the right hand column
+        """
         # Paint ring charge
         canvas = QtGui.QPixmap(110, 110)
         canvas.fill(self.palette().color(self.backgroundRole()))
