@@ -390,8 +390,10 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         leftmost, rightmost, topmost, bottommost = np.inf, -np.inf, -np.inf, np.inf
 
-        # Plot point and line charges themselves
+        # Plot all charges
         for charge in self.graph_window.charges:
+
+            # Point charges
             if isinstance(charge, PointCharge):
                 leftmost = min(leftmost, charge.position.x)
                 rightmost = max(rightmost, charge.position.x)
@@ -404,6 +406,8 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                                                      "initial_size": abs(charge.charge) * 200,
                                                      "brush": "r" if charge.charge > 0.0 else "b"
                                                  })
+
+            # Infinite Line charges
             elif isinstance(charge, InfiniteLineCharge):
                 if charge.y_coef == 0:
                     # ax + c = 0 -> x = -c/a
@@ -429,6 +433,8 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                     })
 
                 self.addItem(line_plot_item)
+
+            # Circle charges
             elif isinstance(charge, CircleCharge):
                 leftmost = min(leftmost, charge.center.x - charge.radius)
                 rightmost = max(rightmost, charge.center.x + charge.radius)
@@ -444,6 +450,8 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                          if charge.charge_density > 0 else QtGui.QColor(0, 0, 255, alpha=128))
                 ellipse_item.setBrush(brush)
                 self.addItem(ellipse_item)
+
+            # Ring charges
             elif isinstance(charge, RingCharge):
                 leftmost = min(leftmost, charge.center.x - charge.outer_radius)
                 rightmost = max(rightmost, charge.center.x + charge.outer_radius)
