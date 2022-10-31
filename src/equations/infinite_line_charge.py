@@ -175,13 +175,17 @@ class InfiniteLineCharge(BaseCharge):
             action = menu.exec(pos.toPoint())
 
             if action == set_charge:
-                print("Need to set charge")
+                val, success = QtWidgets.QInputDialog().getDouble(menu, "Set Charge Density",
+                                                                  "Set Charge Density (C/m)")
+                if success:
+                    self.charge_density = val
             elif action == set_eqn:
                 new_eqn, success = MultiLineInputDialog(
                     ["X Coefficient", "Y Coefficient", "Offset"], menu,
                     "Set equation of the line in the form ax + by + c = 0").get_doubles()
 
-                if success and False not in np.isfinite(new_eqn):
+                if success and False not in np.isfinite(new_eqn) and not (new_eqn[0] == 0.0
+                                                                          and new_eqn[1] == 0.0):
                     self.x_coef, self.y_coef, self.offset = new_eqn
             elif action == rmv_charge:
                 return True
