@@ -93,7 +93,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _paint_point_charge_icon(self) -> None:
         """
-        Paint the drag and drop circle for point charge on the right hand column
+        Paint the drag and drop circle for point charge on the right hand column.
+
+        This is a solid red circle.
         """
         # Paint circle
         canvas = QtGui.QPixmap(110, 110)
@@ -106,14 +108,15 @@ class MainWindow(QtWidgets.QMainWindow):
         painter.drawEllipse(5, 5, 100, 100)
         painter.end()
 
-        # set the drag label variables
         self.point_charge_circle.setPixmap(canvas)
         self.point_charge_circle.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.point_charge_circle.label_type = DraggableLabel.LabelTypes.POINT_CHARGE
 
     def _paint_infinite_line_charge_icon(self) -> None:
         """
-        Paint the drag and drop line for line charge elements on the right hand column
+        Paint the drag and drop line for line charge elements on the right hand column.
+
+        This is a solid vertical line.
         """
         # Paint straight line
         canvas = QtGui.QPixmap(110, 110)
@@ -131,7 +134,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _paint_circle_charge_icon(self) -> None:
         """
-        Paint the drag and drop circle for circle charge elements on the right hand column
+        Paint the drag and drop circle for circle charge elements on the right hand column.
+
+        This is a transparent red circle with a solid red border.
         """
         # Paint circle charge
         canvas = QtGui.QPixmap(110, 110)
@@ -150,7 +155,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _paint_ring_charge_icon(self) -> None:
         """
-        Paint the drag and drop ring for ring charge elements on the right hand column
+        Paint the drag and drop ring for ring charge elements on the right hand column.
+
+        This is a completely transparent circle with a thick red border.
         """
         # Paint ring charge
         canvas = QtGui.QPixmap(110, 110)

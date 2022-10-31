@@ -55,7 +55,13 @@ class PointCharge(BaseCharge):
             float: magnitude of electric field.
         """
 
-        return COULOMB_CONSTANT * self.charge / self.radius(point)**2
+        radius = self.radius(point)
+
+        # Make sure we don't divide by 0
+        if radius == 0.0:
+            return 0.0
+
+        return COULOMB_CONSTANT * self.charge / radius**2
 
     def theta(self, point: Point2D) -> float:
         """
@@ -68,7 +74,7 @@ class PointCharge(BaseCharge):
             float: angle.
         """
 
-        return np.arccos(abs((point.x - self.position.x)) / self.radius(point))
+        return np.arctan2(point.y - self.position.y, point.x - self.position.x)
 
     def electric_field_x(self, point: Point2D) -> float:
         """
@@ -82,9 +88,7 @@ class PointCharge(BaseCharge):
             float: x component of electric field.
         """
 
-        magnitude = self.electric_field_magnitude(point) * np.cos(self.theta(point))
-        magnitude = magnitude * -1 if point.x < self.position.x else magnitude
-        return magnitude
+        return self.electric_field_magnitude(point) * np.cos(self.theta(point))
 
     def electric_field_y(self, point: Point2D) -> float:
         """
@@ -98,9 +102,7 @@ class PointCharge(BaseCharge):
             float: y component of electric field.
         """
 
-        magnitude = self.electric_field_magnitude(point) * np.sin(self.theta(point))
-        magnitude = magnitude * -1 if point.y < self.position.y else magnitude
-        return magnitude
+        return self.electric_field_magnitude(point) * np.sin(self.theta(point))
 
     def open_menu(self, pos: QtCore.QPointF) -> bool:
         """
