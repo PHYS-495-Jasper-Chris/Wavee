@@ -57,6 +57,12 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         self.setAcceptDrops(True)
 
+        self.aspect_ratio_fixed = True
+        """
+        Whether the aspect ratio is fixed at 1:1. Calling ``toggle_even_aspect_ratio`` toggles this
+        value.
+        """
+
         self.graph_resolution = DroppablePlotWidget.DEFAULT_GRAPH_RESOLUTION
         """
         The number of x-axis points to render.
@@ -364,6 +370,16 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         self.build_plots()
         self.scatter_plot_item.viewRangeChanged()
+
+    def toggle_even_aspect_ratio(self) -> None:
+        """
+        Toggle requiring the aspect ratio to be 1:1 so that circles are properly shaped.
+        """
+
+        view_box = self.get_pi_vb()[1]
+        view_box.setAspectLocked(self.aspect_ratio_fixed, 1)
+
+        self.aspect_ratio_fixed = not self.aspect_ratio_fixed
 
     def remove_charge(self) -> None:
         """

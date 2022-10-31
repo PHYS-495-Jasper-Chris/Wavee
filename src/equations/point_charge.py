@@ -71,7 +71,7 @@ class PointCharge(BaseCharge):
             point (Point2D): test point.
 
         Returns:
-            float: angle.
+            float: angle in radians.
         """
 
         return np.arctan2(point.y - self.position.y, point.x - self.position.x)

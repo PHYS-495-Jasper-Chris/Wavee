@@ -66,15 +66,7 @@ class Window:
             float: magnitude of electric field
         """
 
-        e_x = 0.0
-        e_y = 0.0
-
-        for charge in self.charges:
-            x_inc, y_inc = charge.electric_field_x(position), charge.electric_field_y(position)
-            e_x += x_inc if np.isfinite(x_inc) else 0.0
-            e_y += y_inc if np.isfinite(y_inc) else 0.0
-
-        return np.sqrt(pow(e_x, 2) + pow(e_y, 2))
+        return np.sqrt(self.electric_field_x(position)**2 + self.electric_field_y(position)**2)
 
     def electric_field_x(self, position: Point2D) -> float:
         """
@@ -111,7 +103,7 @@ class Window:
 
         # Sum up electric field y component for each point charge
         for charge in self.charges:
-            y_inc = charge.electric_field_x(position)
+            y_inc = charge.electric_field_y(position)
             e_y += y_inc if np.isfinite(y_inc) else 0.0
 
         return e_y
