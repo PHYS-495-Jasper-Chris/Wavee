@@ -42,8 +42,6 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         uic.load_ui.loadUi(os.path.join(sys.path[0], "view/ui/main_window.ui"), self)
-        self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
-        self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
 
         self.refresh_button.clicked.connect(self.graph_widget.refresh_button_pressed)
 
@@ -89,6 +87,9 @@ class MainWindow(QtWidgets.QMainWindow):
             self.graph_widget.graph_window.electric_field_mag_html())
         self.x_equation_label.setHtml(self.graph_widget.graph_window.electric_field_x_html())
         self.y_equation_label.setHtml(self.graph_widget.graph_window.electric_field_y_html())
+
+        self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
+        self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
 
         self.show()
 

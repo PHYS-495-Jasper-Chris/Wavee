@@ -161,9 +161,6 @@ class RingCharge(BaseCharge):
         Returns the position-independent electric field equation of magnitude for this ring charge.
         """
 
-        rp_sym = sympy.Symbol("r'")
-
-        # E = E = k * q_enc / 2 * pi * r
         # r = sqrt((x - x0)**2 + (y - y0)**2)
         r_sym = sympy.sqrt((self.center.x - x)**2 + (self.center.y - y)**2)
 
@@ -172,10 +169,12 @@ class RingCharge(BaseCharge):
             q_enc = self.charge_density * sympy.pi * (r_sym**2 - self.inner_radius**2)
             q_tot = self.charge_density * sympy.pi * (self.outer_radius**2 - self.inner_radius**2)
         else:
+            rp_sym = sympy.Symbol("r'")
             q_enc = sympy.Integral(self.charge_density, (rp_sym, self.inner_radius, r_sym))
             q_tot = sympy.Integral(self.charge_density,
                                    (rp_sym, self.inner_radius, self.outer_radius))
 
+        # E = E = k * q_enc / 2 * pi * r
         eqn = COULOMB_CONSTANT_SYM * q_enc / (2 * sympy.pi * r_sym)
         eqn_outer = COULOMB_CONSTANT_SYM * q_tot / (2 * sympy.pi * r_sym)
 
