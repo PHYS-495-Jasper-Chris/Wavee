@@ -2,6 +2,8 @@
 Calculate the electric field of a point charge.
 """
 
+import sympy
+
 import numpy as np
 
 from PyQt6 import QtWidgets, QtCore
@@ -140,3 +142,17 @@ class PointCharge(BaseCharge):
                 return True
             elif action is None:
                 return False
+
+    def electric_field_mag_string(self) -> sympy.Basic:
+        """
+        Returns the position-independent electric field equation of magnitude for this point charge.
+        """
+
+        k_sym, x_sym, y_sym = sympy.symbols("k_e,x,y")
+
+        # The equation for a point charge is k q / r^2
+        # r = sqrt(x_dist^2 + y_dist^2)
+        # x_dist = abs(x - self.center.x)
+        x_dist, y_dist = abs(x_sym - self.position.x), abs(y_sym - self.position.y)
+
+        return k_sym * self.charge / (x_dist + y_dist)

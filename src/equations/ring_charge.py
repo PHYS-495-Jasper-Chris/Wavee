@@ -2,6 +2,8 @@
 A cylindrical hollow ring of charge.
 """
 
+import sympy
+
 import numpy as np
 
 from PyQt6 import QtWidgets, QtCore
@@ -152,6 +154,26 @@ class RingCharge(BaseCharge):
                 return True
             elif action is None:
                 return False
+
+    def electric_field_mag_string(self) -> sympy.Basic:
+        """
+        Returns the position-independent electric field equation of magnitude for this ring charge.
+        """
+
+        k_sym, x_sym, y_sym, rp_sym = sympy.symbols("k_e,x,y,r")
+
+        # E = E = k * q_enc / 2 * pi * r
+        # r = sqrt((x - x0)**2 + (y - y0)**2)
+        # q_enc = Integral[ρ, {r, inner, rad}]
+        r_sym = sympy.sqrt((self.center.x - x_sym)**2 + (self.center.y - y_sym)**2)
+        q_enc = sympy.Integral(self.charge_density, (rp_sym, self.inner_radius, r_sym))
+        eqn = k_sym * q_enc / (2 * sympy.pi * r_sym)
+
+        # Circle charge
+        if self.inner_radius == 0:
+            return eqn
+
+        return sympy.Piecewise((eqn, r_sym >= self.inner_radius), (0, r_sym <= self.inner_radius))
 
     def _relative_pos(self, point: Point2D) -> Point2D:
         """

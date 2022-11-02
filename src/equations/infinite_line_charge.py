@@ -2,6 +2,8 @@
 Calculate the electric field of an infinite line charge.
 """
 
+import sympy
+
 import numpy as np
 
 from PyQt6 import QtWidgets, QtCore
@@ -188,3 +190,17 @@ class InfiniteLineCharge(BaseCharge):
                 return True
             elif action is None:
                 return False
+
+    def electric_field_mag_string(self) -> sympy.Basic:
+        """
+        Returns the position-independent electric field equation for this point charge.
+        """
+
+        k_sym, x_sym, y_sym = sympy.symbols("k_e,x,y")
+
+        # E = 2k λ/r
+        # radial distance
+        r_sym = (abs(self.x_coef * x_sym + self.y_coef * y_sym + self.offset)
+                 / sympy.sqrt(self.x_coef**2 + self.y_coef**2))
+
+        return 2 * k_sym * self.charge_density / r_sym

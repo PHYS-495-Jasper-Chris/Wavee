@@ -21,7 +21,6 @@ from equations.infinite_line_charge import InfiniteLineCharge
 from equations.point_charge import PointCharge
 from equations.ring_charge import RingCharge
 from view.draggable_label import DraggableLabel
-from view.scaling_scatter_plot import ScalingScatterPlotItem
 # pylint: enable=import-error
 
 RGBTuple = NamedTuple("RGBTuple", [("r", int), ("g", int), ("b", int)])
@@ -66,11 +65,6 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         self.graph_resolution = DroppablePlotWidget.DEFAULT_GRAPH_RESOLUTION
         """
         The number of x-axis points to render.
-        """
-
-        self.scatter_plot_item = ScalingScatterPlotItem()
-        """
-        A scaling ScatterPlotItem holding point charges.
         """
 
         self.graph_window = Window([
@@ -216,12 +210,10 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         # Remove old graphs
         plot_item.clear()
-        self.scatter_plot_item.clear()
 
         for axis in axes:
             plot_item.getAxis(axis).setGrid(255)
 
-        self.addItem(self.scatter_plot_item)
         default_dimensions = self._plot_charges()
 
         # Build the dimensions based solely on the charges, or the provided dimensions.
@@ -306,9 +298,6 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         if should_autoscale:
             # Enable autoscaling if no dimension set.
             view_box.enableAutoRange()
-        else:
-            # Fix the scale factors if we are reloading an existing graph.
-            self.scatter_plot_item.viewRangeChanged()
 
     def reset_resolution(self) -> None:
         """
@@ -369,7 +358,6 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         """
 
         self.build_plots()
-        self.scatter_plot_item.viewRangeChanged()
 
     def toggle_even_aspect_ratio(self) -> None:
         """
@@ -411,17 +399,21 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
             # Point charges
             if isinstance(charge, PointCharge):
-                leftmost = min(leftmost, charge.position.x)
-                rightmost = max(rightmost, charge.position.x)
-                topmost = max(topmost, charge.position.y)
-                bottommost = min(bottommost, charge.position.y)
+                radius = abs(charge.charge) / 5
 
-                self.scatter_plot_item.addPoints(x=[charge.position.x],
-                                                 y=[charge.position.y],
-                                                 data={
-                                                     "initial_size": abs(charge.charge) * 200,
-                                                     "brush": "r" if charge.charge > 0.0 else "b"
-                                                 })
+                leftmost = min(leftmost, charge.position.x - radius)
+                rightmost = max(rightmost, charge.position.x + radius)
+                topmost = max(topmost, charge.position.y + radius)
+                bottommost = min(bottommost, charge.position.y - radius)
+
+                ellipse_item = QtWidgets.QGraphicsEllipseItem(charge.position.x - radius,
+                                                              charge.position.y - radius,
+                                                              radius * 2, radius * 2)
+                ellipse_item.setBrush(
+                    QtCore.Qt.GlobalColor.red if charge.charge > 0 else QtCore.Qt.GlobalColor.blue)
+                ellipse_item.setPen(QtGui.QPen(QtCore.Qt.PenStyle.NoPen))
+                ellipse_item.pen().setWidth(0)
+                self.addItem(ellipse_item)
 
             # Infinite Line charges
             elif isinstance(charge, InfiniteLineCharge):

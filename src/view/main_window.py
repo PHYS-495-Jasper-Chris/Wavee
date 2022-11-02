@@ -9,7 +9,7 @@ from typing import Tuple
 
 import pyqtgraph
 
-from PyQt6 import QtCore, QtWidgets, QtGui, uic
+from PyQt6 import QtCore, QtWidgets, QtGui, uic, QtWebEngineWidgets
 
 # pylint: disable=import-error
 from equations.constants import Point2D
@@ -27,6 +27,7 @@ class MainWindow(QtWidgets.QMainWindow):
     central_widget: QtWidgets.QWidget
     grid_layout: QtWidgets.QGridLayout
     graph_widget: DroppablePlotWidget
+    net_mag_equation_label: QtWebEngineWidgets.QWebEngineView
     point_charge_circle: DraggableLabel
     line_charge_drawing: DraggableLabel
     circle_charge_drawing: DraggableLabel
@@ -80,6 +81,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self._paint_shapes()
         self.graph_widget.build_plots()
+
+        # TODO: reload this when the charges change
+        self.net_mag_equation_label.setHtml(
+            self.graph_widget.graph_window.electric_field_mag_html())
 
         self.show()
 
@@ -194,3 +199,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
             self.graph_widget.setToolTip(text)
             self.status_bar.showMessage(text)
+
+    def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:
+        super().resizeEvent(a0)
+
+        # TODO: figure out how to do this properly (this doesn't work)
+        self.net_mag_equation_label.page().runJavaScript(
+            "document.documentElement.scrollHeight;",
+            lambda height: self.net_mag_equation_label.resize(self.net_mag_equation_label.width(),
+                                                              int(height) + 10))

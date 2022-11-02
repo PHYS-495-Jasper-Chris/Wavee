@@ -5,6 +5,7 @@ A graph window, holding the electric field of arbitrary charge distributions.
 from typing import List, Optional
 
 import numpy as np
+import sympy
 
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
@@ -107,3 +108,36 @@ class Window:
             e_y += y_inc if np.isfinite(y_inc) else 0.0
 
         return e_y
+
+    def electric_field_mag_html(self):
+        """
+        Get the cumulative electric field magnitude by summing each charge's magnitude.
+        """
+
+        full_eqn: str = ""
+
+        for charge in self.charges:
+            full_eqn += ("\\left(" + sympy.latex(charge.electric_field_mag_string()) + "\\right)"
+                         + "+")
+
+        full_eqn = "E(x,y)=" + full_eqn[:-1]
+
+        source = f"""
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>MathJax example</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+</head>
+<body>
+    <p>$${full_eqn}$$</p>
+</body>
+</html>
+"""
+
+        return source
