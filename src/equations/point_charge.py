@@ -11,7 +11,7 @@ from PyQt6 import QtWidgets, QtCore
 
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
-from equations.constants import COULOMB_CONSTANT, Point2D
+from equations.constants import COULOMB_CONSTANT, COULOMB_CONSTANT_SYM, Point2D
 from view.multi_line_input_dialog import MultiLineInputDialog
 # pylint: enable=import-error
 
@@ -114,14 +114,12 @@ class PointCharge(BaseCharge):
         Returns the position-independent electric field equation of magnitude for this point charge.
         """
 
-        k_sym, x_sym, y_sym = sympy.symbols("k_e,x,y")
-
         # The equation for a point charge is k q / r^2
         # r = sqrt(x_dist^2 + y_dist^2)
         # x_dist = abs(x - self.center.x)
-        x_dist, y_dist = abs(x_sym - self.position.x), abs(y_sym - self.position.y)
+        x_dist, y_dist = abs(x - self.position.x), abs(y - self.position.y)
 
-        return k_sym * self.charge / (x_dist + y_dist)
+        return COULOMB_CONSTANT_SYM * self.charge / (x_dist + y_dist)
 
     def electric_field_x_string(self) -> sympy.Basic:
         return self.electric_field_mag_string() * sympy.cos(self._theta_string())

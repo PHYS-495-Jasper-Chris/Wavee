@@ -4,8 +4,7 @@ An abstract charge, from which subclasses overload.
 
 import abc
 
-import sympy
-
+from sympy import Basic
 from PyQt6 import QtCore
 
 from equations.constants import Point2D  # pylint: disable=import-error
@@ -67,19 +66,19 @@ class BaseCharge(abc.ABC):
         """
 
     @abc.abstractmethod
-    def electric_field_mag_string(self) -> sympy.Basic:
+    def electric_field_mag_string(self) -> Basic:
         """
         Returns the position-independent electric field equation.
         """
 
     @abc.abstractmethod
-    def electric_field_x_string(self) -> sympy.Basic:
+    def electric_field_x_string(self) -> Basic:
         """
         Returns the position-independent electric field x-component equation.
         """
 
     @abc.abstractmethod
-    def electric_field_y_string(self) -> sympy.Basic:
+    def electric_field_y_string(self) -> Basic:
         """
         Returns the position-independent electric field y-component equation.
         """

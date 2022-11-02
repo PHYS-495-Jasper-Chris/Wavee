@@ -11,7 +11,7 @@ from PyQt6 import QtWidgets, QtCore
 
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
-from equations.constants import COULOMB_CONSTANT, Point2D
+from equations.constants import COULOMB_CONSTANT, COULOMB_CONSTANT_SYM, Point2D
 from view.multi_line_input_dialog import MultiLineInputDialog
 # pylint: enable=import-error
 
@@ -161,20 +161,31 @@ class RingCharge(BaseCharge):
         Returns the position-independent electric field equation of magnitude for this ring charge.
         """
 
-        k_sym, x_sym, y_sym, rp_sym = sympy.symbols("k_e,x,y,r")
+        rp_sym = sympy.Symbol("r'")
 
         # E = E = k * q_enc / 2 * pi * r
         # r = sqrt((x - x0)**2 + (y - y0)**2)
+        r_sym = sympy.sqrt((self.center.x - x)**2 + (self.center.y - y)**2)
+
         # q_enc = Integral[ρ, {r, inner, rad}]
-        r_sym = sympy.sqrt((self.center.x - x_sym)**2 + (self.center.y - y_sym)**2)
-        q_enc = sympy.Integral(self.charge_density, (rp_sym, self.inner_radius, r_sym))
-        eqn = k_sym * q_enc / (2 * sympy.pi * r_sym)
+        if isinstance(self.charge_density, (float, int)):
+            q_enc = self.charge_density * sympy.pi * (r_sym**2 - self.inner_radius**2)
+            q_tot = self.charge_density * sympy.pi * (self.outer_radius**2 - self.inner_radius**2)
+        else:
+            q_enc = sympy.Integral(self.charge_density, (rp_sym, self.inner_radius, r_sym))
+            q_tot = sympy.Integral(self.charge_density,
+                                   (rp_sym, self.inner_radius, self.outer_radius))
 
-        # Circle charge
-        if self.inner_radius == 0:
-            return eqn
+        eqn = COULOMB_CONSTANT_SYM * q_enc / (2 * sympy.pi * r_sym)
+        eqn_outer = COULOMB_CONSTANT_SYM * q_tot / (2 * sympy.pi * r_sym)
 
-        return sympy.Piecewise((eqn, r_sym >= self.inner_radius), (0, r_sym <= self.inner_radius))
+        inner_cond = False if self.inner_radius == 0 else r_sym <= self.inner_radius
+
+        middle_cond = r_sym <= self.outer_radius if self.inner_radius == 0 else sympy.And(
+            r_sym >= self.inner_radius, r_sym <= self.outer_radius)
+
+        return sympy.Piecewise((eqn_outer, r_sym >= self.outer_radius), (eqn, middle_cond),
+                               (0, inner_cond))
 
     def electric_field_x_string(self) -> sympy.Basic:
         """

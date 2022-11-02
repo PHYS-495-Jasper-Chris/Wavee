@@ -13,7 +13,7 @@ from PyQt6 import QtWidgets, QtCore
 
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
-from equations.constants import COULOMB_CONSTANT, Point2D
+from equations.constants import COULOMB_CONSTANT, COULOMB_CONSTANT_SYM, Point2D
 from equations.sympy_helper import clean_inequality
 from view.multi_line_input_dialog import MultiLineInputDialog
 # pylint: enable=import-error
@@ -200,14 +200,12 @@ class InfiniteLineCharge(BaseCharge):
         Returns the position-independent electric field equation for this infinite line charge.
         """
 
-        k_sym = sympy.symbols("k_e")
-
         # E = 2k λ/r
         # radial distance
         r_sym = (abs(self.x_coef * x + self.y_coef * y + self.offset)
                  / sympy.sqrt(self.x_coef**2 + self.y_coef**2))
 
-        return 2 * k_sym * self.charge_density / r_sym
+        return 2 * COULOMB_CONSTANT_SYM * self.charge_density / r_sym
 
     def _closest_point_string(self) -> Tuple[sympy.Basic, sympy.Basic]:
         """
