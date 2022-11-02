@@ -68,16 +68,16 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         """
 
         self.graph_window = Window([
-            PointCharge(Point2D(1, 4), 10),
-            PointCharge(Point2D(-3, 5), 8),
-            PointCharge(Point2D(0, 1), -5),
+            # PointCharge(Point2D(1, 4), 10),
+            # PointCharge(Point2D(-3, 5), 8),
+            # PointCharge(Point2D(0, 1), -5),
             InfiniteLineCharge(3, 2, 1, 0.5),
             InfiniteLineCharge(0, 1, 1, 1),
             InfiniteLineCharge(1, 0, 2, -1),
-            CircleCharge(Point2D(1, 2), 2.5, 2.0),
-            RingCharge(Point2D(0, 0), 2, 3, -4),
-            RingCharge(Point2D(0, 0), 5, 6, -4),
-            RingCharge(Point2D(0, 0), 0, 1, 20)
+            # CircleCharge(Point2D(1, 2), 2.5, 2.0),
+            # RingCharge(Point2D(0, 0), 2, 3, -4),
+            # RingCharge(Point2D(0, 0), 5, 6, -4),
+            # RingCharge(Point2D(0, 0), 0, 1, 20)
         ])
 
     def get_pi_vb(self) -> Tuple[pyqtgraph.PlotItem, pyqtgraph.ViewBox]:

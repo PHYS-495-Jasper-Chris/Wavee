@@ -28,6 +28,8 @@ class MainWindow(QtWidgets.QMainWindow):
     grid_layout: QtWidgets.QGridLayout
     graph_widget: DroppablePlotWidget
     net_mag_equation_label: QtWebEngineWidgets.QWebEngineView
+    x_equation_label: QtWebEngineWidgets.QWebEngineView
+    y_equation_label: QtWebEngineWidgets.QWebEngineView
     point_charge_circle: DraggableLabel
     line_charge_drawing: DraggableLabel
     circle_charge_drawing: DraggableLabel
@@ -85,6 +87,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # TODO: reload this when the charges change
         self.net_mag_equation_label.setHtml(
             self.graph_widget.graph_window.electric_field_mag_html())
+        self.x_equation_label.setHtml(self.graph_widget.graph_window.electric_field_x_html())
+        self.y_equation_label.setHtml(self.graph_widget.graph_window.electric_field_y_html())
 
         self.show()
 

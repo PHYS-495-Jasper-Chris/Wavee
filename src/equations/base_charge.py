@@ -71,3 +71,15 @@ class BaseCharge(abc.ABC):
         """
         Returns the position-independent electric field equation.
         """
+
+    @abc.abstractmethod
+    def electric_field_x_string(self) -> sympy.Basic:
+        """
+        Returns the position-independent electric field x-component equation.
+        """
+
+    @abc.abstractmethod
+    def electric_field_y_string(self) -> sympy.Basic:
+        """
+        Returns the position-independent electric field y-component equation.
+        """

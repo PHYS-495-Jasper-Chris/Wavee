@@ -2,7 +2,10 @@
 Calculate the electric field of an infinite line charge.
 """
 
+from typing import Tuple
+
 import sympy
+from sympy.abc import x, y
 
 import numpy as np
 
@@ -11,6 +14,7 @@ from PyQt6 import QtWidgets, QtCore
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
 from equations.constants import COULOMB_CONSTANT, Point2D
+from equations.sympy_helper import clean_inequality
 from view.multi_line_input_dialog import MultiLineInputDialog
 # pylint: enable=import-error
 
@@ -193,14 +197,67 @@ class InfiniteLineCharge(BaseCharge):
 
     def electric_field_mag_string(self) -> sympy.Basic:
         """
-        Returns the position-independent electric field equation for this point charge.
+        Returns the position-independent electric field equation for this infinite line charge.
         """
 
-        k_sym, x_sym, y_sym = sympy.symbols("k_e,x,y")
+        k_sym = sympy.symbols("k_e")
 
         # E = 2k λ/r
         # radial distance
-        r_sym = (abs(self.x_coef * x_sym + self.y_coef * y_sym + self.offset)
+        r_sym = (abs(self.x_coef * x + self.y_coef * y + self.offset)
                  / sympy.sqrt(self.x_coef**2 + self.y_coef**2))
 
-        return 2 * k_sym * self.charge_density / r_sym
+        return 2 * k_sym * abs(self.charge_density) / r_sym
+
+    def _closest_point_string(self) -> Tuple[sympy.Basic, sympy.Basic]:
+        """
+        Return the formula for the closest point to a general x, y position.
+        """
+
+        x_pos = (self.y_coef * (self.y_coef * x - self.x_coef * y)
+                 - self.x_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
+
+        y_pos = (self.x_coef * (self.x_coef * y - self.y_coef * x)
+                 - self.y_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
+
+        return x_pos, y_pos
+
+    def electric_field_x_string(self) -> sympy.Basic:
+        """
+        Returns the position-independent electric field x-component equation for this infinite line
+        charge.
+        """
+
+        net_mag = self.electric_field_mag_string()
+
+        angle = sympy.atan2(self.y_coef, self.x_coef)
+        x_mag = sympy.cos(angle) * net_mag
+
+        if x_mag == 0.0:
+            return sympy.sin(0)
+
+        closest_x_sym = self._closest_point_string()[0]
+        neg_equality = clean_inequality(x < closest_x_sym, x)
+        pos_equality = clean_inequality(x > closest_x_sym, x)
+
+        return sympy.Piecewise((-x_mag, neg_equality), (x_mag, pos_equality))
+
+    def electric_field_y_string(self) -> sympy.Basic:
+        """
+        Returns the position-independent electric field y-component equation for this infinite line
+        charge.
+        """
+
+        net_mag = self.electric_field_mag_string()
+
+        angle = sympy.atan2(self.y_coef, self.x_coef)
+        y_mag = sympy.sin(angle) * net_mag
+
+        if y_mag == 0.0:
+            return sympy.sin(0)
+
+        closest_y_sym = self._closest_point_string()[1]
+        neg_equalities = clean_inequality(y < closest_y_sym, y)
+        pos_equalities = clean_inequality(y > closest_y_sym, y)
+
+        return sympy.Piecewise((-y_mag, neg_equalities), (y_mag, pos_equalities))

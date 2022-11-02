@@ -116,11 +116,76 @@ class Window:
 
         full_eqn: str = ""
 
+        for i, charge in enumerate(self.charges):
+            full_eqn += f"E_{i}=" + sympy.latex(charge.electric_field_mag_string()) + ","
+
+        full_eqn = full_eqn[:-1]
+
+        source = f"""
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>MathJax example</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+</head>
+<body>
+    <p>$${full_eqn}$$</p>
+</body>
+</html>
+"""
+
+        return source
+
+    def electric_field_x_html(self):
+        """
+        Get the cumulative electric field magnitude by summing each charge's magnitude.
+        """
+
+        full_eqn: str = ""
+
         for charge in self.charges:
-            full_eqn += ("\\left(" + sympy.latex(charge.electric_field_mag_string()) + "\\right)"
+            full_eqn += ("\\left(" + sympy.latex(charge.electric_field_x_string()) + "\\right)"
                          + "+")
 
-        full_eqn = "E(x,y)=" + full_eqn[:-1]
+        full_eqn = "E_x(x,y)=" + full_eqn[:-1]
+
+        source = f"""
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>MathJax example</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+</head>
+<body>
+    <p>$${full_eqn}$$</p>
+</body>
+</html>
+"""
+
+        return source
+
+    def electric_field_y_html(self):
+        """
+        Get the cumulative electric field magnitude by summing each charge's magnitude.
+        """
+
+        full_eqn: str = ""
+
+        for charge in self.charges:
+            full_eqn += ("\\left(" + sympy.latex(charge.electric_field_y_string()) + "\\right)"
+                         + "+")
+
+        full_eqn = "E_y(x,y)=" + full_eqn[:-1]
 
         source = f"""
 <!DOCTYPE html>

@@ -177,6 +177,9 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QWebEngineView" name="y_equation_label" native="true"/>
+      </item>
      </layout>
     </item>
    </layout>
