@@ -3,6 +3,7 @@ A cylindrical hollow ring of charge.
 """
 
 import sympy
+from sympy.abc import x, y
 
 import numpy as np
 
@@ -175,6 +176,20 @@ class RingCharge(BaseCharge):
 
         return sympy.Piecewise((eqn, r_sym >= self.inner_radius), (0, r_sym <= self.inner_radius))
 
+    def electric_field_x_string(self) -> sympy.Basic:
+        """
+        Returns the position-independent electric field x-component equation for this ring charge.
+        """
+
+        return self.electric_field_mag_string() * sympy.cos(self._theta_string())
+
+    def electric_field_y_string(self) -> sympy.Basic:
+        """
+        Returns the position-independent electric field y-component equation for this ring charge.
+        """
+
+        return self.electric_field_mag_string() * sympy.sin(self._theta_string())
+
     def _relative_pos(self, point: Point2D) -> Point2D:
         """
         Shifted coordinates with ``self.center`` at the origin.
@@ -196,3 +211,12 @@ class RingCharge(BaseCharge):
         x_dist, y_dist = self._relative_pos(point)
 
         return np.arctan2(y_dist, x_dist)
+
+    def _theta_string(self) -> sympy.Basic:
+        """
+        Returns the angle between any x, y point and the center.
+        """
+
+        x_dist, y_dist = x - self.center.x, y - self.center.y
+
+        return sympy.atan2(y_dist, x_dist)

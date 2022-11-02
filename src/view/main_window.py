@@ -207,8 +207,16 @@ class MainWindow(QtWidgets.QMainWindow):
     def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:
         super().resizeEvent(a0)
 
+        def set_height(height: str, label: QtWebEngineWidgets.QWebEngineView) -> None:
+            label.resize(label.width(), int(height) + 20)
+
         # TODO: figure out how to do this properly (this doesn't work)
         self.net_mag_equation_label.page().runJavaScript(
             "document.documentElement.scrollHeight;",
-            lambda height: self.net_mag_equation_label.resize(self.net_mag_equation_label.width(),
-                                                              int(height) + 10))
+            lambda height: set_height(height, self.net_mag_equation_label))
+        self.x_equation_label.page().runJavaScript(
+            "document.documentElement.scrollHeight;",
+            lambda height: set_height(height, self.x_equation_label))
+        self.y_equation_label.page().runJavaScript(
+            "document.documentElement.scrollHeight;",
+            lambda height: set_height(height, self.y_equation_label))

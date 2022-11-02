@@ -117,7 +117,7 @@ class Window:
         full_eqn: str = ""
 
         for i, charge in enumerate(self.charges):
-            full_eqn += f"E_{i}=" + sympy.latex(charge.electric_field_mag_string()) + ","
+            full_eqn += f"E_{i}=" + sympy.latex(charge.electric_field_mag_string().simplify()) + ","
 
         full_eqn = full_eqn[:-1]
 
@@ -149,8 +149,8 @@ class Window:
         full_eqn: str = ""
 
         for charge in self.charges:
-            full_eqn += ("\\left(" + sympy.latex(charge.electric_field_x_string()) + "\\right)"
-                         + "+")
+            full_eqn += ("\\left(" + sympy.latex(charge.electric_field_x_string().simplify())
+                         + "\\right)+")
 
         full_eqn = "E_x(x,y)=" + full_eqn[:-1]
 
@@ -182,8 +182,8 @@ class Window:
         full_eqn: str = ""
 
         for charge in self.charges:
-            full_eqn += ("\\left(" + sympy.latex(charge.electric_field_y_string()) + "\\right)"
-                         + "+")
+            full_eqn += ("\\left(" + sympy.latex(charge.electric_field_y_string().simplify())
+                         + "\\right)+")
 
         full_eqn = "E_y(x,y)=" + full_eqn[:-1]
 

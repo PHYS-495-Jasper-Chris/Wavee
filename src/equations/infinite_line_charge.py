@@ -207,7 +207,7 @@ class InfiniteLineCharge(BaseCharge):
         r_sym = (abs(self.x_coef * x + self.y_coef * y + self.offset)
                  / sympy.sqrt(self.x_coef**2 + self.y_coef**2))
 
-        return 2 * k_sym * abs(self.charge_density) / r_sym
+        return 2 * k_sym * self.charge_density / r_sym
 
     def _closest_point_string(self) -> Tuple[sympy.Basic, sympy.Basic]:
         """
@@ -234,11 +234,11 @@ class InfiniteLineCharge(BaseCharge):
         x_mag = sympy.cos(angle) * net_mag
 
         if x_mag == 0.0:
-            return sympy.sin(0)
+            return sympy.S.Zero
 
         closest_x_sym = self._closest_point_string()[0]
-        neg_equality = clean_inequality(x < closest_x_sym, x)
-        pos_equality = clean_inequality(x > closest_x_sym, x)
+        neg_equality = clean_inequality(x <= closest_x_sym, x)
+        pos_equality = clean_inequality(x >= closest_x_sym, x)
 
         return sympy.Piecewise((-x_mag, neg_equality), (x_mag, pos_equality))
 
@@ -254,10 +254,10 @@ class InfiniteLineCharge(BaseCharge):
         y_mag = sympy.sin(angle) * net_mag
 
         if y_mag == 0.0:
-            return sympy.sin(0)
+            return sympy.S.Zero
 
         closest_y_sym = self._closest_point_string()[1]
-        neg_equalities = clean_inequality(y < closest_y_sym, y)
-        pos_equalities = clean_inequality(y > closest_y_sym, y)
+        neg_equalities = clean_inequality(y <= closest_y_sym, y)
+        pos_equalities = clean_inequality(y >= closest_y_sym, y)
 
         return sympy.Piecewise((-y_mag, neg_equalities), (y_mag, pos_equalities))
