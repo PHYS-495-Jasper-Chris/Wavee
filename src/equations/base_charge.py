@@ -3,6 +3,7 @@ An abstract charge, from which subclasses overload.
 """
 
 import abc
+from typing import Callable
 
 from PyQt6 import QtCore
 from sympy import Basic
@@ -13,6 +14,16 @@ from equations.constants import Point2D  # pylint: disable=import-error
 class BaseCharge(abc.ABC):
     """
     An abstract charge, from which subclasses overload.
+    """
+
+    charge_updated: Callable[[], None]
+    """
+    A signal to be emitted when an aspect of this charge changes.
+
+    For example, if the position or charge changes, this signal is emitted.
+
+    Note that this is not the same signal used when a charge is removed or added - that signal is
+    emitted from ``Window``.
     """
 
     @abc.abstractmethod

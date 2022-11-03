@@ -42,6 +42,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         uic.load_ui.loadUi(os.path.join(sys.path[0], "view/ui/main_window.ui"), self)
 
+        self.graph_widget.graph_window.charges_updated = self._charges_updated
+
         self.refresh_button.clicked.connect(self.graph_widget.refresh_button_pressed)
 
         graph_menu = self.menu_bar.addMenu("Graph")
@@ -74,18 +76,19 @@ class MainWindow(QtWidgets.QMainWindow):
         undo_remove_charge = charge_menu.addAction("Undo last removal", "Ctrl+Shift+Backspace")
         undo_remove_charge.triggered.connect(self.graph_widget.undo_remove_charge)
 
+        remove_all_charges = charge_menu.addAction("Remove all charges", "Ctrl+Alt+Backspace")
+        remove_all_charges.triggered.connect(self.graph_widget.graph_window.remove_all_charges)
+
+        readd_all_charges = charge_menu.addAction("Re-add all charges", "Ctrl+Shift+Alt+Backspace")
+        readd_all_charges.triggered.connect(self.graph_widget.graph_window.readd_all_charges)
+
         self.proxy = pyqtgraph.SignalProxy(self.graph_widget.scene().sigMouseMoved,
                                            rateLimit=60,
                                            slot=self._mouse_moved)
 
         self._paint_shapes()
         self.graph_widget.build_plots()
-
-        # TODO: reload this when the charges change
-        self.net_mag_equation_label.setHtml(
-            self.graph_widget.graph_window.electric_field_mag_html())
-        self.x_equation_label.setHtml(self.graph_widget.graph_window.electric_field_x_html())
-        self.y_equation_label.setHtml(self.graph_widget.graph_window.electric_field_y_html())
+        self._update_equations()
 
         self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
         self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
@@ -203,6 +206,29 @@ class MainWindow(QtWidgets.QMainWindow):
 
             self.graph_widget.setToolTip(text)
             self.status_bar.showMessage(text)
+
+    def _charges_updated(self) -> None:
+        """
+        When charges change, do several things:
+
+        1.) Reload the graphs.
+        2.) Reload the equations (this is __really__ slow).
+
+        TODO: figure out how to speed up the equations. Consider moving this to its own thread.
+        """
+
+        self.graph_widget.charges_updated()
+        self._update_equations()
+
+    def _update_equations(self) -> None:
+        """
+        Update the equation labels.
+        """
+
+        self.net_mag_equation_label.setHtml(
+            self.graph_widget.graph_window.electric_field_mag_html())
+        self.x_equation_label.setHtml(self.graph_widget.graph_window.electric_field_x_html())
+        self.y_equation_label.setHtml(self.graph_widget.graph_window.electric_field_y_html())
 
     def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:  # pylint: disable=invalid-name
         """

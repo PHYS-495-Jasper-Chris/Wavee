@@ -2,7 +2,7 @@
 A graph window, holding the electric field of arbitrary charge distributions.
 """
 
-from typing import List, Optional
+from typing import Callable, List, Optional
 
 import numpy as np
 from sympy import latex
@@ -19,6 +19,14 @@ class Window:
     A collection of charges, to be graphed
     """
 
+    charges_updated: Callable[[], None]
+    """
+    A signal to be emitted when an aspect of any charge, or the list of charges, changes.
+
+    For example, if the position of a charge changes, this signal is emitted. Also, if a charge is
+    added or removed, this signal is emitted.
+    """
+
     def __init__(self, charges: Optional[List[BaseCharge]] = None) -> None:
         """
         Initialize a collection of charges of any kind.
@@ -29,7 +37,7 @@ class Window:
 
         self.charges = charges or []
 
-        self._removed_charges = []
+        self._removed_charges: List[BaseCharge] = []
 
     def add_charge(self, point_charge: BaseCharge) -> None:
         """
@@ -41,13 +49,21 @@ class Window:
 
         self.charges.append(point_charge)
 
+        point_charge.charge_updated = self.charges_updated
+
+        self.charges_updated()
+
     def remove_last_charge(self) -> None:
         """
         Remove the last charge that was added (ie, the charge at the end of the list of charges).
         """
 
         if len(self.charges) > 0:
-            self._removed_charges.append(self.charges.pop())
+            charge = self.charges.pop()
+            self._removed_charges.append(charge)
+            charge.charge_updated = lambda: None
+
+            self.charges_updated()
 
     def undo_charge_removal(self) -> None:
         """
@@ -55,7 +71,39 @@ class Window:
         """
 
         if len(self._removed_charges) > 0:
-            self.charges.append(self._removed_charges.pop())
+            charge = self._removed_charges.pop()
+            self.charges.append(charge)
+            charge.charge_updated = self.charges_updated
+
+            self.charges_updated()
+
+    def remove_all_charges(self) -> None:
+        """
+        Remove all charges that are currently on the window, adding them to the list of removed
+        charges.
+        """
+
+        if len(self.charges) > 0:
+            for charge in self.charges:
+                charge.charge_updated = lambda: None
+                self._removed_charges.append(charge)
+
+            self.charges = []
+            self.charges_updated()
+
+    def readd_all_charges(self) -> None:
+        """
+        Re-add all charges that have been removed to the window, removing them from the list of
+        removed charges.
+        """
+
+        if len(self._removed_charges) > 0:
+            for charge in self._removed_charges:
+                charge.charge_updated = self.charges_updated
+                self.charges.append(charge)
+
+            self._removed_charges = []
+            self.charges_updated()
 
     def net_electric_field(self, position: Point2D) -> float:
         """
@@ -110,10 +158,13 @@ class Window:
 
         return e_y
 
-    def electric_field_mag_html(self):
+    def electric_field_mag_html(self) -> str:
         """
         Get the cumulative electric field magnitude by summing each charge's magnitude.
         """
+
+        if len(self.charges) == 0:
+            return ""
 
         full_eqn: str = ""
 
@@ -142,10 +193,13 @@ class Window:
 
         return source
 
-    def electric_field_x_html(self):
+    def electric_field_x_html(self) -> str:
         """
         Get the cumulative electric field magnitude by summing each charge's magnitude.
         """
+
+        if len(self.charges) == 0:
+            return ""
 
         full_eqn: str = ""
 
@@ -174,10 +228,13 @@ class Window:
 
         return source
 
-    def electric_field_y_html(self):
+    def electric_field_y_html(self) -> str:
         """
         Get the cumulative electric field magnitude by summing each charge's magnitude.
         """
+
+        if len(self.charges) == 0:
+            return ""
 
         full_eqn: str = ""
 

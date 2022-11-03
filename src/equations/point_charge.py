@@ -97,12 +97,14 @@ class PointCharge(BaseCharge):
                                                                   "Set Charge (C)")
                 if success:
                     self.charge = val
+                    self.charge_updated()
             elif action == set_center:
                 new_center, success = MultiLineInputDialog(["X Position", "Y Position"],
                                                            menu).get_doubles()
 
                 if success and False not in np.isfinite(new_center):
                     self.position = Point2D(*new_center)
+                    self.charge_updated()
             elif action == rmv_charge:
                 return True
             elif action is None:

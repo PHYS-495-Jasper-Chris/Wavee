@@ -167,16 +167,10 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         ev.accept()
 
-        # Rebuild the plot after new charge is added.
-        self.build_plots(dimensions=self._get_graph_bounds())
-
         # Open the relevant menu.
         rmv_charge = self.graph_window.charges[-1].open_menu(self.mapToGlobal(ev.position()))
         if rmv_charge:
             self.remove_charge()
-
-        # Rebuild the plots after the menu selections have been made.
-        self.build_plots(dimensions=self._get_graph_bounds())
 
     def build_plots(self,
                     dimensions: Optional[GraphBounds] = None,
@@ -374,16 +368,12 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         self.graph_window.remove_last_charge()
 
-        self.build_plots(dimensions=self._get_graph_bounds())
-
     def undo_remove_charge(self) -> None:
         """
         Undo the latest removal, and rebuild the graphs.
         """
 
         self.graph_window.undo_charge_removal()
-
-        self.build_plots(dimensions=self._get_graph_bounds())
 
     def _plot_charges(self) -> GraphBounds:
         """
@@ -567,3 +557,10 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         g = min_color.g - g_shift
         b = min_color.b - b_shift
         return RGBTuple(int(r), int(g), int(b))
+
+    def charges_updated(self) -> None:
+        """
+        When charges change, reload the graphs.
+        """
+
+        self.build_plots(dimensions=self._get_graph_bounds())
