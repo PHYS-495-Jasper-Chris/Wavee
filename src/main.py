@@ -4,7 +4,7 @@ Instantiate the graphical user interface.
 
 import sys
 
-from PyQt6 import QtWidgets, QtCore
+from PyQt6 import QtCore, QtWidgets
 
 from view.main_window import MainWindow
 

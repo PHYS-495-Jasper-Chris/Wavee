@@ -4,8 +4,8 @@ An abstract charge, from which subclasses overload.
 
 import abc
 
-from sympy import Basic
 from PyQt6 import QtCore
+from sympy import Basic
 
 from equations.constants import Point2D  # pylint: disable=import-error
 

@@ -5,7 +5,6 @@ Constants needed for calculating the electric field.
 from typing import NamedTuple
 
 import numpy as np
-
 from sympy import Symbol
 
 EPSILON_NOUGHT = 1 / (4 * np.pi * 10**-7 * 299792458**2)

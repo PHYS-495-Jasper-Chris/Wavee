@@ -2,17 +2,16 @@
 Calculate the electric field of a point charge.
 """
 
-import sympy
-from sympy.abc import x, y
-
 import numpy as np
-
-from PyQt6 import QtWidgets, QtCore
+import sympy
+from PyQt6 import QtCore, QtWidgets
+from sympy.abc import x, y
 
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
 from equations.constants import COULOMB_CONSTANT, COULOMB_CONSTANT_SYM, Point2D
 from view.multi_line_input_dialog import MultiLineInputDialog
+
 # pylint: enable=import-error
 
 

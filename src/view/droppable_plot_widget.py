@@ -3,15 +3,12 @@ A PlotWidget that can be dropped into.
 """
 
 import sys
-
 from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple
 
-import pyqtgraph
-
 import numpy as np
-
-from PyQt6 import QtGui, QtWidgets, QtCore
+import pyqtgraph
+from PyQt6 import QtCore, QtGui, QtWidgets
 
 # pylint: disable=import-error
 from equations.circle_charge import CircleCharge
@@ -21,6 +18,7 @@ from equations.infinite_line_charge import InfiniteLineCharge
 from equations.point_charge import PointCharge
 from equations.ring_charge import RingCharge
 from view.draggable_label import DraggableLabel
+
 # pylint: enable=import-error
 
 RGBTuple = NamedTuple("RGBTuple", [("r", int), ("g", int), ("b", int)])

@@ -4,17 +4,16 @@ The main window.
 
 import os
 import sys
-
 from typing import Tuple
 
 import pyqtgraph
-
-from PyQt6 import QtCore, QtWidgets, QtGui, uic, QtWebEngineWidgets
+from PyQt6 import QtCore, QtGui, QtWebEngineWidgets, QtWidgets, uic
 
 # pylint: disable=import-error
 from equations.constants import Point2D
-from view.droppable_plot_widget import DroppablePlotWidget
 from view.draggable_label import DraggableLabel
+from view.droppable_plot_widget import DroppablePlotWidget
+
 # pylint: enable=import-error
 
 
@@ -205,7 +204,13 @@ class MainWindow(QtWidgets.QMainWindow):
             self.graph_widget.setToolTip(text)
             self.status_bar.showMessage(text)
 
-    def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:
+    def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:  # pylint: disable=invalid-name
+        """
+        When the window is resized, automatically resize the equation web views.
+
+        TODO: figure out if this works.
+        """
+
         super().resizeEvent(a0)
 
         def set_height(height: str, label: QtWebEngineWidgets.QWebEngineView) -> None:

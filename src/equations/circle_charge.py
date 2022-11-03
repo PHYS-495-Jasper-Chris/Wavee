@@ -3,13 +3,13 @@ Calculate the electric field of solid circle of charge.
 """
 
 import numpy as np
-
-from PyQt6 import QtWidgets, QtCore
+from PyQt6 import QtCore, QtWidgets
 
 # pylint: disable=import-error
 from equations.constants import Point2D
 from equations.ring_charge import RingCharge
 from view.multi_line_input_dialog import MultiLineInputDialog
+
 # pylint: enable=import-error
 
 

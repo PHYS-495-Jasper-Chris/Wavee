@@ -5,12 +5,12 @@ A graph window, holding the electric field of arbitrary charge distributions.
 from typing import List, Optional
 
 import numpy as np
-
 from sympy import latex
 
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
 from equations.constants import Point2D
+
 # pylint: enable=import-error
 
 
