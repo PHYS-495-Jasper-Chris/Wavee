@@ -11,6 +11,7 @@ from PyQt6 import QtCore, QtGui, QtWebEngineWidgets, QtWidgets, uic
 
 # pylint: disable=import-error
 from equations.constants import Point2D
+from equations.equation_thread import EquationThread
 from view.draggable_label import DraggableLabel
 from view.droppable_plot_widget import DroppablePlotWidget
 
@@ -41,6 +42,9 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         uic.load_ui.loadUi(os.path.join(sys.path[0], "view/ui/main_window.ui"), self)
+
+        self.equations_thread = EquationThread(self.graph_widget.graph_window, self)
+        self.equations_thread.finished.connect(self._update_equations)
 
         self.graph_widget.graph_window.charges_updated = self._charges_updated
 
@@ -88,7 +92,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self._paint_shapes()
         self.graph_widget.build_plots()
-        self._update_equations()
+        self.equations_thread.start()
 
         self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
         self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
@@ -218,17 +222,16 @@ class MainWindow(QtWidgets.QMainWindow):
         """
 
         self.graph_widget.charges_updated()
-        self._update_equations()
+        self.equations_thread.start()
 
     def _update_equations(self) -> None:
         """
-        Update the equation labels.
+        Read the values from the equations thread and update the labels.
         """
 
-        self.net_mag_equation_label.setHtml(
-            self.graph_widget.graph_window.electric_field_mag_html())
-        self.x_equation_label.setHtml(self.graph_widget.graph_window.electric_field_x_html())
-        self.y_equation_label.setHtml(self.graph_widget.graph_window.electric_field_y_html())
+        self.net_mag_equation_label.setHtml(self.equations_thread.mag_html)
+        self.x_equation_label.setHtml(self.equations_thread.x_html)
+        self.y_equation_label.setHtml(self.equations_thread.y_html)
 
     def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:  # pylint: disable=invalid-name
         """
