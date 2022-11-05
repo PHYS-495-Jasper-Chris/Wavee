@@ -116,11 +116,9 @@ class InfiniteLineCharge(BaseCharge):
         """
 
         # The direction of the electric field is completely orthogonal to the direction of the line
-        # charge itself, so for x take the cos instead of sin.
+        # charge itself, so for x take the sin instead of cos.
 
-        line_angle: float = np.arctan2(self.y_coef, self.x_coef)
-
-        magnitude = self.electric_field_magnitude(point) * np.cos(line_angle)
+        magnitude = self.electric_field_magnitude(point) * abs(np.sin(self._line_angle()))
 
         # If the x-component of the point is greater than that of the closest point on the line,
         # then the magnitude should be kept the same, otherwise it should be negated.
@@ -142,11 +140,9 @@ class InfiniteLineCharge(BaseCharge):
         """
 
         # The direction of the electric field is completely orthogonal to the direction of the line
-        # charge itself, so for y take the sin instead of cos.
+        # charge itself, so for y take the cos instead of sin.
 
-        line_angle: float = np.arctan2(self.y_coef, self.x_coef)
-
-        magnitude = self.electric_field_magnitude(point) * np.sin(line_angle)
+        magnitude = self.electric_field_magnitude(point) * abs(np.cos(self._line_angle()))
 
         # If the y-component of the point is greater than that of the closest point on the line,
         # then the magnitude should be kept the same, otherwise it should be negated.
@@ -227,19 +223,16 @@ class InfiniteLineCharge(BaseCharge):
         charge.
         """
 
-        net_mag = self.electric_field_mag_string()
+        magnitude = self.electric_field_mag_string() * abs(np.sin(self._line_angle()))
 
-        angle = sympy.atan2(self.y_coef, self.x_coef)
-        x_mag = sympy.cos(angle) * net_mag
-
-        if x_mag == 0.0:
+        if magnitude == 0.0:
             return sympy.S.Zero
 
         closest_x_sym = self._closest_point_string()[0]
         neg_equality = clean_inequality(x <= closest_x_sym, x)
         pos_equality = clean_inequality(x >= closest_x_sym, x)
 
-        return sympy.Piecewise((-x_mag, neg_equality), (x_mag, pos_equality))
+        return sympy.Piecewise((-magnitude, neg_equality), (magnitude, pos_equality))
 
     def electric_field_y_string(self) -> sympy.Basic:
         """
@@ -247,16 +240,30 @@ class InfiniteLineCharge(BaseCharge):
         charge.
         """
 
-        net_mag = self.electric_field_mag_string()
+        magnitude = self.electric_field_mag_string() * abs(np.cos(self._line_angle()))
 
-        angle = sympy.atan2(self.y_coef, self.x_coef)
-        y_mag = sympy.sin(angle) * net_mag
-
-        if y_mag == 0.0:
+        if magnitude == 0.0:
             return sympy.S.Zero
 
         closest_y_sym = self._closest_point_string()[1]
         neg_equalities = clean_inequality(y <= closest_y_sym, y)
         pos_equalities = clean_inequality(y >= closest_y_sym, y)
 
-        return sympy.Piecewise((-y_mag, neg_equalities), (y_mag, pos_equalities))
+        return sympy.Piecewise((-magnitude, neg_equalities), (magnitude, pos_equalities))
+
+    def _line_angle(self) -> float:
+        """
+        Get the angle of the line as though it was through the origin, in radians.
+        """
+
+        if self.y_coef == 0.0:
+            # Only have x component, so let the line point straight up (independent of x's sign).
+            return np.pi / 2
+
+        if self.x_coef == 0.0:
+            # Only have y component, so let the line point straight in the +x direction (independent
+            # of y's sign).
+            return 0
+
+        # The slope of the line, in ay + bx + c = 0 turns in to y = -b/a x - c/a
+        return np.arctan(-self.y_coef / self.x_coef)
