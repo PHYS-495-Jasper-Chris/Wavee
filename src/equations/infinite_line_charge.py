@@ -50,7 +50,7 @@ class InfiniteLineCharge(BaseCharge):
         self.offset = offset
         self.charge_density = charge_density
 
-    def radial_distance(self, point: Point2D) -> float:
+    def _radial_distance(self, point: Point2D) -> float:
         """
         The shortest distance from a point to the infinite line of charge.
 
@@ -64,7 +64,7 @@ class InfiniteLineCharge(BaseCharge):
         return (abs(self.x_coef * point.x + self.y_coef * point.y + self.offset)
                 / np.sqrt(self.x_coef**2 + self.y_coef**2))
 
-    def closest_point(self, point: Point2D) -> Point2D:
+    def _closest_point(self, point: Point2D) -> Point2D:
         """
         The closest point on the line from a given point.
 
@@ -94,7 +94,7 @@ class InfiniteLineCharge(BaseCharge):
             float: The net (signed) magnitude of the electric field at the given point.
         """
 
-        radial_distance = self.radial_distance(point)
+        radial_distance = self._radial_distance(point)
 
         # Make sure we don't divide by 0
         if radial_distance == 0.0:
@@ -116,13 +116,10 @@ class InfiniteLineCharge(BaseCharge):
         """
 
         # The direction of the electric field is completely orthogonal to the direction of the line
-        # charge itself, so for x take the sin instead of cos.
+        # charge itself, so add a pi/2 rotation to the angle.
+        magnitude = self.electric_field_magnitude(point) * np.cos(self._line_angle() + np.pi / 2)
 
-        magnitude = self.electric_field_magnitude(point) * abs(np.sin(self._line_angle()))
-
-        # If the x-component of the point is greater than that of the closest point on the line,
-        # then the magnitude should be kept the same, otherwise it should be negated.
-        if self.closest_point(point).x > point.x:
+        if self._flip_direction(point):
             magnitude *= -1
 
         return magnitude
@@ -140,13 +137,10 @@ class InfiniteLineCharge(BaseCharge):
         """
 
         # The direction of the electric field is completely orthogonal to the direction of the line
-        # charge itself, so for y take the cos instead of sin.
+        # charge itself, so add a pi/2 rotation to the angle.
+        magnitude = self.electric_field_magnitude(point) * np.sin(self._line_angle() + np.pi / 2)
 
-        magnitude = self.electric_field_magnitude(point) * abs(np.cos(self._line_angle()))
-
-        # If the y-component of the point is greater than that of the closest point on the line,
-        # then the magnitude should be kept the same, otherwise it should be negated.
-        if self.closest_point(point).y > point.y:
+        if self._flip_direction(point):
             magnitude *= -1
 
         return magnitude
@@ -204,35 +198,19 @@ class InfiniteLineCharge(BaseCharge):
 
         return 2 * COULOMB_CONSTANT_SYM * self.charge_density / r_sym
 
-    def _closest_point_string(self) -> Tuple[sympy.Basic, sympy.Basic]:
-        """
-        Return the formula for the closest point to a general x, y position.
-        """
-
-        x_pos = (self.y_coef * (self.y_coef * x - self.x_coef * y)
-                 - self.x_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
-
-        y_pos = (self.x_coef * (self.x_coef * y - self.y_coef * x)
-                 - self.y_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
-
-        return x_pos, y_pos
-
     def electric_field_x_string(self) -> sympy.Basic:
         """
         Returns the position-independent electric field x-component equation for this infinite line
         charge.
         """
 
-        magnitude = self.electric_field_mag_string() * abs(np.sin(self._line_angle()))
+        magnitude = self.electric_field_mag_string() * np.cos(self._line_angle() + np.pi / 2)
 
         if magnitude == 0.0:
             return sympy.S.Zero
 
-        closest_x_sym = self._closest_point_string()[0]
-        neg_equality = clean_inequality(x <= closest_x_sym, x)
-        pos_equality = clean_inequality(x >= closest_x_sym, x)
-
-        return sympy.Piecewise((-magnitude, neg_equality), (magnitude, pos_equality))
+        pos_eq, neg_eq = self._flip_direction_string()
+        return sympy.Piecewise((-magnitude, neg_eq), (magnitude, pos_eq))
 
     def electric_field_y_string(self) -> sympy.Basic:
         """
@@ -240,16 +218,14 @@ class InfiniteLineCharge(BaseCharge):
         charge.
         """
 
-        magnitude = self.electric_field_mag_string() * abs(np.cos(self._line_angle()))
+        magnitude = self.electric_field_mag_string() * np.sin(self._line_angle() + np.pi / 2)
 
         if magnitude == 0.0:
             return sympy.S.Zero
 
-        closest_y_sym = self._closest_point_string()[1]
-        neg_equalities = clean_inequality(y <= closest_y_sym, y)
-        pos_equalities = clean_inequality(y >= closest_y_sym, y)
+        pos_eq, neg_eq = self._flip_direction_string()
 
-        return sympy.Piecewise((-magnitude, neg_equalities), (magnitude, pos_equalities))
+        return sympy.Piecewise((-magnitude, neg_eq), (magnitude, pos_eq))
 
     def _line_angle(self) -> float:
         """
@@ -266,4 +242,68 @@ class InfiniteLineCharge(BaseCharge):
             return 0
 
         # The slope of the line, in ay + bx + c = 0 turns in to y = -b/a x - c/a
-        return np.arctan(-self.y_coef / self.x_coef)
+        return np.arctan(-self.x_coef / self.y_coef)
+
+    def _flip_direction(self, point: Point2D) -> bool:
+        """
+        Returns whether to flip the direction of a component of a magnitude, based on the location
+        of the point.
+        """
+
+        # Now we need to flip the direction if we are on the opposite side of the line. This means
+        # that there are 4 cases, part of 2 groups: the x component and y component are both greater
+        # than the closest point on the line; the x and y component are both less than the closest
+        # point on the line; and one (but not both) of the components is greater than the closest
+        # point on the line.
+
+        closest_point = self._closest_point(point)
+
+        if closest_point.x >= point.x and closest_point.y >= point.y:
+            return True
+
+        if closest_point.x <= point.x and closest_point.y <= point.y:
+            return False
+
+        if closest_point.x >= point.x and closest_point.y <= point.y:
+            return False
+
+        return True
+
+    def _closest_point_string(self) -> Tuple[sympy.Basic, sympy.Basic]:
+        """
+        Return the formula for the closest point to a general x, y position.
+        """
+
+        x_pos = (self.y_coef * (self.y_coef * x - self.x_coef * y)
+                 - self.x_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
+
+        y_pos = (self.x_coef * (self.x_coef * y - self.y_coef * x)
+                 - self.y_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
+
+        return x_pos, y_pos
+
+    def _flip_direction_string(
+            self) -> Tuple[sympy.logic.boolalg.Boolean, sympy.logic.boolalg.Boolean]:
+        """
+        The inequalities for the positive and negative equations.
+
+        Returns:
+            Tuple[Boolean, Boolean]: The positive and negative inequalities to be used, as boolean
+            compositions of relationals.
+        """
+
+        x_closest, y_closest = self._closest_point_string()
+
+        if self.x_coef == 0:
+            pos_eq = clean_inequality(y_closest <= y, y)
+            neg_eq = clean_inequality(y_closest >= y, y)
+        elif self.y_coef == 0:
+            pos_eq = clean_inequality(x_closest <= x, x)
+            neg_eq = clean_inequality(x_closest >= x, x)
+        else:
+            pos_eq = sympy.Or(clean_inequality([x_closest <= x, y_closest <= y], x),
+                              clean_inequality([x_closest >= x, y_closest <= y], x)).simplify()
+            neg_eq = sympy.Or(clean_inequality([x_closest >= x, y_closest >= y], x),
+                              clean_inequality([x_closest <= x, y_closest >= y], x)).simplify()
+
+        return pos_eq, neg_eq

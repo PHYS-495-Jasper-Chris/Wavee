@@ -2,13 +2,13 @@
 A helper module providing convenience functions for sympy.
 """
 
-from typing import List
+from typing import Iterable, List, Union
 
 import sympy
-import sympy.core as sympyc
+import sympy.core.numbers as nums
 
 
-def _remove_infinities(inequality: sympyc.Basic) -> List[sympyc.relational.Relational]:
+def _remove_infinities(inequality: sympy.Basic) -> List[sympy.Rel]:
     """
     Remove infinities from inequality, returning a list of simplified inequalities.
 
@@ -20,19 +20,19 @@ def _remove_infinities(inequality: sympyc.Basic) -> List[sympyc.relational.Relat
 
     ineqs = []
 
-    if isinstance(inequality.args[0], sympyc.relational.Relational):
+    if isinstance(inequality.args[0], sympy.Rel):
         for ineq in inequality.args:
-            if not ineq.has(sympyc.numbers.Infinity) and not ineq.has(
-                    sympyc.numbers.NegativeInfinity):
+            if not ineq.has(nums.Infinity) and not ineq.has(nums.NegativeInfinity):
                 ineqs.append(ineq)
     else:
-        ineqs = ([inequality] if not inequality.has(sympyc.numbers.Infinity)
-                 and not inequality.has(sympyc.numbers.NegativeInfinity) else [])
+        ineqs = ([inequality] if not inequality.has(nums.Infinity)
+                 and not inequality.has(nums.NegativeInfinity) else [])
 
     return ineqs
 
 
-def clean_inequality(inequality: sympyc.relational.Relational, symbol: sympyc.Symbol) -> sympy.And:
+def clean_inequality(inequality: Union[sympy.Rel, Iterable[sympy.Rel]],
+                     symbol: sympy.Symbol) -> sympy.And:
     """
     Builds a easy-to-understand inequality, solving for ``symbol`` and remove infinities.
     """
