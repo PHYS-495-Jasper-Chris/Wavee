@@ -6,7 +6,7 @@ from typing import Optional
 
 from PyQt6 import QtCore
 
-from equations.graph_window import Window
+from equations.graph_window import GraphWindow
 
 
 class EquationThread(QtCore.QThread):
@@ -15,7 +15,7 @@ class EquationThread(QtCore.QThread):
     does not need to be blocking.
     """
 
-    def __init__(self, graph_window: Window, parent: Optional[QtCore.QObject] = None) -> None:
+    def __init__(self, graph_window: GraphWindow, parent: Optional[QtCore.QObject] = None) -> None:
         super().__init__(parent)
 
         self._graph_window = graph_window

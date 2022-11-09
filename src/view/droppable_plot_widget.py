@@ -3,7 +3,6 @@ A PlotWidget that can be dropped into.
 """
 
 import sys
-from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple
 
 import numpy as np
@@ -13,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 # pylint: disable=import-error
 from equations.circle_charge import CircleCharge
 from equations.constants import Point2D
-from equations.graph_window import Window
+from equations.graph_window import GraphWindow
 from equations.infinite_line_charge import InfiniteLineCharge
 from equations.point_charge import PointCharge
 from equations.ring_charge import RingCharge
@@ -25,13 +24,14 @@ RGBTuple = NamedTuple("RGBTuple", [("r", int), ("g", int), ("b", int)])
 GraphBounds = NamedTuple("GraphBounds", [("top_left", Point2D), ("bottom_right", Point2D)])
 
 
-class CenterArrowItem(pyqtgraph.ArrowItem):
+class ArrowTailItem(pyqtgraph.ArrowItem):
     """
-    An ArrowItem that loads its position from the center, not from the head of the arrow.
+    An ArrowItem that loads its position from the tail (end) of the arrow, not from the head of the
+    arrow.
     """
 
     def paint(self, p: QtGui.QPainter, *args) -> None:
-        p.translate(-self.boundingRect().center())
+        p.translate(-2 * self.boundingRect().center())
         return super().paint(p, *args)
 
 
@@ -65,7 +65,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         The number of x-axis points to render.
         """
 
-        self.graph_window = Window([
+        self.graph_window = GraphWindow([
             PointCharge(Point2D(1, 4), 10),
             PointCharge(Point2D(-3, 5), 8),
             PointCharge(Point2D(0, 1), -5),
@@ -259,7 +259,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                     pass
 
         # Build sorted array holding indexes of magnitude
-        MagIndexes = namedtuple("MagIndexes", ["magnitude", "x", "y"])
+        MagIndexes = NamedTuple("MagIndexes", [("magnitude", float), ("x", int), ("y", int)])
         flat_arr: List[MagIndexes] = []
         for i in range(x_indices):
             for j in range(y_indices):
@@ -281,10 +281,10 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                 normalized_mag = net_mag[i][j] / flat_arr[-1].magnitude
                 scaled_mag = normalized_mag * max_mag_length
                 brush_color = self._get_color_from_mag(net_mag_idx[i][j], len(flat_arr))
-                arrow_item = CenterArrowItem(pos=(p_x[i][j], p_y[i][j]),
-                                             tailLen=scaled_mag,
-                                             brush=brush_color,
-                                             angle=angle)
+                arrow_item = ArrowTailItem(pos=(p_x[i][j], p_y[i][j]),
+                                           tailLen=scaled_mag,
+                                           brush=brush_color,
+                                           angle=angle)
                 self.addItem(arrow_item)
 
         if should_autoscale:
@@ -363,14 +363,14 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
     def remove_charge(self) -> None:
         """
-        Remove the last charge added, and rebuild the graphs.
+        Remove the last charge added, automatically rebuilding the graphs.
         """
 
         self.graph_window.remove_last_charge()
 
     def undo_remove_charge(self) -> None:
         """
-        Undo the latest removal, and rebuild the graphs.
+        Undo the latest removal, automatically rebuilding the graphs.
         """
 
         self.graph_window.undo_charge_removal()
@@ -387,7 +387,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
             # Point charges
             if isinstance(charge, PointCharge):
-                radius = abs(charge.charge) / 5
+                radius = abs(charge.charge) / 5  # Arbitrarily chosen scaling factor
 
                 leftmost = min(leftmost, charge.position.x - radius)
                 rightmost = max(rightmost, charge.position.x + radius)

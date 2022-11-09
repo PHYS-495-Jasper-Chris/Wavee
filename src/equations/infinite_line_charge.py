@@ -50,39 +50,6 @@ class InfiniteLineCharge(BaseCharge):
         self.offset = offset
         self.charge_density = charge_density
 
-    def _radial_distance(self, point: Point2D) -> float:
-        """
-        The shortest distance from a point to the infinite line of charge.
-
-        Args:
-            point (Point2D): The point to measure the distance from.
-
-        Returns:
-            float: minimal radial distance from ``point`` to line charge.
-        """
-
-        return (abs(self.x_coef * point.x + self.y_coef * point.y + self.offset)
-                / np.sqrt(self.x_coef**2 + self.y_coef**2))
-
-    def _closest_point(self, point: Point2D) -> Point2D:
-        """
-        The closest point on the line from a given point.
-
-        Args:
-            point (Point2D): The point to find the closest point to.
-
-        Returns:
-            Point2D: The closest point.
-        """
-
-        x_pos = (self.y_coef * (self.y_coef * point.x - self.x_coef * point.y)
-                 - self.x_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
-
-        y_pos = (self.x_coef * (self.x_coef * point.y - self.y_coef * point.x)
-                 - self.y_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
-
-        return Point2D(x_pos, y_pos)
-
     def electric_field_magnitude(self, point: Point2D) -> float:
         """
         The net magnitude of the electric field at the given point.
@@ -189,6 +156,9 @@ class InfiniteLineCharge(BaseCharge):
     def electric_field_mag_string(self) -> sympy.Basic:
         """
         Returns the position-independent electric field equation for this infinite line charge.
+
+        Returns:
+            Basic: sympy representation of the signed magnitude of the electric field.
         """
 
         # E = 2k λ/r
@@ -202,6 +172,9 @@ class InfiniteLineCharge(BaseCharge):
         """
         Returns the position-independent electric field x-component equation for this infinite line
         charge.
+
+        Returns:
+            Basic: sympy representation of the x-component of the electric field.
         """
 
         magnitude = self.electric_field_mag_string() * np.cos(self._line_angle() + np.pi / 2)
@@ -216,6 +189,9 @@ class InfiniteLineCharge(BaseCharge):
         """
         Returns the position-independent electric field y-component equation for this infinite line
         charge.
+
+        Returns:
+            Basic: sympy representation of the y-component of the electric field.
         """
 
         magnitude = self.electric_field_mag_string() * np.sin(self._line_angle() + np.pi / 2)
@@ -227,9 +203,45 @@ class InfiniteLineCharge(BaseCharge):
 
         return sympy.Piecewise((-magnitude, neg_eq), (magnitude, pos_eq))
 
+    def _radial_distance(self, point: Point2D) -> float:
+        """
+        The shortest distance from a point to the infinite line of charge.
+
+        Args:
+            point (Point2D): The point to measure the distance from.
+
+        Returns:
+            float: minimal radial distance from ``point`` to line charge.
+        """
+
+        return (abs(self.x_coef * point.x + self.y_coef * point.y + self.offset)
+                / np.sqrt(self.x_coef**2 + self.y_coef**2))
+
+    def _closest_point(self, point: Point2D) -> Point2D:
+        """
+        The closest point on the line from a given point.
+
+        Args:
+            point (Point2D): The point to find the closest point to.
+
+        Returns:
+            Point2D: The closest point.
+        """
+
+        x_pos = (self.y_coef * (self.y_coef * point.x - self.x_coef * point.y)
+                 - self.x_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
+
+        y_pos = (self.x_coef * (self.x_coef * point.y - self.y_coef * point.x)
+                 - self.y_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
+
+        return Point2D(x_pos, y_pos)
+
     def _line_angle(self) -> float:
         """
         Get the angle of the line as though it was through the origin, in radians.
+
+        Returns:
+            float: The angle of the infinite line charge itself, in radians.
         """
 
         if self.y_coef == 0.0:
@@ -248,6 +260,9 @@ class InfiniteLineCharge(BaseCharge):
         """
         Returns whether to flip the direction of a component of a magnitude, based on the location
         of the point.
+
+        Returns:
+            bool: True if the magnitude value should be negated, False otherwise.
         """
 
         # Now we need to flip the direction if we are on the opposite side of the line. This means
@@ -272,6 +287,9 @@ class InfiniteLineCharge(BaseCharge):
     def _closest_point_string(self) -> Tuple[sympy.Basic, sympy.Basic]:
         """
         Return the formula for the closest point to a general x, y position.
+
+        Returns:
+            Tuple[Basic, Basic]: The x position and y position as sympy objects.
         """
 
         x_pos = (self.y_coef * (self.y_coef * x - self.x_coef * y)
