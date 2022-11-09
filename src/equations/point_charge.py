@@ -20,9 +20,10 @@ class PointCharge(BaseCharge):
     A single point charge, with a position and a charge.
     """
 
-    def __init__(self, position: Point2D, charge: float) -> None:
+    def __init__(self, position: Point2D, charge: float, default_rounding: int = -1) -> None:
         self.position = position
         self.charge = charge
+        self.default_rounding = default_rounding
 
     def electric_field_magnitude(self, point: Point2D) -> float:
         """
@@ -110,23 +111,41 @@ class PointCharge(BaseCharge):
             elif action is None:
                 return False
 
-    def electric_field_mag_string(self) -> sympy.Basic:
+    def electric_field_mag_string(self, default_rounding = None) -> sympy.Basic:
         """
         Returns the position-independent electric field equation of magnitude for this point charge.
         """
+        # use class default rounding value if one is not explicitly passed
+        if default_rounding is None:
+            default_rounding = self.default_rounding
 
         # The equation for a point charge is k q / r^2
         # r = sqrt(x_dist^2 + y_dist^2)
         # x_dist = abs(x - self.center.x)
         x_dist, y_dist = abs(x - self.position.x), abs(y - self.position.y)
 
-        return COULOMB_CONSTANT_SYM * self.charge / (x_dist + y_dist)
+        mag = COULOMB_CONSTANT_SYM * self.charge / (x_dist + y_dist)
+        return mag if default_rounding < 0 else self.round_symbolic(mag, default_rounding)
 
-    def electric_field_x_string(self) -> sympy.Basic:
-        return self.electric_field_mag_string() * sympy.cos(self._theta_string())
+    def electric_field_x_string(self, default_rounding = None) -> sympy.Basic:
+        # use class default rounding value if one is not explicitly passed
+        if default_rounding is None:
+            default_rounding = self.default_rounding
 
-    def electric_field_y_string(self) -> sympy.Basic:
-        return self.electric_field_mag_string() * sympy.sin(self._theta_string())
+        mag = self.electric_field_mag_string(default_rounding = -1)
+        theta = self._theta_string(default_rounding = -1)
+        x_field = mag * sympy.cos(theta)
+        return x_field if default_rounding < 0 else self.round_symbolic(x_field, default_rounding)
+
+    def electric_field_y_string(self, default_rounding = None) -> sympy.Basic:
+        # use class default rounding value if one is not explicitly passed
+        if default_rounding is None:
+            default_rounding = self.default_rounding
+
+        mag = self.electric_field_mag_string(default_rounding = -1)
+        theta = self._theta_string(default_rounding = -1)
+        y_field = mag * sympy.sin(theta)
+        return y_field if default_rounding < 0 else self.round_symbolic(y_field, default_rounding)
 
     def _radius(self, point: Point2D) -> float:
         """
@@ -163,9 +182,13 @@ class PointCharge(BaseCharge):
 
         return np.arctan2(point.y - self.position.y, point.x - self.position.x)
 
-    def _theta_string(self) -> sympy.Basic:
+    def _theta_string(self, default_rounding = None) -> sympy.Basic:
         """
         Returns the angle between any x, y point and the point charge location.
         """
+        # use class default rounding value if one is not explicitly passed
+        if default_rounding is None:
+            default_rounding = self.default_rounding
 
-        return sympy.atan2(y - self.position.y, x - self.position.x)
+        theta = sympy.atan2(y - self.position.y, x - self.position.x)
+        return theta if default_rounding < 0 else self.round_symbolic(theta, default_rounding)

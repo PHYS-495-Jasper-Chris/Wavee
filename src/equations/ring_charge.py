@@ -21,7 +21,7 @@ class RingCharge(BaseCharge):
     """
 
     def __init__(self, center: Point2D, inner_radius: float, outer_radius: float,
-                 charge_density: float) -> None:
+                 charge_density: float, default_rounding: int = -1) -> None:
         """
         Initialize the ring of charge with a center, an inner radius, an outer radius, and a charge
         density.
@@ -45,6 +45,7 @@ class RingCharge(BaseCharge):
             raise RuntimeError(
                 f"Inner radius {inner_radius} must be less than outer radius {outer_radius}")
 
+        self.default_rounding = default_rounding
         self.center = center
         self.inner_radius = inner_radius
         self.outer_radius = outer_radius
@@ -158,10 +159,14 @@ class RingCharge(BaseCharge):
             elif action is None:
                 return False
 
-    def electric_field_mag_string(self) -> sympy.Basic:
+    def electric_field_mag_string(self, default_rounding = None) -> sympy.Basic:
         """
         Returns the position-independent electric field equation of magnitude for this ring charge.
         """
+
+        # use class default rounding value if one is not explicitly passed
+        if default_rounding is None:
+            default_rounding = self.default_rounding
 
         # r = sqrt((x - x0)**2 + (y - y0)**2)
         r_sym = sympy.sqrt((self.center.x - x)**2 + (self.center.y - y)**2)
@@ -185,22 +190,48 @@ class RingCharge(BaseCharge):
         middle_cond = r_sym <= self.outer_radius if self.inner_radius == 0 else sympy.And(
             r_sym >= self.inner_radius, r_sym <= self.outer_radius)
 
-        return sympy.Piecewise((eqn_outer, r_sym >= self.outer_radius), (eqn, middle_cond),
+        piecewise = sympy.Piecewise((eqn_outer, r_sym >= self.outer_radius), (eqn, middle_cond),
                                (0, inner_cond))
 
-    def electric_field_x_string(self) -> sympy.Basic:
+        if default_rounding >= 0:
+            piecewise = self.round_symbolic(piecewise, default_rounding)
+
+        return piecewise
+
+    def electric_field_x_string(self, default_rounding = None) -> sympy.Basic:
         """
         Returns the position-independent electric field x-component equation for this ring charge.
         """
+        # use class default rounding value if one is not explicitly passed
+        if default_rounding is None:
+            default_rounding = self.default_rounding
 
-        return self.electric_field_mag_string() * sympy.cos(self._theta_string())
+        mag = self.electric_field_mag_string(default_rounding=-1)
+        x_comp = sympy.cos(self._theta_string(default_rounding=-1))
+        x_mag = mag * x_comp
 
-    def electric_field_y_string(self) -> sympy.Basic:
+        if default_rounding >= 0:
+            x_mag = self.round_symbolic(x_mag, default_rounding)
+
+        return x_mag
+
+    def electric_field_y_string(self, default_rounding = None) -> sympy.Basic:
         """
         Returns the position-independent electric field y-component equation for this ring charge.
         """
 
-        return self.electric_field_mag_string() * sympy.sin(self._theta_string())
+        # use class default rounding value if one is not explicitly passed
+        if default_rounding is None:
+            default_rounding = self.default_rounding
+
+        mag = self.electric_field_mag_string(default_rounding=-1)
+        y_comp = sympy.sin(self._theta_string(default_rounding=-1))
+        y_mag = mag * y_comp
+
+        if default_rounding >= 0:
+            y_mag = self.round_symbolic(y_mag, default_rounding)
+
+        return y_mag
 
     def _relative_pos(self, point: Point2D) -> Point2D:
         """
@@ -224,11 +255,19 @@ class RingCharge(BaseCharge):
 
         return np.arctan2(y_dist, x_dist)
 
-    def _theta_string(self) -> sympy.Basic:
+    def _theta_string(self, default_rounding = None) -> sympy.Basic:
         """
         Returns the angle between any x, y point and the center.
         """
 
-        x_dist, y_dist = x - self.center.x, y - self.center.y
+        # use class default rounding value if one is not explicitly passed
+        if default_rounding is None:
+            default_rounding = self.default_rounding
 
-        return sympy.atan2(y_dist, x_dist)
+        x_dist, y_dist = x - self.center.x, y - self.center.y
+        angle = sympy.atan2(y_dist, x_dist)
+
+        if default_rounding >= 0:
+            angle = self.round_symbolic(angle, default_rounding)
+
+        return angle

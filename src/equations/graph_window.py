@@ -158,7 +158,7 @@ class Window:
 
         return e_y
 
-    def electric_field_mag_html(self) -> str:
+    def electric_field_mag_html(self, default_rounding: int) -> str:
         """
         Get the cumulative electric field magnitude by summing each charge's magnitude.
         """
@@ -169,7 +169,7 @@ class Window:
         full_eqn: str = ""
 
         for i, charge in enumerate(self.charges):
-            full_eqn += f"E_{i}=" + latex(charge.electric_field_mag_string().simplify()) + ","
+            full_eqn += f"E_{i}=" + latex(charge.electric_field_mag_string(default_rounding=default_rounding).simplify()) + ","
 
         full_eqn = full_eqn[:-1]
 
@@ -193,7 +193,7 @@ class Window:
 
         return source
 
-    def electric_field_x_html(self) -> str:
+    def electric_field_x_html(self, default_rounding: int) -> str:
         """
         Get the cumulative electric field magnitude by summing each charge's magnitude.
         """
@@ -204,7 +204,9 @@ class Window:
         full_eqn: str = ""
 
         for charge in self.charges:
-            full_eqn += "\\left(" + latex(charge.electric_field_x_string().simplify()) + "\\right)+"
+            charge_string = charge.electric_field_x_string(default_rounding=default_rounding)
+            charge_string = charge_string.simplify()
+            full_eqn += "\\left(" + latex(charge_string) + "\\right)+"
 
         full_eqn = "E_x(x,y)=" + full_eqn[:-1]
 
@@ -228,7 +230,7 @@ class Window:
 
         return source
 
-    def electric_field_y_html(self) -> str:
+    def electric_field_y_html(self, default_rounding: int) -> str:
         """
         Get the cumulative electric field magnitude by summing each charge's magnitude.
         """
@@ -239,7 +241,7 @@ class Window:
         full_eqn: str = ""
 
         for charge in self.charges:
-            full_eqn += "\\left(" + latex(charge.electric_field_y_string().simplify()) + "\\right)+"
+            full_eqn += "\\left(" + latex(charge.electric_field_y_string(default_rounding=default_rounding).simplify()) + "\\right)+"
 
         full_eqn = "E_y(x,y)=" + full_eqn[:-1]
 

@@ -6,7 +6,7 @@ import abc
 from typing import Callable
 
 from PyQt6 import QtCore
-from sympy import Basic
+from sympy import Basic, preorder_traversal, Float
 
 from equations.constants import Point2D  # pylint: disable=import-error
 
@@ -15,7 +15,6 @@ class BaseCharge(abc.ABC):
     """
     An abstract charge, from which subclasses overload.
     """
-
     charge_updated: Callable[[], None]
     """
     A signal to be emitted when an aspect of this charge changes.
@@ -24,6 +23,12 @@ class BaseCharge(abc.ABC):
 
     Note that this is not the same signal used when a charge is removed or added - that signal is
     emitted from ``Window``.
+    """
+
+    default_rounding = -1
+    """
+    number of decimal places to show when creating the equation string. If value is -1 no rounding
+    will be done
     """
 
     @abc.abstractmethod
@@ -77,19 +82,29 @@ class BaseCharge(abc.ABC):
         """
 
     @abc.abstractmethod
-    def electric_field_mag_string(self) -> Basic:
+    def electric_field_mag_string(self, default_rounding = None) -> Basic:
         """
         Returns the position-independent electric field equation.
         """
 
     @abc.abstractmethod
-    def electric_field_x_string(self) -> Basic:
+    def electric_field_x_string(self, default_rounding = None) -> Basic:
         """
         Returns the position-independent electric field x-component equation.
         """
 
     @abc.abstractmethod
-    def electric_field_y_string(self) -> Basic:
+    def electric_field_y_string(self, default_rounding = None) -> Basic:
         """
         Returns the position-independent electric field y-component equation.
         """
+
+    def round_symbolic(self, expression, digits) -> Basic:
+        """
+        Rounds floats within sympy expression to given digits
+        """
+        tmp = expression
+        for a in preorder_traversal(expression):
+            if isinstance(a, Float):
+                tmp = tmp.subs(a, round(a, digits))
+        return tmp

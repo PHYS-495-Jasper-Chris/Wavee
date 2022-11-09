@@ -50,6 +50,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.refresh_button.clicked.connect(self.graph_widget.refresh_button_pressed)
 
+        # ---- GRAPH MENU OPTIONS ----
         graph_menu = self.menu_bar.addMenu("Graph")
         refresh_graph_action = graph_menu.addAction("Refresh Graph")
         refresh_graph_action.setShortcuts(["Ctrl+R", "F5"])
@@ -73,6 +74,8 @@ class MainWindow(QtWidgets.QMainWindow):
         aspect_ratio_toggle = graph_menu.addAction("Toggle fixed aspect ratio", "Ctrl+A")
         aspect_ratio_toggle.triggered.connect(self.graph_widget.toggle_even_aspect_ratio)
 
+
+        # ---- CHARGES MENU OPTIONS ----
         charge_menu = self.menu_bar.addMenu("Charges")
         remove_charge = charge_menu.addAction("Remove last charge", "Ctrl+Backspace")
         remove_charge.triggered.connect(self.graph_widget.remove_charge)
@@ -85,6 +88,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
         readd_all_charges = charge_menu.addAction("Re-add all charges", "Ctrl+Shift+Alt+Backspace")
         readd_all_charges.triggered.connect(self.graph_widget.graph_window.readd_all_charges)
+
+        # ---- EQUATION MENU OPTIONS ----
+        equation_menu = self.menu_bar.addMenu("Equations")
+
+        increase_digits = equation_menu.addAction("Increase digits shown", "Ctrl+]")
+        increase_digits.triggered.connect(self.increment_equations_digits)
+
+        decrease_digits = equation_menu.addAction("Decrease digits shown", "Ctrl+[")
+        decrease_digits.triggered.connect(self.decrement_equations_digits)
+
 
         self.proxy = pyqtgraph.SignalProxy(self.graph_widget.scene().sigMouseMoved,
                                            rateLimit=60,
@@ -217,8 +230,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
         1.) Reload the graphs.
         2.) Reload the equations (this is __really__ slow).
-
-        TODO: figure out how to speed up the equations. Consider moving this to its own thread.
         """
 
         self.graph_widget.charges_updated()
@@ -255,3 +266,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.y_equation_label.page().runJavaScript(
             "document.documentElement.scrollHeight;",
             lambda height: set_height(height, self.y_equation_label))
+
+    def increment_equations_digits(self):
+        """
+        Increase the number of digits shown in the equations window by 1
+        """
+        self.equations_thread.increase_digits(1)
+        self.equations_thread.start()
+
+    def decrement_equations_digits(self):
+        """
+        Decrease the number of digits shown in the equations window by 1
+        """
+        self.equations_thread.decrease_digits(1)
+        self.equations_thread.start()
