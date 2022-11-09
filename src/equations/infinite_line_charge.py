@@ -153,7 +153,7 @@ class InfiniteLineCharge(BaseCharge):
             elif action is None:
                 return False
 
-    def electric_field_mag_string(self) -> sympy.Basic:
+    def electric_field_mag_eqn(self) -> sympy.Basic:
         """
         Returns the position-independent electric field equation for this infinite line charge.
 
@@ -168,7 +168,7 @@ class InfiniteLineCharge(BaseCharge):
 
         return 2 * COULOMB_CONSTANT_SYM * self.charge_density / r_sym
 
-    def electric_field_x_string(self) -> sympy.Basic:
+    def electric_field_x_eqn(self) -> sympy.Basic:
         """
         Returns the position-independent electric field x-component equation for this infinite line
         charge.
@@ -177,15 +177,15 @@ class InfiniteLineCharge(BaseCharge):
             Basic: sympy representation of the x-component of the electric field.
         """
 
-        magnitude = self.electric_field_mag_string() * np.cos(self._line_angle() + np.pi / 2)
+        magnitude = self.electric_field_mag_eqn() * np.cos(self._line_angle() + np.pi / 2)
 
         if magnitude == 0.0:
             return sympy.S.Zero
 
-        pos_eq, neg_eq = self._flip_direction_string()
+        pos_eq, neg_eq = self._flip_direction_eqn()
         return sympy.Piecewise((-magnitude, neg_eq), (magnitude, pos_eq))
 
-    def electric_field_y_string(self) -> sympy.Basic:
+    def electric_field_y_eqn(self) -> sympy.Basic:
         """
         Returns the position-independent electric field y-component equation for this infinite line
         charge.
@@ -194,12 +194,12 @@ class InfiniteLineCharge(BaseCharge):
             Basic: sympy representation of the y-component of the electric field.
         """
 
-        magnitude = self.electric_field_mag_string() * np.sin(self._line_angle() + np.pi / 2)
+        magnitude = self.electric_field_mag_eqn() * np.sin(self._line_angle() + np.pi / 2)
 
         if magnitude == 0.0:
             return sympy.S.Zero
 
-        pos_eq, neg_eq = self._flip_direction_string()
+        pos_eq, neg_eq = self._flip_direction_eqn()
 
         return sympy.Piecewise((-magnitude, neg_eq), (magnitude, pos_eq))
 
@@ -284,7 +284,7 @@ class InfiniteLineCharge(BaseCharge):
 
         return True
 
-    def _closest_point_string(self) -> Tuple[sympy.Basic, sympy.Basic]:
+    def _closest_point_eqn(self) -> Tuple[sympy.Basic, sympy.Basic]:
         """
         Return the formula for the closest point to a general x, y position.
 
@@ -300,7 +300,7 @@ class InfiniteLineCharge(BaseCharge):
 
         return x_pos, y_pos
 
-    def _flip_direction_string(
+    def _flip_direction_eqn(
             self) -> Tuple[sympy.logic.boolalg.Boolean, sympy.logic.boolalg.Boolean]:
         """
         The inequalities for the positive and negative equations.
@@ -310,7 +310,7 @@ class InfiniteLineCharge(BaseCharge):
             compositions of relationals.
         """
 
-        x_closest, y_closest = self._closest_point_string()
+        x_closest, y_closest = self._closest_point_eqn()
 
         if self.x_coef == 0:
             pos_eq = clean_inequality(y_closest <= y, y)

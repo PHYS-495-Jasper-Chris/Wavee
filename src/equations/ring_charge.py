@@ -158,9 +158,12 @@ class RingCharge(BaseCharge):
             elif action is None:
                 return False
 
-    def electric_field_mag_string(self) -> sympy.Basic:
+    def electric_field_mag_eqn(self) -> sympy.Basic:
         """
         Returns the position-independent electric field equation of magnitude for this ring charge.
+
+        Returns:
+            Basic: sympy representation of the signed magnitude of the electric field.
         """
 
         # r = sqrt((x - x0)**2 + (y - y0)**2)
@@ -188,19 +191,25 @@ class RingCharge(BaseCharge):
         return sympy.Piecewise((eqn_outer, r_sym >= self.outer_radius), (eqn, middle_cond),
                                (0, inner_cond))
 
-    def electric_field_x_string(self) -> sympy.Basic:
+    def electric_field_x_eqn(self) -> sympy.Basic:
         """
         Returns the position-independent electric field x-component equation for this ring charge.
+
+        Returns:
+            Basic: sympy representation of the x-component of the electric field.
         """
 
-        return self.electric_field_mag_string() * sympy.cos(self._theta_string())
+        return self.electric_field_mag_eqn() * sympy.cos(self._theta_eqn())
 
-    def electric_field_y_string(self) -> sympy.Basic:
+    def electric_field_y_eqn(self) -> sympy.Basic:
         """
         Returns the position-independent electric field y-component equation for this ring charge.
+
+        Returns:
+            Basic: sympy representation of the y-component of the electric field.
         """
 
-        return self.electric_field_mag_string() * sympy.sin(self._theta_string())
+        return self.electric_field_mag_eqn() * sympy.sin(self._theta_eqn())
 
     def _relative_pos(self, point: Point2D) -> Point2D:
         """
@@ -224,11 +233,9 @@ class RingCharge(BaseCharge):
 
         return np.arctan2(y_dist, x_dist)
 
-    def _theta_string(self) -> sympy.Basic:
+    def _theta_eqn(self) -> sympy.Basic:
         """
         Returns the angle between any x, y point and the center.
         """
 
-        x_dist, y_dist = x - self.center.x, y - self.center.y
-
-        return sympy.atan2(y_dist, x_dist)
+        return sympy.atan2(y - self.center.y, x - self.center.x)

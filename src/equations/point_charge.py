@@ -110,9 +110,12 @@ class PointCharge(BaseCharge):
             elif action is None:
                 return False
 
-    def electric_field_mag_string(self) -> sympy.Basic:
+    def electric_field_mag_eqn(self) -> sympy.Basic:
         """
         Returns the position-independent electric field equation of magnitude for this point charge.
+
+        Returns:
+            Basic: sympy representation of the signed magnitude of the electric field.
         """
 
         # The equation for a point charge is k q / r^2
@@ -122,11 +125,25 @@ class PointCharge(BaseCharge):
 
         return COULOMB_CONSTANT_SYM * self.charge / (x_dist + y_dist)
 
-    def electric_field_x_string(self) -> sympy.Basic:
-        return self.electric_field_mag_string() * sympy.cos(self._theta_string())
+    def electric_field_x_eqn(self) -> sympy.Basic:
+        """
+        Returns the position-independent electric field x-component equation for this point charge.
 
-    def electric_field_y_string(self) -> sympy.Basic:
-        return self.electric_field_mag_string() * sympy.sin(self._theta_string())
+        Returns:
+            Basic: sympy representation of the x-component of the electric field.
+        """
+
+        return self.electric_field_mag_eqn() * sympy.cos(self._theta_eqn())
+
+    def electric_field_y_eqn(self) -> sympy.Basic:
+        """
+        Returns the position-independent electric field y-component equation for this point charge.
+
+        Returns:
+            Basic: sympy representation of the y-component of the electric field.
+        """
+
+        return self.electric_field_mag_eqn() * sympy.sin(self._theta_eqn())
 
     def _radius(self, point: Point2D) -> float:
         """
@@ -163,7 +180,7 @@ class PointCharge(BaseCharge):
 
         return np.arctan2(point.y - self.position.y, point.x - self.position.x)
 
-    def _theta_string(self) -> sympy.Basic:
+    def _theta_eqn(self) -> sympy.Basic:
         """
         Returns the angle between any x, y point and the point charge location.
         """

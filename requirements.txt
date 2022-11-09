@@ -1,5 +1,6 @@
 matplotlib>=3.4.3
 numpy>=1.21.2
 PyQt6>=6.4.0
-pyqtgraph>=0.13.1
 PyQt6-WebEngine>=6.4.0
+pyqtgraph>=0.13.1
+sympy>=1.11.1

@@ -173,7 +173,7 @@ class GraphWindow:
         full_eqn: str = ""
 
         for i, charge in enumerate(self.charges):
-            full_eqn += f"E_{i}=" + latex(charge.electric_field_mag_string().simplify()) + ","
+            full_eqn += f"E_{i}=" + latex(charge.electric_field_mag_eqn().simplify()) + ","
 
         full_eqn = full_eqn[:-1]
         return GraphWindow._make_source(full_eqn)
@@ -194,7 +194,7 @@ class GraphWindow:
         full_eqn: str = ""
 
         for charge in self.charges:
-            full_eqn += "\\left(" + latex(charge.electric_field_x_string().simplify()) + "\\right)+"
+            full_eqn += "\\left(" + latex(charge.electric_field_x_eqn().simplify()) + "\\right)+"
 
         full_eqn = "E_x(x,y)=" + full_eqn[:-1]
         return GraphWindow._make_source(full_eqn)
@@ -215,7 +215,7 @@ class GraphWindow:
         full_eqn: str = ""
 
         for charge in self.charges:
-            full_eqn += "\\left(" + latex(charge.electric_field_y_string().simplify()) + "\\right)+"
+            full_eqn += "\\left(" + latex(charge.electric_field_y_eqn().simplify()) + "\\right)+"
 
         full_eqn = "E_y(x,y)=" + full_eqn[:-1]
         return GraphWindow._make_source(full_eqn)
