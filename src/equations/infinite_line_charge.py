@@ -2,14 +2,19 @@
 Calculate the electric field of an infinite line charge.
 """
 
-import numpy as np
+from typing import Optional, Tuple
 
-from PyQt6 import QtWidgets, QtCore
+import numpy as np
+import sympy
+from PyQt6 import QtCore, QtWidgets
+from sympy.abc import x, y
 
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
-from equations.constants import COULOMB_CONSTANT, Point2D
+from equations.constants import COULOMB_CONSTANT, COULOMB_CONSTANT_SYM, Point2D
+from equations.sympy_helper import clean_inequality, round_symbolic
 from view.multi_line_input_dialog import MultiLineInputDialog
+
 # pylint: enable=import-error
 
 
@@ -18,7 +23,12 @@ class InfiniteLineCharge(BaseCharge):
     A single infinite line of charge, with a slope and offset (m & b), and a charge density.
     """
 
-    def __init__(self, x_coef: float, y_coef: float, offset: float, charge_density: float) -> None:
+    def __init__(self,
+                 x_coef: float,
+                 y_coef: float,
+                 offset: float,
+                 charge_density: float,
+                 default_rounding: int = -1) -> None:
         """
         Initialize the infinite line charge with its equation and charge density.
 
@@ -44,39 +54,7 @@ class InfiniteLineCharge(BaseCharge):
         self.y_coef = y_coef
         self.offset = offset
         self.charge_density = charge_density
-
-    def radial_distance(self, point: Point2D) -> float:
-        """
-        The shortest distance from a point to the infinite line of charge.
-
-        Args:
-            point (Point2D): The point to measure the distance from.
-
-        Returns:
-            float: minimal radial distance from ``point`` to line charge.
-        """
-
-        return (abs(self.x_coef * point.x + self.y_coef * point.y + self.offset)
-                / np.sqrt(self.x_coef**2 + self.y_coef**2))
-
-    def closest_point(self, point: Point2D) -> Point2D:
-        """
-        The closest point on the line from a given point.
-
-        Args:
-            point (Point2D): The point to find the closest point to.
-
-        Returns:
-            Point2D: The closest point.
-        """
-
-        x_pos = (self.y_coef * (self.y_coef * point.x - self.x_coef * point.y)
-                 - self.x_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
-
-        y_pos = (self.x_coef * (self.x_coef * point.y - self.y_coef * point.x)
-                 - self.y_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
-
-        return Point2D(x_pos, y_pos)
+        self.default_rounding = default_rounding
 
     def electric_field_magnitude(self, point: Point2D) -> float:
         """
@@ -89,7 +67,7 @@ class InfiniteLineCharge(BaseCharge):
             float: The net (signed) magnitude of the electric field at the given point.
         """
 
-        radial_distance = self.radial_distance(point)
+        radial_distance = self._radial_distance(point)
 
         # Make sure we don't divide by 0
         if radial_distance == 0.0:
@@ -111,15 +89,10 @@ class InfiniteLineCharge(BaseCharge):
         """
 
         # The direction of the electric field is completely orthogonal to the direction of the line
-        # charge itself, so for x take the cos instead of sin.
+        # charge itself, so add a pi/2 rotation to the angle.
+        magnitude = self.electric_field_magnitude(point) * np.cos(self._line_angle() + np.pi / 2)
 
-        line_angle: float = np.arctan2(self.y_coef, self.x_coef)
-
-        magnitude = self.electric_field_magnitude(point) * np.cos(line_angle)
-
-        # If the x-component of the point is greater than that of the closest point on the line,
-        # then the magnitude should be kept the same, otherwise it should be negated.
-        if self.closest_point(point).x > point.x:
+        if self._flip_direction(point):
             magnitude *= -1
 
         return magnitude
@@ -137,15 +110,10 @@ class InfiniteLineCharge(BaseCharge):
         """
 
         # The direction of the electric field is completely orthogonal to the direction of the line
-        # charge itself, so for y take the sin instead of cos.
+        # charge itself, so add a pi/2 rotation to the angle.
+        magnitude = self.electric_field_magnitude(point) * np.sin(self._line_angle() + np.pi / 2)
 
-        line_angle: float = np.arctan2(self.y_coef, self.x_coef)
-
-        magnitude = self.electric_field_magnitude(point) * np.sin(line_angle)
-
-        # If the y-component of the point is greater than that of the closest point on the line,
-        # then the magnitude should be kept the same, otherwise it should be negated.
-        if self.closest_point(point).y > point.y:
+        if self._flip_direction(point):
             magnitude *= -1
 
         return magnitude
@@ -176,6 +144,7 @@ class InfiniteLineCharge(BaseCharge):
                                                                   "Set Charge Density (C/m)")
                 if success:
                     self.charge_density = val
+                    self.charge_updated()
             elif action == set_eqn:
                 new_eqn, success = MultiLineInputDialog(
                     ["X Coefficient", "Y Coefficient", "Offset"], menu,
@@ -184,7 +153,204 @@ class InfiniteLineCharge(BaseCharge):
                 if success and False not in np.isfinite(new_eqn) and not (new_eqn[0] == 0.0
                                                                           and new_eqn[1] == 0.0):
                     self.x_coef, self.y_coef, self.offset = new_eqn
+                    self.charge_updated()
             elif action == rmv_charge:
                 return True
             elif action is None:
                 return False
+
+    def electric_field_mag_eqn(self, rounding: Optional[int] = None) -> sympy.Basic:
+        """
+        Returns the position-independent electric field equation for this infinite line charge.
+
+        Returns:
+            Basic: sympy representation of the signed magnitude of the electric field.
+        """
+
+        # use class default rounding value if one is not explicitly passed
+        if rounding is None:
+            rounding = self.default_rounding
+
+        # E = 2k λ/r
+        # radial distance
+        r_sym = (abs(self.x_coef * x + self.y_coef * y + self.offset)
+                 / sympy.sqrt(self.x_coef**2 + self.y_coef**2))
+        mag = 2 * COULOMB_CONSTANT_SYM * self.charge_density / r_sym
+        return round_symbolic(mag, rounding)
+
+    def electric_field_x_eqn(self, rounding: Optional[int] = None) -> sympy.Basic:
+        """
+        Returns the position-independent electric field x-component equation for this infinite line
+        charge.
+
+        Returns:
+            Basic: sympy representation of the x-component of the electric field.
+        """
+        # use class default rounding value if one is not explicitly passed
+        if rounding is None:
+            rounding = self.default_rounding
+
+        x_comp = np.cos(self._line_angle() + np.pi / 2)
+        magnitude = self.electric_field_mag_eqn(rounding=-1) * x_comp
+
+        if magnitude == 0.0:
+            return sympy.S.Zero
+
+        pos_eq, neg_eq = self._flip_direction_eqn(rounding=-1)
+        piecewise = sympy.Piecewise((-magnitude, neg_eq), (magnitude, pos_eq))
+
+        return round_symbolic(piecewise, rounding)
+
+    def electric_field_y_eqn(self, rounding: Optional[int] = None) -> sympy.Basic:
+        """
+        Returns the position-independent electric field y-component equation for this infinite line
+        charge.
+
+        Returns:
+            Basic: sympy representation of the y-component of the electric field.
+        """
+        # use class default rounding value if one is not explicitly passed
+        if rounding is None:
+            rounding = self.default_rounding
+
+        y_comp = np.sin(self._line_angle() + np.pi / 2)
+        magnitude = self.electric_field_mag_eqn(rounding=-1) * y_comp
+
+        if magnitude == 0.0:
+            return sympy.S.Zero
+
+        pos_eq, neg_eq = self._flip_direction_eqn(rounding=-1)
+        piecewise = sympy.Piecewise((-magnitude, neg_eq), (magnitude, pos_eq))
+
+        return round_symbolic(piecewise, rounding)
+
+    def _radial_distance(self, point: Point2D) -> float:
+        """
+        The shortest distance from a point to the infinite line of charge.
+
+        Args:
+            point (Point2D): The point to measure the distance from.
+
+        Returns:
+            float: minimal radial distance from ``point`` to line charge.
+        """
+
+        return (abs(self.x_coef * point.x + self.y_coef * point.y + self.offset)
+                / np.sqrt(self.x_coef**2 + self.y_coef**2))
+
+    def _closest_point(self, point: Point2D) -> Point2D:
+        """
+        The closest point on the line from a given point.
+
+        Args:
+            point (Point2D): The point to find the closest point to.
+
+        Returns:
+            Point2D: The closest point.
+        """
+
+        x_pos = (self.y_coef * (self.y_coef * point.x - self.x_coef * point.y)
+                 - self.x_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
+
+        y_pos = (self.x_coef * (self.x_coef * point.y - self.y_coef * point.x)
+                 - self.y_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
+
+        return Point2D(x_pos, y_pos)
+
+    def _line_angle(self) -> float:
+        """
+        Get the angle of the line as though it was through the origin, in radians.
+
+        Returns:
+            float: The angle of the infinite line charge itself, in radians.
+        """
+
+        if self.y_coef == 0.0:
+            # Only have x component, so let the line point straight up (independent of x's sign).
+            return np.pi / 2
+
+        if self.x_coef == 0.0:
+            # Only have y component, so let the line point straight in the +x direction (independent
+            # of y's sign).
+            return 0
+
+        # The slope of the line, in ay + bx + c = 0 turns in to y = -b/a x - c/a
+        return np.arctan(-self.x_coef / self.y_coef)
+
+    def _flip_direction(self, point: Point2D) -> bool:
+        """
+        Returns whether to flip the direction of a component of a magnitude, based on the location
+        of the point.
+
+        Returns:
+            bool: True if the magnitude value should be negated, False otherwise.
+        """
+
+        # Now we need to flip the direction if we are on the opposite side of the line. This means
+        # that there are 4 cases, part of 2 groups: the x component and y component are both greater
+        # than the closest point on the line; the x and y component are both less than the closest
+        # point on the line; and one (but not both) of the components is greater than the closest
+        # point on the line.
+
+        closest_point = self._closest_point(point)
+
+        if closest_point.x >= point.x and closest_point.y >= point.y:
+            return True
+
+        if closest_point.x <= point.x and closest_point.y <= point.y:
+            return False
+
+        if closest_point.x >= point.x and closest_point.y <= point.y:
+            return False
+
+        return True
+
+    def _closest_point_eqn(self, rounding: Optional[int] = None) -> Tuple[sympy.Basic, sympy.Basic]:
+        """
+        Return the formula for the closest point to a general x, y position.
+
+        Returns:
+            Tuple[Basic, Basic]: The x position and y position as sympy objects.
+        """
+
+        x_pos = (self.y_coef * (self.y_coef * x - self.x_coef * y)
+                 - self.x_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
+
+        y_pos = (self.x_coef * (self.x_coef * y - self.y_coef * x)
+                 - self.y_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
+
+        # use class default rounding value if one is not explicitly passed
+        if rounding is None:
+            rounding = self.default_rounding
+
+        return round_symbolic(x_pos, rounding), round_symbolic(y_pos, rounding)
+
+    def _flip_direction_eqn(self,
+                            rounding: Optional[int] = None) -> Tuple[sympy.Basic, sympy.Basic]:
+        """
+        The inequalities for the positive and negative equations.
+
+        Returns:
+            Tuple[Basic, Basic]: The positive and negative inequalities to be used, as boolean
+            compositions of relationals.
+        """
+
+        # use class default rounding value if one is not explicitly passed
+        if rounding is None:
+            rounding = self.default_rounding
+
+        x_closest, y_closest = self._closest_point_eqn(rounding=-1)
+
+        if self.x_coef == 0:
+            pos_eq = clean_inequality(y_closest <= y, y)
+            neg_eq = clean_inequality(y_closest >= y, y)
+        elif self.y_coef == 0:
+            pos_eq = clean_inequality(x_closest <= x, x)
+            neg_eq = clean_inequality(x_closest >= x, x)
+        else:
+            pos_eq = sympy.Or(clean_inequality([x_closest <= x, y_closest <= y], x),
+                              clean_inequality([x_closest >= x, y_closest <= y], x)).simplify()
+            neg_eq = sympy.Or(clean_inequality([x_closest >= x, y_closest >= y], x),
+                              clean_inequality([x_closest <= x, y_closest >= y], x)).simplify()
+
+        return round_symbolic(pos_eq, rounding), round_symbolic(neg_eq, rounding)

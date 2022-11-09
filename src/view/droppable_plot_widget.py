@@ -3,38 +3,35 @@ A PlotWidget that can be dropped into.
 """
 
 import sys
-
-from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple
 
-import pyqtgraph
-
 import numpy as np
-
-from PyQt6 import QtGui, QtWidgets, QtCore
+import pyqtgraph
+from PyQt6 import QtCore, QtGui, QtWidgets
 
 # pylint: disable=import-error
 from equations.circle_charge import CircleCharge
 from equations.constants import Point2D
-from equations.graph_window import Window
+from equations.graph_window import GraphWindow
 from equations.infinite_line_charge import InfiniteLineCharge
 from equations.point_charge import PointCharge
 from equations.ring_charge import RingCharge
 from view.draggable_label import DraggableLabel
-from view.scaling_scatter_plot import ScalingScatterPlotItem
+
 # pylint: enable=import-error
 
 RGBTuple = NamedTuple("RGBTuple", [("r", int), ("g", int), ("b", int)])
 GraphBounds = NamedTuple("GraphBounds", [("top_left", Point2D), ("bottom_right", Point2D)])
 
 
-class CenterArrowItem(pyqtgraph.ArrowItem):
+class ArrowTailItem(pyqtgraph.ArrowItem):
     """
-    An ArrowItem that loads its position from the center, not from the head of the arrow.
+    An ArrowItem that loads its position from the tail (end) of the arrow, not from the head of the
+    arrow.
     """
 
     def paint(self, p: QtGui.QPainter, *args) -> None:
-        p.translate(-self.boundingRect().center())
+        p.translate(-2 * self.boundingRect().center())
         return super().paint(p, *args)
 
 
@@ -68,12 +65,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         The number of x-axis points to render.
         """
 
-        self.scatter_plot_item = ScalingScatterPlotItem()
-        """
-        A scaling ScatterPlotItem holding point charges.
-        """
-
-        self.graph_window = Window([
+        self.graph_window = GraphWindow([
             PointCharge(Point2D(1, 4), 10),
             PointCharge(Point2D(-3, 5), 8),
             PointCharge(Point2D(0, 1), -5),
@@ -175,16 +167,10 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         ev.accept()
 
-        # Rebuild the plot after new charge is added.
-        self.build_plots(dimensions=self._get_graph_bounds())
-
         # Open the relevant menu.
         rmv_charge = self.graph_window.charges[-1].open_menu(self.mapToGlobal(ev.position()))
         if rmv_charge:
             self.remove_charge()
-
-        # Rebuild the plots after the menu selections have been made.
-        self.build_plots(dimensions=self._get_graph_bounds())
 
     def build_plots(self,
                     dimensions: Optional[GraphBounds] = None,
@@ -216,12 +202,10 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
         # Remove old graphs
         plot_item.clear()
-        self.scatter_plot_item.clear()
 
         for axis in axes:
             plot_item.getAxis(axis).setGrid(255)
 
-        self.addItem(self.scatter_plot_item)
         default_dimensions = self._plot_charges()
 
         # Build the dimensions based solely on the charges, or the provided dimensions.
@@ -275,7 +259,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                     pass
 
         # Build sorted array holding indexes of magnitude
-        MagIndexes = namedtuple("MagIndexes", ["magnitude", "x", "y"])
+        MagIndexes = NamedTuple("MagIndexes", [("magnitude", float), ("x", int), ("y", int)])
         flat_arr: List[MagIndexes] = []
         for i in range(x_indices):
             for j in range(y_indices):
@@ -297,18 +281,15 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                 normalized_mag = net_mag[i][j] / flat_arr[-1].magnitude
                 scaled_mag = normalized_mag * max_mag_length
                 brush_color = self._get_color_from_mag(net_mag_idx[i][j], len(flat_arr))
-                arrow_item = CenterArrowItem(pos=(p_x[i][j], p_y[i][j]),
-                                             tailLen=scaled_mag,
-                                             brush=brush_color,
-                                             angle=angle)
+                arrow_item = ArrowTailItem(pos=(p_x[i][j], p_y[i][j]),
+                                           tailLen=scaled_mag,
+                                           brush=brush_color,
+                                           angle=angle)
                 self.addItem(arrow_item)
 
         if should_autoscale:
             # Enable autoscaling if no dimension set.
             view_box.enableAutoRange()
-        else:
-            # Fix the scale factors if we are reloading an existing graph.
-            self.scatter_plot_item.viewRangeChanged()
 
     def reset_resolution(self) -> None:
         """
@@ -369,7 +350,6 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         """
 
         self.build_plots()
-        self.scatter_plot_item.viewRangeChanged()
 
     def toggle_even_aspect_ratio(self) -> None:
         """
@@ -383,21 +363,17 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
     def remove_charge(self) -> None:
         """
-        Remove the last charge added, and rebuild the graphs.
+        Remove the last charge added, automatically rebuilding the graphs.
         """
 
         self.graph_window.remove_last_charge()
 
-        self.build_plots(dimensions=self._get_graph_bounds())
-
     def undo_remove_charge(self) -> None:
         """
-        Undo the latest removal, and rebuild the graphs.
+        Undo the latest removal, automatically rebuilding the graphs.
         """
 
         self.graph_window.undo_charge_removal()
-
-        self.build_plots(dimensions=self._get_graph_bounds())
 
     def _plot_charges(self) -> GraphBounds:
         """
@@ -411,17 +387,21 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
 
             # Point charges
             if isinstance(charge, PointCharge):
-                leftmost = min(leftmost, charge.position.x)
-                rightmost = max(rightmost, charge.position.x)
-                topmost = max(topmost, charge.position.y)
-                bottommost = min(bottommost, charge.position.y)
+                radius = abs(charge.charge) / 5  # Arbitrarily chosen scaling factor
 
-                self.scatter_plot_item.addPoints(x=[charge.position.x],
-                                                 y=[charge.position.y],
-                                                 data={
-                                                     "initial_size": abs(charge.charge) * 200,
-                                                     "brush": "r" if charge.charge > 0.0 else "b"
-                                                 })
+                leftmost = min(leftmost, charge.position.x - radius)
+                rightmost = max(rightmost, charge.position.x + radius)
+                topmost = max(topmost, charge.position.y + radius)
+                bottommost = min(bottommost, charge.position.y - radius)
+
+                ellipse_item = QtWidgets.QGraphicsEllipseItem(charge.position.x - radius,
+                                                              charge.position.y - radius,
+                                                              radius * 2, radius * 2)
+                ellipse_item.setBrush(
+                    QtCore.Qt.GlobalColor.red if charge.charge > 0 else QtCore.Qt.GlobalColor.blue)
+                ellipse_item.setPen(QtGui.QPen(QtCore.Qt.PenStyle.NoPen))
+                ellipse_item.pen().setWidth(0)
+                self.addItem(ellipse_item)
 
             # Infinite Line charges
             elif isinstance(charge, InfiniteLineCharge):
@@ -577,3 +557,10 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         g = min_color.g - g_shift
         b = min_color.b - b_shift
         return RGBTuple(int(r), int(g), int(b))
+
+    def charges_updated(self) -> None:
+        """
+        When charges change, reload the graphs.
+        """
+
+        self.build_plots(dimensions=self._get_graph_bounds())

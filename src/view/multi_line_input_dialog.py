@@ -4,7 +4,7 @@ A QDialog with multiple input lines.
 
 from typing import List, Optional, Tuple, Type, TypeVar
 
-from PyQt6 import QtWidgets, QtCore
+from PyQt6 import QtCore, QtWidgets
 
 
 class MultiLineInputDialog(QtWidgets.QDialog):

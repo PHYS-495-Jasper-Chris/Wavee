@@ -2,14 +2,19 @@
 A cylindrical hollow ring of charge.
 """
 
-import numpy as np
+from typing import Optional
 
-from PyQt6 import QtWidgets, QtCore
+import numpy as np
+import sympy
+from PyQt6 import QtCore, QtWidgets
+from sympy.abc import x, y
 
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
-from equations.constants import COULOMB_CONSTANT, Point2D
+from equations.constants import COULOMB_CONSTANT, COULOMB_CONSTANT_SYM, Point2D
+from equations.sympy_helper import round_symbolic
 from view.multi_line_input_dialog import MultiLineInputDialog
+
 # pylint: enable=import-error
 
 
@@ -18,8 +23,12 @@ class RingCharge(BaseCharge):
     A cylindrical ring of charge.
     """
 
-    def __init__(self, center: Point2D, inner_radius: float, outer_radius: float,
-                 charge_density: float) -> None:
+    def __init__(self,
+                 center: Point2D,
+                 inner_radius: float,
+                 outer_radius: float,
+                 charge_density: float,
+                 default_rounding: int = -1) -> None:
         """
         Initialize the ring of charge with a center, an inner radius, an outer radius, and a charge
         density.
@@ -43,6 +52,7 @@ class RingCharge(BaseCharge):
             raise RuntimeError(
                 f"Inner radius {inner_radius} must be less than outer radius {outer_radius}")
 
+        self.default_rounding = default_rounding
         self.center = center
         self.inner_radius = inner_radius
         self.outer_radius = outer_radius
@@ -134,6 +144,7 @@ class RingCharge(BaseCharge):
                                                                   "Set Charge Density (C/m^2)")
                 if success:
                     self.charge_density = val
+                    self.charge_updated()
             elif action == set_radii:
                 (inner_radius,
                  outer_radius), success = MultiLineInputDialog(["Inner Radius", "Outer Radius"],
@@ -142,16 +153,93 @@ class RingCharge(BaseCharge):
                 if success and False not in np.isfinite([inner_radius, outer_radius
                                                         ]) and 0 <= inner_radius < outer_radius:
                     self.inner_radius, self.outer_radius = inner_radius, outer_radius
+                    self.charge_updated()
             elif action == set_center:
                 new_center, success = MultiLineInputDialog(["X Position", "Y Position"],
                                                            menu).get_doubles()
 
                 if success and False not in np.isfinite(new_center):
                     self.center = Point2D(*new_center)
+                    self.charge_updated()
             elif action == rmv_charge:
                 return True
             elif action is None:
                 return False
+
+    def electric_field_mag_eqn(self, rounding: Optional[int] = None) -> sympy.Basic:
+        """
+        Returns the position-independent electric field equation of magnitude for this ring charge.
+
+        Returns:
+            Basic: sympy representation of the signed magnitude of the electric field.
+        """
+
+        # r = sqrt((x - x0)**2 + (y - y0)**2)
+        r_sym = sympy.sqrt((self.center.x - x)**2 + (self.center.y - y)**2)
+
+        # q_enc = Integral[ρ, {r, inner, rad}]
+        if isinstance(self.charge_density, (float, int)):
+            q_enc = self.charge_density * sympy.pi * (r_sym**2 - self.inner_radius**2)
+            q_tot = self.charge_density * sympy.pi * (self.outer_radius**2 - self.inner_radius**2)
+        else:
+            rp_sym = sympy.Symbol("r'")
+            q_enc = sympy.Integral(self.charge_density, (rp_sym, self.inner_radius, r_sym))
+            q_tot = sympy.Integral(self.charge_density,
+                                   (rp_sym, self.inner_radius, self.outer_radius))
+
+        # E = E = k * q_enc / 2 * pi * r
+        eqn = COULOMB_CONSTANT_SYM * q_enc / (2 * sympy.pi * r_sym)
+        eqn_outer = COULOMB_CONSTANT_SYM * q_tot / (2 * sympy.pi * r_sym)
+
+        inner_cond = False if self.inner_radius == 0 else r_sym <= self.inner_radius
+
+        middle_cond = r_sym <= self.outer_radius if self.inner_radius == 0 else sympy.And(
+            r_sym >= self.inner_radius, r_sym <= self.outer_radius)
+
+        piecewise = sympy.Piecewise((eqn_outer, r_sym >= self.outer_radius), (eqn, middle_cond),
+                                    (0, inner_cond))
+
+        # use class default rounding value if one is not explicitly passed
+        if rounding is None:
+            rounding = self.default_rounding
+
+        return round_symbolic(piecewise, rounding)
+
+    def electric_field_x_eqn(self, rounding: Optional[int] = None) -> sympy.Basic:
+        """
+        Returns the position-independent electric field x-component equation for this ring charge.
+
+        Returns:
+            Basic: sympy representation of the x-component of the electric field.
+        """
+
+        mag = self.electric_field_mag_eqn(rounding=-1)
+        x_comp = sympy.cos(self._theta_eqn(rounding=-1))
+        x_mag = mag * x_comp
+
+        # use class default rounding value if one is not explicitly passed
+        if rounding is None:
+            rounding = self.default_rounding
+
+        return round_symbolic(x_mag, rounding)
+
+    def electric_field_y_eqn(self, rounding: Optional[int] = None) -> sympy.Basic:
+        """
+        Returns the position-independent electric field y-component equation for this ring charge.
+
+        Returns:
+            Basic: sympy representation of the y-component of the electric field.
+        """
+
+        mag = self.electric_field_mag_eqn(rounding=-1)
+        y_comp = sympy.sin(self._theta_eqn(rounding=-1))
+        y_mag = mag * y_comp
+
+        # use class default rounding value if one is not explicitly passed
+        if rounding is None:
+            rounding = self.default_rounding
+
+        return round_symbolic(y_mag, rounding)
 
     def _relative_pos(self, point: Point2D) -> Point2D:
         """
@@ -174,3 +262,17 @@ class RingCharge(BaseCharge):
         x_dist, y_dist = self._relative_pos(point)
 
         return np.arctan2(y_dist, x_dist)
+
+    def _theta_eqn(self, rounding: Optional[int] = None) -> sympy.Basic:
+        """
+        Returns the angle between any x, y point and the center.
+        """
+
+        x_dist, y_dist = x - self.center.x, y - self.center.y
+        angle = sympy.atan2(y_dist, x_dist)
+
+        # use class default rounding value if one is not explicitly passed
+        if rounding is None:
+            rounding = self.default_rounding
+
+        return round_symbolic(angle, rounding)

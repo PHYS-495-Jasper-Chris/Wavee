@@ -3,13 +3,13 @@ Calculate the electric field of solid circle of charge.
 """
 
 import numpy as np
-
-from PyQt6 import QtWidgets, QtCore
+from PyQt6 import QtCore, QtWidgets
 
 # pylint: disable=import-error
 from equations.constants import Point2D
 from equations.ring_charge import RingCharge
 from view.multi_line_input_dialog import MultiLineInputDialog
+
 # pylint: enable=import-error
 
 
@@ -48,17 +48,20 @@ class CircleCharge(RingCharge):
                                                                   "Set Charge Density (C/m^2)")
                 if success:
                     self.charge_density = val
+                    self.charge_updated()
             elif action == set_radius:
                 val, success = QtWidgets.QInputDialog().getDouble(menu, "Set Radius",
                                                                   "Set Radius (m)")
                 if success:
                     self.outer_radius = val
+                    self.charge_updated()
             elif action == set_center:
                 new_center, success = MultiLineInputDialog(["X Position", "Y Position"],
                                                            menu).get_doubles()
 
                 if success and False not in np.isfinite(new_center):
                     self.center = Point2D(*new_center)
+                    self.charge_updated()
             elif action == rmv_charge:
                 return True
             elif action is None:

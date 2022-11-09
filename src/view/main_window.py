@@ -4,17 +4,17 @@ The main window.
 
 import os
 import sys
-
 from typing import Tuple
 
 import pyqtgraph
-
-from PyQt6 import QtCore, QtWidgets, QtGui, uic
+from PyQt6 import QtCore, QtGui, QtWebEngineWidgets, QtWidgets, uic
 
 # pylint: disable=import-error
 from equations.constants import Point2D
-from view.droppable_plot_widget import DroppablePlotWidget
+from equations.equation_thread import EquationThread
 from view.draggable_label import DraggableLabel
+from view.droppable_plot_widget import DroppablePlotWidget
+
 # pylint: enable=import-error
 
 
@@ -27,6 +27,9 @@ class MainWindow(QtWidgets.QMainWindow):
     central_widget: QtWidgets.QWidget
     grid_layout: QtWidgets.QGridLayout
     graph_widget: DroppablePlotWidget
+    net_mag_equation_label: QtWebEngineWidgets.QWebEngineView
+    x_equation_label: QtWebEngineWidgets.QWebEngineView
+    y_equation_label: QtWebEngineWidgets.QWebEngineView
     point_charge_circle: DraggableLabel
     line_charge_drawing: DraggableLabel
     circle_charge_drawing: DraggableLabel
@@ -39,11 +42,15 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         uic.load_ui.loadUi(os.path.join(sys.path[0], "view/ui/main_window.ui"), self)
-        self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
-        self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
+
+        self.equations_thread = EquationThread(self.graph_widget.graph_window, self)
+        self.equations_thread.finished.connect(self._update_equations)
+
+        self.graph_widget.graph_window.charges_updated = self._charges_updated
 
         self.refresh_button.clicked.connect(self.graph_widget.refresh_button_pressed)
 
+        # ---- GRAPH MENU OPTIONS ----
         graph_menu = self.menu_bar.addMenu("Graph")
         refresh_graph_action = graph_menu.addAction("Refresh Graph")
         refresh_graph_action.setShortcuts(["Ctrl+R", "F5"])
@@ -67,6 +74,7 @@ class MainWindow(QtWidgets.QMainWindow):
         aspect_ratio_toggle = graph_menu.addAction("Toggle fixed aspect ratio", "Ctrl+A")
         aspect_ratio_toggle.triggered.connect(self.graph_widget.toggle_even_aspect_ratio)
 
+        # ---- CHARGES MENU OPTIONS ----
         charge_menu = self.menu_bar.addMenu("Charges")
         remove_charge = charge_menu.addAction("Remove last charge", "Ctrl+Backspace")
         remove_charge.triggered.connect(self.graph_widget.remove_charge)
@@ -74,12 +82,31 @@ class MainWindow(QtWidgets.QMainWindow):
         undo_remove_charge = charge_menu.addAction("Undo last removal", "Ctrl+Shift+Backspace")
         undo_remove_charge.triggered.connect(self.graph_widget.undo_remove_charge)
 
+        remove_all_charges = charge_menu.addAction("Remove all charges", "Ctrl+Alt+Backspace")
+        remove_all_charges.triggered.connect(self.graph_widget.graph_window.remove_all_charges)
+
+        readd_all_charges = charge_menu.addAction("Re-add all charges", "Ctrl+Shift+Alt+Backspace")
+        readd_all_charges.triggered.connect(self.graph_widget.graph_window.readd_all_charges)
+
+        # ---- EQUATION MENU OPTIONS ----
+        equation_menu = self.menu_bar.addMenu("Equations")
+
+        increase_digits = equation_menu.addAction("Increase digits shown", "Ctrl+]")
+        increase_digits.triggered.connect(self.increment_equations_digits)
+
+        decrease_digits = equation_menu.addAction("Decrease digits shown", "Ctrl+[")
+        decrease_digits.triggered.connect(self.decrement_equations_digits)
+
         self.proxy = pyqtgraph.SignalProxy(self.graph_widget.scene().sigMouseMoved,
                                            rateLimit=60,
                                            slot=self._mouse_moved)
 
         self._paint_shapes()
         self.graph_widget.build_plots()
+        self.equations_thread.start()
+
+        self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
+        self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
 
         self.show()
 
@@ -194,3 +221,60 @@ class MainWindow(QtWidgets.QMainWindow):
 
             self.graph_widget.setToolTip(text)
             self.status_bar.showMessage(text)
+
+    def _charges_updated(self) -> None:
+        """
+        When charges change, do several things:
+
+        1.) Reload the graphs.
+        2.) Reload the equations (this is __really__ slow).
+        """
+
+        self.graph_widget.charges_updated()
+        self.equations_thread.start()
+
+    def _update_equations(self) -> None:
+        """
+        Read the values from the equations thread and update the labels.
+        """
+
+        self.net_mag_equation_label.setHtml(self.equations_thread.mag_html)
+        self.x_equation_label.setHtml(self.equations_thread.x_html)
+        self.y_equation_label.setHtml(self.equations_thread.y_html)
+
+    def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:  # pylint: disable=invalid-name
+        """
+        When the window is resized, automatically resize the equation web views.
+
+        TODO: figure out if this works.
+        """
+
+        super().resizeEvent(a0)
+
+        def set_height(height: str, label: QtWebEngineWidgets.QWebEngineView) -> None:
+            label.resize(label.width(), int(height) + 20)
+
+        # TODO: figure out how to do this properly (this doesn't work)
+        self.net_mag_equation_label.page().runJavaScript(
+            "document.documentElement.scrollHeight;",
+            lambda height: set_height(height, self.net_mag_equation_label))
+        self.x_equation_label.page().runJavaScript(
+            "document.documentElement.scrollHeight;",
+            lambda height: set_height(height, self.x_equation_label))
+        self.y_equation_label.page().runJavaScript(
+            "document.documentElement.scrollHeight;",
+            lambda height: set_height(height, self.y_equation_label))
+
+    def increment_equations_digits(self):
+        """
+        Increase the number of digits shown in the equations window by 1
+        """
+        self.equations_thread.increase_digits(1)
+        self.equations_thread.start()
+
+    def decrement_equations_digits(self):
+        """
+        Decrease the number of digits shown in the equations window by 1
+        """
+        self.equations_thread.decrease_digits(1)
+        self.equations_thread.start()

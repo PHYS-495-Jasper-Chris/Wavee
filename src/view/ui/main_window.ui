@@ -27,6 +27,33 @@
     <property name="bottomMargin">
      <number>12</number>
     </property>
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="button_menu">
+      <item>
+       <widget class="QPushButton" name="refresh_button">
+        <property name="text">
+         <string>Refresh Graph</string>
+        </property>
+        <property name="default">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="button_spacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
     <item row="1" column="1">
      <widget class="QWidget" name="charge_widget" native="true">
       <layout class="QVBoxLayout" name="charge_layout">
@@ -125,57 +152,42 @@
       </layout>
      </widget>
     </item>
-    <item row="0" column="0">
-     <layout class="QHBoxLayout" name="button_menu">
+    <item row="1" column="0">
+     <widget class="DroppablePlotWidget" name="graph_widget" native="true"/>
+    </item>
+    <item row="2" column="0">
+     <layout class="QHBoxLayout" name="equation_layout">
       <item>
-       <widget class="QPushButton" name="refresh_button">
-        <property name="text">
-         <string>Refresh Graph</string>
-        </property>
-        <property name="default">
-         <bool>true</bool>
+       <widget class="QWebEngineView" name="net_mag_equation_label" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>100</height>
+         </size>
         </property>
        </widget>
       </item>
       <item>
-       <spacer name="button_spacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
+       <widget class="QWebEngineView" name="x_equation_label" native="true">
+        <property name="minimumSize">
          <size>
-          <width>40</width>
-          <height>20</height>
+          <width>0</width>
+          <height>100</height>
          </size>
         </property>
-       </spacer>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWebEngineView" name="y_equation_label" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>100</height>
+         </size>
+        </property>
+       </widget>
       </item>
      </layout>
-    </item>
-    <item row="1" column="0">
-     <widget class="DroppablePlotWidget" name="graph_widget" native="true"/>
-    </item>
-    <item row="2" column="1">
-     <widget class="QWidget" name="equation_widget" native="true">
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="equation_label">
-         <property name="text">
-          <string>Equation Label (RUNTIME GENERATED)</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::RichText</enum>
-         </property>
-         <property name="textInteractionFlags">
-          <set>Qt::TextSelectableByMouse</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
     </item>
    </layout>
   </widget>
@@ -202,6 +214,11 @@
    <class>DraggableLabel</class>
    <extends>QLabel</extends>
    <header>view.draggable_label</header>
+  </customwidget>
+  <customwidget>
+   <class>QWebEngineView</class>
+   <extends>QWidget</extends>
+   <header>PyQt6.QtWebEngineWidgets</header>
   </customwidget>
  </customwidgets>
  <resources/>

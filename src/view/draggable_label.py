@@ -3,10 +3,9 @@ A draggable QLabel.
 """
 
 import enum
-
 from typing import Optional
 
-from PyQt6 import QtWidgets, QtGui, QtCore
+from PyQt6 import QtCore, QtGui, QtWidgets
 
 
 class DraggableLabel(QtWidgets.QLabel):
