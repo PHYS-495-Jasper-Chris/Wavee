@@ -82,21 +82,30 @@ class BaseCharge(abc.ABC):
         """
 
     @abc.abstractmethod
-    def electric_field_mag_string(self, default_rounding = None) -> Basic:
+    def electric_field_mag_eqn(self, default_rounding = None) -> Basic:
         """
         Returns the position-independent electric field equation.
+
+        Returns:
+            Basic: sympy representation of the signed magnitude of the electric field.
         """
 
     @abc.abstractmethod
-    def electric_field_x_string(self, default_rounding = None) -> Basic:
+    def electric_field_x_eqn(self, default_rounding = None) -> Basic:
         """
         Returns the position-independent electric field x-component equation.
+
+        Returns:
+            Basic: sympy representation of the x-component of the electric field.
         """
 
     @abc.abstractmethod
-    def electric_field_y_string(self, default_rounding = None) -> Basic:
+    def electric_field_y_eqn(self, default_rounding = None) -> Basic:
         """
         Returns the position-independent electric field y-component equation.
+
+        Returns:
+            Basic: sympy representation of the y-component of the electric field.
         """
 
     def round_symbolic(self, expression, digits) -> Basic:

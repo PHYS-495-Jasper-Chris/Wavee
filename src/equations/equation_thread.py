@@ -6,7 +6,7 @@ from typing import Optional
 
 from PyQt6 import QtCore
 
-from equations.graph_window import Window
+from equations.graph_window import GraphWindow
 from equations.point_charge import PointCharge
 
 class EquationThread(QtCore.QThread):
@@ -15,7 +15,7 @@ class EquationThread(QtCore.QThread):
     does not need to be blocking.
     """
 
-    def __init__(self, graph_window: Window, parent: Optional[QtCore.QObject] = None,
+    def __init__(self, graph_window: GraphWindow, parent: Optional[QtCore.QObject] = None,
                 default_rounding: int = 2) -> None:
         super().__init__(parent)
 
@@ -50,7 +50,7 @@ class EquationThread(QtCore.QThread):
             self.default_rounding -= amount
 
         # Recalculate equations
-        abstract_charge = PointCharge([0,0],0)
+        abstract_charge = PointCharge([0,0], 0)
         self.mag_html = abstract_charge.round_symbolic(self.mag_html, self.decrease_digits)
         self.x_html = abstract_charge.round_symbolic(self.x_html, self.decrease_digits)
         self.y_html = abstract_charge.round_symbolic(self.y_html, self.decrease_digits)

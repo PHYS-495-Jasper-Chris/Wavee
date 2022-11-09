@@ -14,7 +14,7 @@ from equations.constants import Point2D
 # pylint: enable=import-error
 
 
-class Window:
+class GraphWindow:
     """
     A collection of charges, to be graphed
     """
@@ -160,7 +160,11 @@ class Window:
 
     def electric_field_mag_html(self, default_rounding: int) -> str:
         """
-        Get the cumulative electric field magnitude by summing each charge's magnitude.
+        Get each charge's electric field magnitude equation.
+
+        Returns:
+            str: A string representation of the HTML rendering of each charge's electric field
+            magnitude.
         """
 
         if len(self.charges) == 0:
@@ -169,33 +173,19 @@ class Window:
         full_eqn: str = ""
 
         for i, charge in enumerate(self.charges):
-            full_eqn += f"E_{i}=" + latex(charge.electric_field_mag_string(default_rounding=default_rounding).simplify()) + ","
+            full_eqn += f"E_{i}=" + latex(charge.electric_field_mag_eqn(default_rounding=default_rounding).simplify()) + ","
 
         full_eqn = full_eqn[:-1]
-
-        source = f"""
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>MathJax example</title>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async
-          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-  </script>
-</head>
-<body>
-    <p>$${full_eqn}$$</p>
-</body>
-</html>
-"""
-
-        return source
+        return GraphWindow._make_source(full_eqn)
 
     def electric_field_x_html(self, default_rounding: int) -> str:
         """
-        Get the cumulative electric field magnitude by summing each charge's magnitude.
+        Get the cumulative electric field x-component equation by summing each charge's x-component
+        equation.
+
+        Returns:
+            str: A string representation of the HTML rendering of the cumulative electric field
+            x-component equation.
         """
 
         if len(self.charges) == 0:
@@ -204,35 +194,21 @@ class Window:
         full_eqn: str = ""
 
         for charge in self.charges:
-            charge_string = charge.electric_field_x_string(default_rounding=default_rounding)
+            charge_string = charge.electric_field_x_eqn(default_rounding=default_rounding)
             charge_string = charge_string.simplify()
             full_eqn += "\\left(" + latex(charge_string) + "\\right)+"
 
         full_eqn = "E_x(x,y)=" + full_eqn[:-1]
-
-        source = f"""
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>MathJax example</title>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async
-          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-  </script>
-</head>
-<body>
-    <p>$${full_eqn}$$</p>
-</body>
-</html>
-"""
-
-        return source
+        return GraphWindow._make_source(full_eqn)
 
     def electric_field_y_html(self, default_rounding: int) -> str:
         """
-        Get the cumulative electric field magnitude by summing each charge's magnitude.
+        Get the cumulative electric field y-component equation by summing each charge's y-component
+        equation.
+
+        Returns:
+            str: A string representation of the HTML rendering of the cumulative electric field
+            y-component equation.
         """
 
         if len(self.charges) == 0:
@@ -241,11 +217,24 @@ class Window:
         full_eqn: str = ""
 
         for charge in self.charges:
-            full_eqn += "\\left(" + latex(charge.electric_field_y_string(default_rounding=default_rounding).simplify()) + "\\right)+"
+            full_eqn += "\\left(" + latex(charge.electric_field_y_eqn(default_rounding=default_rounding).simplify()) + "\\right)+"
 
         full_eqn = "E_y(x,y)=" + full_eqn[:-1]
+        return GraphWindow._make_source(full_eqn)
 
-        source = f"""
+    @staticmethod
+    def _make_source(full_eqn: str) -> str:
+        """
+        Makes a MathJax string representation of a LaTeX equation string.
+
+        Args:
+            full_eqn (str): The full LaTeX equation to render.
+
+        Returns:
+            str: The MathJax HTML to render, containing the relevant equation.
+        """
+
+        return f"""
 <!DOCTYPE html>
 <html>
 <head>
@@ -262,5 +251,3 @@ class Window:
 </body>
 </html>
 """
-
-        return source
