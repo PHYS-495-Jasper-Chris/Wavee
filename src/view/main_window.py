@@ -74,7 +74,6 @@ class MainWindow(QtWidgets.QMainWindow):
         aspect_ratio_toggle = graph_menu.addAction("Toggle fixed aspect ratio", "Ctrl+A")
         aspect_ratio_toggle.triggered.connect(self.graph_widget.toggle_even_aspect_ratio)
 
-
         # ---- CHARGES MENU OPTIONS ----
         charge_menu = self.menu_bar.addMenu("Charges")
         remove_charge = charge_menu.addAction("Remove last charge", "Ctrl+Backspace")
@@ -97,7 +96,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
         decrease_digits = equation_menu.addAction("Decrease digits shown", "Ctrl+[")
         decrease_digits.triggered.connect(self.decrement_equations_digits)
-
 
         self.proxy = pyqtgraph.SignalProxy(self.graph_widget.scene().sigMouseMoved,
                                            rateLimit=60,

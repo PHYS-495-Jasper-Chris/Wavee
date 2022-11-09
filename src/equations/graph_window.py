@@ -158,7 +158,7 @@ class GraphWindow:
 
         return e_y
 
-    def electric_field_mag_html(self, default_rounding: int) -> str:
+    def electric_field_mag_html(self, rounding: int) -> str:
         """
         Get each charge's electric field magnitude equation.
 
@@ -173,12 +173,13 @@ class GraphWindow:
         full_eqn: str = ""
 
         for i, charge in enumerate(self.charges):
-            full_eqn += f"E_{i}=" + latex(charge.electric_field_mag_eqn(default_rounding=default_rounding).simplify()) + ","
+            charge_string = latex(charge.electric_field_mag_eqn(rounding=rounding).simplify())
+            full_eqn += f"E_{i}={charge_string},"
 
         full_eqn = full_eqn[:-1]
         return GraphWindow._make_source(full_eqn)
 
-    def electric_field_x_html(self, default_rounding: int) -> str:
+    def electric_field_x_html(self, rounding: int) -> str:
         """
         Get the cumulative electric field x-component equation by summing each charge's x-component
         equation.
@@ -194,14 +195,17 @@ class GraphWindow:
         full_eqn: str = ""
 
         for charge in self.charges:
-            charge_string = charge.electric_field_x_eqn(default_rounding=default_rounding)
-            charge_string = charge_string.simplify()
-            full_eqn += "\\left(" + latex(charge_string) + "\\right)+"
+            charge_string = latex(charge.electric_field_x_eqn(rounding=rounding).simplify())
 
-        full_eqn = "E_x(x,y)=" + full_eqn[:-1]
+            if len(self.charges) > 1:
+                full_eqn += f"\\left({charge_string}\\right)+"
+            else:
+                full_eqn += charge_string
+
+        full_eqn = "E_x(x,y)=" + (full_eqn[:-1] if len(self.charges) > 1 else full_eqn)
         return GraphWindow._make_source(full_eqn)
 
-    def electric_field_y_html(self, default_rounding: int) -> str:
+    def electric_field_y_html(self, rounding: int) -> str:
         """
         Get the cumulative electric field y-component equation by summing each charge's y-component
         equation.
@@ -217,9 +221,14 @@ class GraphWindow:
         full_eqn: str = ""
 
         for charge in self.charges:
-            full_eqn += "\\left(" + latex(charge.electric_field_y_eqn(default_rounding=default_rounding).simplify()) + "\\right)+"
+            charge_string = latex(charge.electric_field_y_eqn(rounding=rounding).simplify())
 
-        full_eqn = "E_y(x,y)=" + full_eqn[:-1]
+            if len(self.charges) > 1:
+                full_eqn += f"\\left({charge_string}\\right)+"
+            else:
+                full_eqn += charge_string
+
+        full_eqn = "E_y(x,y)=" + (full_eqn[:-1] if len(self.charges) > 1 else full_eqn)
         return GraphWindow._make_source(full_eqn)
 
     @staticmethod

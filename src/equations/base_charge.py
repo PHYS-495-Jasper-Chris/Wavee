@@ -3,10 +3,10 @@ An abstract charge, from which subclasses overload.
 """
 
 import abc
-from typing import Callable
+from typing import Callable, Optional
 
 from PyQt6 import QtCore
-from sympy import Basic, preorder_traversal, Float
+from sympy import Basic
 
 from equations.constants import Point2D  # pylint: disable=import-error
 
@@ -15,6 +15,7 @@ class BaseCharge(abc.ABC):
     """
     An abstract charge, from which subclasses overload.
     """
+
     charge_updated: Callable[[], None]
     """
     A signal to be emitted when an aspect of this charge changes.
@@ -82,38 +83,40 @@ class BaseCharge(abc.ABC):
         """
 
     @abc.abstractmethod
-    def electric_field_mag_eqn(self, default_rounding = None) -> Basic:
+    def electric_field_mag_eqn(self, rounding: Optional[int] = None) -> Basic:
         """
         Returns the position-independent electric field equation.
+
+        Args:
+            rounding (Optional[int]): The rounding to apply to floats in this equation. If none is
+            specified, uses ``default_rounding``.
 
         Returns:
             Basic: sympy representation of the signed magnitude of the electric field.
         """
 
     @abc.abstractmethod
-    def electric_field_x_eqn(self, default_rounding = None) -> Basic:
+    def electric_field_x_eqn(self, rounding: Optional[int] = None) -> Basic:
         """
         Returns the position-independent electric field x-component equation.
+
+        Args:
+            rounding (Optional[int]): The rounding to apply to floats in this equation. If none is
+            specified, uses ``default_rounding``.
 
         Returns:
             Basic: sympy representation of the x-component of the electric field.
         """
 
     @abc.abstractmethod
-    def electric_field_y_eqn(self, default_rounding = None) -> Basic:
+    def electric_field_y_eqn(self, rounding: Optional[int] = None) -> Basic:
         """
         Returns the position-independent electric field y-component equation.
+
+        Args:
+            rounding (Optional[int]): The rounding to apply to floats in this equation. If none is
+            specified, uses ``default_rounding``.
 
         Returns:
             Basic: sympy representation of the y-component of the electric field.
         """
-
-    def round_symbolic(self, expression, digits) -> Basic:
-        """
-        Rounds floats within sympy expression to given digits
-        """
-        tmp = expression
-        for a in preorder_traversal(expression):
-            if isinstance(a, Float):
-                tmp = tmp.subs(a, round(a, digits))
-        return tmp

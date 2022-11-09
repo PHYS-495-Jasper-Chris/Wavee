@@ -34,9 +34,21 @@ def _remove_infinities(inequality: sympy.Basic) -> List[sympy.Rel]:
 def clean_inequality(inequality: Union[sympy.Rel, Iterable[sympy.Rel]],
                      symbol: sympy.Symbol) -> sympy.And:
     """
-    Builds a easy-to-understand inequality, solving for ``symbol`` and remove infinities.
+    Builds an easy-to-understand inequality, solving for ``symbol`` and removing infinities.
     """
 
     ineqs = _remove_infinities(sympy.reduce_inequalities(inequality, [symbol]))
 
     return sympy.And(*ineqs)
+
+
+def round_symbolic(expression: sympy.Basic, digits: int) -> sympy.Basic:
+    """
+    Rounds floats within sympy expression to given digits.
+    """
+
+    if digits < 0:
+        return expression
+
+    return expression.xreplace(
+        {n.evalf(): round(n, digits) for n in expression.atoms(sympy.Number)})
