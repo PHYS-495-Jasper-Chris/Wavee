@@ -28,7 +28,7 @@ def _remove_infinities(inequality: sympy.Basic) -> List[sympy.Rel]:
         ineqs = ([inequality] if not inequality.has(nums.Infinity)
                  and not inequality.has(nums.NegativeInfinity) else [])
 
-    return ineqs
+    return ineqs  # type: ignore
 
 
 def clean_inequality(inequality: Union[sympy.Rel, Iterable[sympy.Rel]],

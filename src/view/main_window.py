@@ -262,11 +262,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 y_html += f"{latex(y_eqn)}+"
 
         self.net_mag_equation_label.setHtml(
-            MainWindow.make_source(mag_html) if len(mag_eqns) > 0 else "")
-        self.x_equation_label.setHtml(
-            MainWindow.make_source(x_html[:-1]) if len(x_eqns) > 0 else "")
-        self.y_equation_label.setHtml(
-            MainWindow.make_source(y_html[:-1]) if len(y_eqns) > 0 else "")
+            MainWindow.make_source(mag_html[:-1]) if mag_eqns else "")
+        self.x_equation_label.setHtml(MainWindow.make_source(x_html[:-1]) if x_eqns else "")
+        self.y_equation_label.setHtml(MainWindow.make_source(y_html[:-1]) if y_eqns else "")
 
     def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:  # pylint: disable=invalid-name
         """

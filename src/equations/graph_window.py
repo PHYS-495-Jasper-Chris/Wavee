@@ -5,7 +5,7 @@ A graph window, holding the electric field of arbitrary charge distributions.
 from typing import Callable, List, Optional
 
 import numpy as np
-from sympy import latex, Basic
+from sympy import Basic
 
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge

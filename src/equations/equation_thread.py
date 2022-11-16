@@ -37,13 +37,17 @@ class EquationThread(QtCore.QThread):
 
     def run(self) -> None:
         """
-        Update the equation labels.
+        Update the equation labels when the charges are changed.
         """
 
         # Load all equations at once.
-        self._unrounded_mag_eqns = self._graph_window.electric_field_mag_eqns()
-        self._unrounded_x_eqns = self._graph_window.electric_field_x_eqns()
-        self._unrounded_y_eqns = self._graph_window.electric_field_y_eqns()
+        temp_mag_eqns = self._graph_window.electric_field_mag_eqns()
+        temp_x_eqns = self._graph_window.electric_field_x_eqns()
+        temp_y_eqns = self._graph_window.electric_field_y_eqns()
+
+        self._unrounded_mag_eqns = temp_mag_eqns
+        self._unrounded_x_eqns = temp_x_eqns
+        self._unrounded_y_eqns = temp_y_eqns
 
         self.update_rounding()
 
@@ -68,11 +72,12 @@ class EquationThread(QtCore.QThread):
     def update_rounding(self) -> None:
         """
         Update the rounding on the current equations.
-
-        Args:
-            rounding (int): The number of decimal places to round the equations to.
         """
 
-        self.mag_eqns = [round_symbolic(eqn, self.rounding) for eqn in self._unrounded_mag_eqns]
-        self.x_eqns = [round_symbolic(eqn, self.rounding) for eqn in self._unrounded_x_eqns]
-        self.y_eqns = [round_symbolic(eqn, self.rounding) for eqn in self._unrounded_y_eqns]
+        temp_mag_eqns = [round_symbolic(eqn, self.rounding) for eqn in self._unrounded_mag_eqns]
+        temp_x_eqns = [round_symbolic(eqn, self.rounding) for eqn in self._unrounded_x_eqns]
+        temp_y_eqns = [round_symbolic(eqn, self.rounding) for eqn in self._unrounded_y_eqns]
+
+        self.mag_eqns = temp_mag_eqns
+        self.x_eqns = temp_x_eqns
+        self.y_eqns = temp_y_eqns
