@@ -51,6 +51,25 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.refresh_button.clicked.connect(self.graph_widget.refresh_button_pressed)
 
+        self.proxy = pyqtgraph.SignalProxy(self.graph_widget.scene().sigMouseMoved,
+                                           rateLimit=60,
+                                           slot=self._mouse_moved)
+
+        self._add_menus()
+        self._paint_shapes()
+        self.graph_widget.build_plots()
+        self.equations_thread.start()
+
+        self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
+        self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
+
+        self.show()
+
+    def _add_menus(self) -> None:
+        """
+        Add menus and actions to window.
+        """
+
         # ---- GRAPH MENU OPTIONS ----
         graph_menu = self.menu_bar.addMenu("Graph")
         refresh_graph_action = graph_menu.addAction("Refresh Graph")
@@ -97,19 +116,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
         decrease_digits = equation_menu.addAction("Decrease digits shown", "Ctrl+[")
         decrease_digits.triggered.connect(self.decrement_equations_digits)
-
-        self.proxy = pyqtgraph.SignalProxy(self.graph_widget.scene().sigMouseMoved,
-                                           rateLimit=60,
-                                           slot=self._mouse_moved)
-
-        self._paint_shapes()
-        self.graph_widget.build_plots()
-        self.equations_thread.start()
-
-        self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
-        self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
-
-        self.show()
 
     def _paint_shapes(self) -> None:
         """
