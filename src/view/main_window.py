@@ -13,6 +13,7 @@ from sympy import latex
 # pylint: disable=import-error
 from equations.constants import Point2D
 from equations.equation_thread import EquationThread
+from equations.sympy_helper import make_source
 from view.draggable_label import DraggableLabel
 from view.droppable_plot_widget import DroppablePlotWidget
 
@@ -72,50 +73,32 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # ---- GRAPH MENU OPTIONS ----
         graph_menu = self.menu_bar.addMenu("Graph")
-        refresh_graph_action = graph_menu.addAction("Refresh Graph")
+        refresh_graph_action = graph_menu.addAction("Refresh Graph",
+                                                    self.graph_widget.refresh_button_pressed)
         refresh_graph_action.setShortcuts(["Ctrl+R", "F5"])
-        refresh_graph_action.triggered.connect(self.graph_widget.refresh_button_pressed)
-
-        increase_graph_resolution = graph_menu.addAction("Increase resolution", "Ctrl+=")
-        increase_graph_resolution.triggered.connect(self.graph_widget.increase_resolution)
-
-        decrease_graph_resolution = graph_menu.addAction("Decrease resolution", "Ctrl+-")
-        decrease_graph_resolution.triggered.connect(self.graph_widget.decrease_resolution)
-
-        reset_graph_resolution = graph_menu.addAction("Reset resolution", "Ctrl+0")
-        reset_graph_resolution.triggered.connect(self.graph_widget.reset_resolution)
-
-        center_origin = graph_menu.addAction("Center at origin", "Ctrl+O")
-        center_origin.triggered.connect(self.graph_widget.center_origin)
-
-        default_range = graph_menu.addAction("Default range", "Ctrl+D")
-        default_range.triggered.connect(self.graph_widget.default_range)
-
-        aspect_ratio_toggle = graph_menu.addAction("Toggle fixed aspect ratio", "Ctrl+A")
-        aspect_ratio_toggle.triggered.connect(self.graph_widget.toggle_even_aspect_ratio)
+        graph_menu.addAction("Increase resolution", "Ctrl+=", self.graph_widget.increase_resolution)
+        graph_menu.addAction("Decrease resolution", "Ctrl+-", self.graph_widget.decrease_resolution)
+        graph_menu.addAction("Reset resolution", "Ctrl+0", self.graph_widget.reset_resolution)
+        graph_menu.addAction("Center at origin", "Ctrl+O", self.graph_widget.center_origin)
+        graph_menu.addAction("Default range", "Ctrl+D", self.graph_widget.default_range)
+        graph_menu.addAction("Toggle fixed aspect ratio", "Ctrl+A",
+                             self.graph_widget.toggle_even_aspect_ratio)
 
         # ---- CHARGES MENU OPTIONS ----
         charge_menu = self.menu_bar.addMenu("Charges")
-        remove_charge = charge_menu.addAction("Remove last charge", "Ctrl+Backspace")
-        remove_charge.triggered.connect(self.graph_widget.remove_charge)
-
-        undo_remove_charge = charge_menu.addAction("Undo last removal", "Ctrl+Shift+Backspace")
-        undo_remove_charge.triggered.connect(self.graph_widget.undo_remove_charge)
-
-        remove_all_charges = charge_menu.addAction("Remove all charges", "Ctrl+Alt+Backspace")
-        remove_all_charges.triggered.connect(self.graph_widget.graph_window.remove_all_charges)
-
-        readd_all_charges = charge_menu.addAction("Re-add all charges", "Ctrl+Shift+Alt+Backspace")
-        readd_all_charges.triggered.connect(self.graph_widget.graph_window.readd_all_charges)
+        charge_menu.addAction("Remove last charge", "Ctrl+Backspace",
+                              self.graph_widget.remove_charge)
+        charge_menu.addAction("Undo last removal", "Ctrl+Shift+Backspace",
+                              self.graph_widget.undo_remove_charge)
+        charge_menu.addAction("Remove all charges", "Ctrl+Alt+Backspace",
+                              self.graph_widget.graph_window.remove_all_charges)
+        charge_menu.addAction("Re-add all charges", "Ctrl+Shift+Alt+Backspace",
+                              self.graph_widget.graph_window.readd_all_charges)
 
         # ---- EQUATION MENU OPTIONS ----
         equation_menu = self.menu_bar.addMenu("Equations")
-
-        increase_digits = equation_menu.addAction("Increase digits shown", "Ctrl+]")
-        increase_digits.triggered.connect(self.increment_equations_digits)
-
-        decrease_digits = equation_menu.addAction("Decrease digits shown", "Ctrl+[")
-        decrease_digits.triggered.connect(self.decrement_equations_digits)
+        equation_menu.addAction("Increase digits shown", "Ctrl+]", self._increment_equations_digits)
+        equation_menu.addAction("Decrease digits shown", "Ctrl+[", self._decrement_equations_digits)
 
     def _paint_shapes(self) -> None:
         """
@@ -267,10 +250,9 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 y_html += f"{latex(y_eqn)}+"
 
-        self.net_mag_equation_label.setHtml(
-            MainWindow.make_source(mag_html[:-1]) if mag_eqns else "")
-        self.x_equation_label.setHtml(MainWindow.make_source(x_html[:-1]) if x_eqns else "")
-        self.y_equation_label.setHtml(MainWindow.make_source(y_html[:-1]) if y_eqns else "")
+        self.net_mag_equation_label.setHtml(make_source(mag_html[:-1]) if mag_eqns else "")
+        self.x_equation_label.setHtml(make_source(x_html[:-1]) if x_eqns else "")
+        self.y_equation_label.setHtml(make_source(y_html[:-1]) if y_eqns else "")
 
     def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:  # pylint: disable=invalid-name
         """
@@ -295,7 +277,7 @@ class MainWindow(QtWidgets.QMainWindow):
             "document.documentElement.scrollHeight;",
             lambda height: set_height(height, self.y_equation_label))
 
-    def increment_equations_digits(self):
+    def _increment_equations_digits(self):
         """
         Increase the number of digits shown in the equations window by 1
         """
@@ -304,7 +286,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.equations_thread.update_rounding()
         self._update_equations()
 
-    def decrement_equations_digits(self):
+    def _decrement_equations_digits(self):
         """
         Decrease the number of digits shown in the equations window by 1
         """
@@ -312,33 +294,3 @@ class MainWindow(QtWidgets.QMainWindow):
         self.equations_thread.change_rounding(-1)
         self.equations_thread.update_rounding()
         self._update_equations()
-
-    @staticmethod
-    def make_source(full_eqn: str) -> str:
-        """
-        Makes a MathJax string representation of a LaTeX equation string.
-
-        Args:
-            full_eqn (str): The full LaTeX equation to render.
-
-        Returns:
-            str: The MathJax HTML to render, containing the relevant equation.
-        """
-
-        return f"""
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>MathJax example</title>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async
-          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-  </script>
-</head>
-<body>
-    <p>$${full_eqn}$$</p>
-</body>
-</html>
-"""
