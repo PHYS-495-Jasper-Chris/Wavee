@@ -8,6 +8,7 @@ from typing import Tuple
 
 import pyqtgraph
 from PyQt6 import QtCore, QtGui, QtWebEngineWidgets, QtWidgets, uic
+from sympy import latex
 
 # pylint: disable=import-error
 from equations.constants import Point2D
@@ -49,6 +50,25 @@ class MainWindow(QtWidgets.QMainWindow):
         self.graph_widget.graph_window.charges_updated = self._charges_updated
 
         self.refresh_button.clicked.connect(self.graph_widget.refresh_button_pressed)
+
+        self.proxy = pyqtgraph.SignalProxy(self.graph_widget.scene().sigMouseMoved,
+                                           rateLimit=60,
+                                           slot=self._mouse_moved)
+
+        self._add_menus()
+        self._paint_shapes()
+        self.graph_widget.build_plots()
+        self.equations_thread.start()
+
+        self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
+        self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
+
+        self.show()
+
+    def _add_menus(self) -> None:
+        """
+        Add menus and actions to window.
+        """
 
         # ---- GRAPH MENU OPTIONS ----
         graph_menu = self.menu_bar.addMenu("Graph")
@@ -96,19 +116,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
         decrease_digits = equation_menu.addAction("Decrease digits shown", "Ctrl+[")
         decrease_digits.triggered.connect(self.decrement_equations_digits)
-
-        self.proxy = pyqtgraph.SignalProxy(self.graph_widget.scene().sigMouseMoved,
-                                           rateLimit=60,
-                                           slot=self._mouse_moved)
-
-        self._paint_shapes()
-        self.graph_widget.build_plots()
-        self.equations_thread.start()
-
-        self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
-        self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
-
-        self.show()
 
     def _paint_shapes(self) -> None:
         """
@@ -238,9 +245,32 @@ class MainWindow(QtWidgets.QMainWindow):
         Read the values from the equations thread and update the labels.
         """
 
-        self.net_mag_equation_label.setHtml(self.equations_thread.mag_html)
-        self.x_equation_label.setHtml(self.equations_thread.x_html)
-        self.y_equation_label.setHtml(self.equations_thread.y_html)
+        mag_eqns = self.equations_thread.mag_eqns
+        x_eqns = self.equations_thread.x_eqns
+        y_eqns = self.equations_thread.y_eqns
+
+        mag_html = ""
+        for i, mag_eqn in enumerate(mag_eqns):
+            mag_html += f"E_{i}={latex(mag_eqn)},"
+
+        x_html = "E_x(x,y)="
+        for i, x_eqn in enumerate(x_eqns):
+            if len(x_eqns) > 1:
+                x_html += f"\\left({latex(x_eqn)}\\right)+"
+            else:
+                x_html += f"{latex(x_eqn)}+"
+
+        y_html = "E_y(x,y)="
+        for i, y_eqn in enumerate(y_eqns):
+            if len(y_eqns) > 1:
+                y_html += f"\\left({latex(y_eqn)}\\right)+"
+            else:
+                y_html += f"{latex(y_eqn)}+"
+
+        self.net_mag_equation_label.setHtml(
+            MainWindow.make_source(mag_html[:-1]) if mag_eqns else "")
+        self.x_equation_label.setHtml(MainWindow.make_source(x_html[:-1]) if x_eqns else "")
+        self.y_equation_label.setHtml(MainWindow.make_source(y_html[:-1]) if y_eqns else "")
 
     def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:  # pylint: disable=invalid-name
         """
@@ -269,12 +299,46 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         Increase the number of digits shown in the equations window by 1
         """
-        self.equations_thread.increase_digits(1)
-        self.equations_thread.start()
+
+        self.equations_thread.change_rounding(1)
+        self.equations_thread.update_rounding()
+        self._update_equations()
 
     def decrement_equations_digits(self):
         """
         Decrease the number of digits shown in the equations window by 1
         """
-        self.equations_thread.decrease_digits(1)
-        self.equations_thread.start()
+
+        self.equations_thread.change_rounding(-1)
+        self.equations_thread.update_rounding()
+        self._update_equations()
+
+    @staticmethod
+    def make_source(full_eqn: str) -> str:
+        """
+        Makes a MathJax string representation of a LaTeX equation string.
+
+        Args:
+            full_eqn (str): The full LaTeX equation to render.
+
+        Returns:
+            str: The MathJax HTML to render, containing the relevant equation.
+        """
+
+        return f"""
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>MathJax example</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+</head>
+<body>
+    <p>$${full_eqn}$$</p>
+</body>
+</html>
+"""

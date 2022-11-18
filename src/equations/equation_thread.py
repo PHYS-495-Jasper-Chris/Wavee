@@ -2,11 +2,13 @@
 Implementation of a separate thread for equation rendering.
 """
 
-from typing import Optional
+from typing import List, Optional
 
 from PyQt6 import QtCore
+from sympy import Basic
 
 from equations.graph_window import GraphWindow
+from equations.sympy_helper import round_symbolic
 
 
 class EquationThread(QtCore.QThread):
@@ -23,41 +25,59 @@ class EquationThread(QtCore.QThread):
 
         self._graph_window = graph_window
 
-        self.mag_html: str = ""
-        self.x_html: str = ""
-        self.y_html: str = ""
-        self.default_rounding = default_rounding
+        self.rounding = default_rounding
 
-    def increase_digits(self, amount: int) -> None:
-        """
-        Increase the max decimal places drawn by the amount given
+        self._unrounded_mag_eqns: List[Basic] = []
+        self._unrounded_x_eqns: List[Basic] = []
+        self._unrounded_y_eqns: List[Basic] = []
 
-        Args:
-            amount (int): number of decimal places to add
-        """
-
-        self.default_rounding = max(self.default_rounding + amount, 0)
-
-    def decrease_digits(self, amount: int) -> None:
-        """
-        Decrease the max decimal places drawn by the amount given. Will not reduce below zero.
-
-        Args:
-            amount (int): number of decimal places to subtract
-        """
-
-        self.default_rounding = max(self.default_rounding - amount, 0)
+        self.mag_eqns: List[Basic] = []
+        self.x_eqns: List[Basic] = []
+        self.y_eqns: List[Basic] = []
 
     def run(self) -> None:
         """
-        Update the equation labels.
+        Update the equation labels when the charges are changed.
         """
 
-        def_round = self.default_rounding
-
         # Load all equations at once.
-        self.mag_html = self._graph_window.electric_field_mag_html(rounding=def_round)
-        self.x_html = self._graph_window.electric_field_x_html(rounding=def_round)
-        self.y_html = self._graph_window.electric_field_y_html(rounding=def_round)
+        temp_mag_eqns = self._graph_window.electric_field_mag_eqns()
+        temp_x_eqns = self._graph_window.electric_field_x_eqns()
+        temp_y_eqns = self._graph_window.electric_field_y_eqns()
+
+        self._unrounded_mag_eqns = temp_mag_eqns
+        self._unrounded_x_eqns = temp_x_eqns
+        self._unrounded_y_eqns = temp_y_eqns
+
+        self.update_rounding()
 
         self.finished.emit()
+
+    def change_rounding(self, increment: int) -> None:
+        """
+        Increase (or decrease) the rounding by ``increment``, resulting in more (or fewer) digits
+        after the decimal place.
+
+        Does not automatically rebuild the equations.
+
+        Args:
+            increment (int): The change to the current value of ``rounding``.
+        """
+
+        self.rounding += increment
+
+        # Make sure rounding never goes below zero.
+        self.rounding = max(self.rounding, 0)
+
+    def update_rounding(self) -> None:
+        """
+        Update the rounding on the current equations.
+        """
+
+        temp_mag_eqns = [round_symbolic(eqn, self.rounding) for eqn in self._unrounded_mag_eqns]
+        temp_x_eqns = [round_symbolic(eqn, self.rounding) for eqn in self._unrounded_x_eqns]
+        temp_y_eqns = [round_symbolic(eqn, self.rounding) for eqn in self._unrounded_y_eqns]
+
+        self.mag_eqns = temp_mag_eqns
+        self.x_eqns = temp_x_eqns
+        self.y_eqns = temp_y_eqns
