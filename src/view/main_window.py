@@ -46,6 +46,7 @@ class MainWindow(QtWidgets.QMainWindow):
         uic.load_ui.loadUi(os.path.join(sys.path[0], "view/ui/main_window.ui"), self)
 
         self.equations_thread = EquationThread(self.graph_widget.graph_window, self)
+        self.equations_thread.started.connect(self._clear_equations)
         self.equations_thread.finished.connect(self._update_equations)
 
         self.graph_widget.graph_window.charges_updated = self._charges_updated
@@ -62,7 +63,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.equations_thread.start()
 
         self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
-        self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
 
         self.show()
 
@@ -254,32 +254,20 @@ class MainWindow(QtWidgets.QMainWindow):
         self.x_equation_label.setHtml(make_source(x_html[:-1]) if x_eqns else "")
         self.y_equation_label.setHtml(make_source(y_html[:-1]) if y_eqns else "")
 
-    def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:  # pylint: disable=invalid-name
+    def _clear_equations(self) -> None:
         """
-        When the window is resized, automatically resize the equation web views.
-
-        TODO: figure out if this works.
+        When the equations thread is running, clear the current equations.
         """
 
-        super().resizeEvent(a0)
+        loading_html = "<center>Loading...</center>"
 
-        def set_height(height: str, label: QtWebEngineWidgets.QWebEngineView) -> None:
-            label.resize(label.width(), int(height) + 20)
-
-        # TODO: figure out how to do this properly (this doesn't work)
-        self.net_mag_equation_label.page().runJavaScript(
-            "document.documentElement.scrollHeight;",
-            lambda height: set_height(height, self.net_mag_equation_label))
-        self.x_equation_label.page().runJavaScript(
-            "document.documentElement.scrollHeight;",
-            lambda height: set_height(height, self.x_equation_label))
-        self.y_equation_label.page().runJavaScript(
-            "document.documentElement.scrollHeight;",
-            lambda height: set_height(height, self.y_equation_label))
+        self.net_mag_equation_label.setHtml(loading_html)
+        self.x_equation_label.setHtml(loading_html)
+        self.y_equation_label.setHtml(loading_html)
 
     def _increment_equations_digits(self):
         """
-        Increase the number of digits shown in the equations window by 1
+        Increase the number of digits shown in the equations window by 1.
         """
 
         self.equations_thread.change_rounding(1)
@@ -288,7 +276,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _decrement_equations_digits(self):
         """
-        Decrease the number of digits shown in the equations window by 1
+        Decrease the number of digits shown in the equations window by 1.
         """
 
         self.equations_thread.change_rounding(-1)
