@@ -2,7 +2,7 @@
 Calculate the electric field of an infinite line charge.
 """
 
-from typing import Optional, Tuple
+from typing import Tuple
 
 import numpy as np
 import sympy
@@ -12,7 +12,7 @@ from sympy.abc import x, y
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
 from equations.constants import COULOMB_CONSTANT, COULOMB_CONSTANT_SYM, Point2D
-from equations.sympy_helper import clean_inequality, round_symbolic
+from equations.sympy_helper import clean_inequality
 from view.multi_line_input_dialog import MultiLineInputDialog
 
 # pylint: enable=import-error
@@ -23,12 +23,7 @@ class InfiniteLineCharge(BaseCharge):
     A single infinite line of charge, with a slope and offset (m & b), and a charge density.
     """
 
-    def __init__(self,
-                 x_coef: float,
-                 y_coef: float,
-                 offset: float,
-                 charge_density: float,
-                 default_rounding: int = -1) -> None:
+    def __init__(self, x_coef: float, y_coef: float, offset: float, charge_density: float) -> None:
         """
         Initialize the infinite line charge with its equation and charge density.
 
@@ -54,7 +49,6 @@ class InfiniteLineCharge(BaseCharge):
         self.y_coef = y_coef
         self.offset = offset
         self.charge_density = charge_density
-        self.default_rounding = default_rounding
 
     def electric_field_magnitude(self, point: Point2D) -> float:
         """
@@ -159,7 +153,7 @@ class InfiniteLineCharge(BaseCharge):
             elif action is None:
                 return False
 
-    def electric_field_mag_eqn(self, rounding: Optional[int] = None) -> sympy.Basic:
+    def electric_field_mag_eqn(self) -> sympy.Basic:
         """
         Returns the position-independent electric field equation for this infinite line charge.
 
@@ -167,18 +161,13 @@ class InfiniteLineCharge(BaseCharge):
             Basic: sympy representation of the signed magnitude of the electric field.
         """
 
-        # use class default rounding value if one is not explicitly passed
-        if rounding is None:
-            rounding = self.default_rounding
-
         # E = 2k λ/r
         # radial distance
         r_sym = (abs(self.x_coef * x + self.y_coef * y + self.offset)
                  / sympy.sqrt(self.x_coef**2 + self.y_coef**2))
-        mag = 2 * COULOMB_CONSTANT_SYM * self.charge_density / r_sym
-        return round_symbolic(mag, rounding)
+        return 2 * COULOMB_CONSTANT_SYM * self.charge_density / r_sym
 
-    def electric_field_x_eqn(self, rounding: Optional[int] = None) -> sympy.Basic:
+    def electric_field_x_eqn(self) -> sympy.Basic:
         """
         Returns the position-independent electric field x-component equation for this infinite line
         charge.
@@ -186,22 +175,17 @@ class InfiniteLineCharge(BaseCharge):
         Returns:
             Basic: sympy representation of the x-component of the electric field.
         """
-        # use class default rounding value if one is not explicitly passed
-        if rounding is None:
-            rounding = self.default_rounding
 
         x_comp = np.cos(self._line_angle() + np.pi / 2)
-        magnitude = self.electric_field_mag_eqn(rounding=-1) * x_comp
+        magnitude = self.electric_field_mag_eqn() * x_comp
 
         if magnitude == 0.0:
             return sympy.S.Zero
 
-        pos_eq, neg_eq = self._flip_direction_eqn(rounding=-1)
-        piecewise = sympy.Piecewise((-magnitude, neg_eq), (magnitude, pos_eq))
+        pos_eq, neg_eq = self._flip_direction_eqn()
+        return sympy.Piecewise((-magnitude, neg_eq), (magnitude, pos_eq))
 
-        return round_symbolic(piecewise, rounding)
-
-    def electric_field_y_eqn(self, rounding: Optional[int] = None) -> sympy.Basic:
+    def electric_field_y_eqn(self) -> sympy.Basic:
         """
         Returns the position-independent electric field y-component equation for this infinite line
         charge.
@@ -209,20 +193,15 @@ class InfiniteLineCharge(BaseCharge):
         Returns:
             Basic: sympy representation of the y-component of the electric field.
         """
-        # use class default rounding value if one is not explicitly passed
-        if rounding is None:
-            rounding = self.default_rounding
 
         y_comp = np.sin(self._line_angle() + np.pi / 2)
-        magnitude = self.electric_field_mag_eqn(rounding=-1) * y_comp
+        magnitude = self.electric_field_mag_eqn() * y_comp
 
         if magnitude == 0.0:
             return sympy.S.Zero
 
-        pos_eq, neg_eq = self._flip_direction_eqn(rounding=-1)
-        piecewise = sympy.Piecewise((-magnitude, neg_eq), (magnitude, pos_eq))
-
-        return round_symbolic(piecewise, rounding)
+        pos_eq, neg_eq = self._flip_direction_eqn()
+        return sympy.Piecewise((-magnitude, neg_eq), (magnitude, pos_eq))
 
     def _radial_distance(self, point: Point2D) -> float:
         """
@@ -305,7 +284,7 @@ class InfiniteLineCharge(BaseCharge):
 
         return True
 
-    def _closest_point_eqn(self, rounding: Optional[int] = None) -> Tuple[sympy.Basic, sympy.Basic]:
+    def _closest_point_eqn(self) -> Tuple[sympy.Basic, sympy.Basic]:
         """
         Return the formula for the closest point to a general x, y position.
 
@@ -319,14 +298,9 @@ class InfiniteLineCharge(BaseCharge):
         y_pos = (self.x_coef * (self.x_coef * y - self.y_coef * x)
                  - self.y_coef * self.offset) / (self.x_coef**2 + self.y_coef**2)
 
-        # use class default rounding value if one is not explicitly passed
-        if rounding is None:
-            rounding = self.default_rounding
+        return x_pos, y_pos
 
-        return round_symbolic(x_pos, rounding), round_symbolic(y_pos, rounding)
-
-    def _flip_direction_eqn(self,
-                            rounding: Optional[int] = None) -> Tuple[sympy.Basic, sympy.Basic]:
+    def _flip_direction_eqn(self) -> Tuple[sympy.Basic, sympy.Basic]:
         """
         The inequalities for the positive and negative equations.
 
@@ -335,11 +309,7 @@ class InfiniteLineCharge(BaseCharge):
             compositions of relationals.
         """
 
-        # use class default rounding value if one is not explicitly passed
-        if rounding is None:
-            rounding = self.default_rounding
-
-        x_closest, y_closest = self._closest_point_eqn(rounding=-1)
+        x_closest, y_closest = self._closest_point_eqn()
 
         if self.x_coef == 0:
             pos_eq = clean_inequality(y_closest <= y, y)
@@ -353,4 +323,4 @@ class InfiniteLineCharge(BaseCharge):
             neg_eq = sympy.Or(clean_inequality([x_closest >= x, y_closest >= y], x),
                               clean_inequality([x_closest <= x, y_closest >= y], x)).simplify()
 
-        return round_symbolic(pos_eq, rounding), round_symbolic(neg_eq, rounding)
+        return pos_eq, neg_eq

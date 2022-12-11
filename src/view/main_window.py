@@ -8,10 +8,12 @@ from typing import Tuple
 
 import pyqtgraph
 from PyQt6 import QtCore, QtGui, QtWebEngineWidgets, QtWidgets, uic
+from sympy import latex
 
 # pylint: disable=import-error
 from equations.constants import Point2D
 from equations.equation_thread import EquationThread
+from equations.sympy_helper import make_source
 from view.draggable_label import DraggableLabel
 from view.droppable_plot_widget import DroppablePlotWidget
 
@@ -44,71 +46,59 @@ class MainWindow(QtWidgets.QMainWindow):
         uic.load_ui.loadUi(os.path.join(sys.path[0], "view/ui/main_window.ui"), self)
 
         self.equations_thread = EquationThread(self.graph_widget.graph_window, self)
+        self.equations_thread.started.connect(self._clear_equations)
         self.equations_thread.finished.connect(self._update_equations)
 
         self.graph_widget.graph_window.charges_updated = self._charges_updated
 
         self.refresh_button.clicked.connect(self.graph_widget.refresh_button_pressed)
 
-        # ---- GRAPH MENU OPTIONS ----
-        graph_menu = self.menu_bar.addMenu("Graph")
-        refresh_graph_action = graph_menu.addAction("Refresh Graph")
-        refresh_graph_action.setShortcuts(["Ctrl+R", "F5"])
-        refresh_graph_action.triggered.connect(self.graph_widget.refresh_button_pressed)
-
-        increase_graph_resolution = graph_menu.addAction("Increase resolution", "Ctrl+=")
-        increase_graph_resolution.triggered.connect(self.graph_widget.increase_resolution)
-
-        decrease_graph_resolution = graph_menu.addAction("Decrease resolution", "Ctrl+-")
-        decrease_graph_resolution.triggered.connect(self.graph_widget.decrease_resolution)
-
-        reset_graph_resolution = graph_menu.addAction("Reset resolution", "Ctrl+0")
-        reset_graph_resolution.triggered.connect(self.graph_widget.reset_resolution)
-
-        center_origin = graph_menu.addAction("Center at origin", "Ctrl+O")
-        center_origin.triggered.connect(self.graph_widget.center_origin)
-
-        default_range = graph_menu.addAction("Default range", "Ctrl+D")
-        default_range.triggered.connect(self.graph_widget.default_range)
-
-        aspect_ratio_toggle = graph_menu.addAction("Toggle fixed aspect ratio", "Ctrl+A")
-        aspect_ratio_toggle.triggered.connect(self.graph_widget.toggle_even_aspect_ratio)
-
-        # ---- CHARGES MENU OPTIONS ----
-        charge_menu = self.menu_bar.addMenu("Charges")
-        remove_charge = charge_menu.addAction("Remove last charge", "Ctrl+Backspace")
-        remove_charge.triggered.connect(self.graph_widget.remove_charge)
-
-        undo_remove_charge = charge_menu.addAction("Undo last removal", "Ctrl+Shift+Backspace")
-        undo_remove_charge.triggered.connect(self.graph_widget.undo_remove_charge)
-
-        remove_all_charges = charge_menu.addAction("Remove all charges", "Ctrl+Alt+Backspace")
-        remove_all_charges.triggered.connect(self.graph_widget.graph_window.remove_all_charges)
-
-        readd_all_charges = charge_menu.addAction("Re-add all charges", "Ctrl+Shift+Alt+Backspace")
-        readd_all_charges.triggered.connect(self.graph_widget.graph_window.readd_all_charges)
-
-        # ---- EQUATION MENU OPTIONS ----
-        equation_menu = self.menu_bar.addMenu("Equations")
-
-        increase_digits = equation_menu.addAction("Increase digits shown", "Ctrl+]")
-        increase_digits.triggered.connect(self.increment_equations_digits)
-
-        decrease_digits = equation_menu.addAction("Decrease digits shown", "Ctrl+[")
-        decrease_digits.triggered.connect(self.decrement_equations_digits)
-
         self.proxy = pyqtgraph.SignalProxy(self.graph_widget.scene().sigMouseMoved,
                                            rateLimit=60,
                                            slot=self._mouse_moved)
 
+        self._add_menus()
         self._paint_shapes()
         self.graph_widget.build_plots()
         self.equations_thread.start()
 
         self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
-        self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
 
         self.show()
+
+    def _add_menus(self) -> None:
+        """
+        Add menus and actions to window.
+        """
+
+        # ---- GRAPH MENU OPTIONS ----
+        graph_menu = self.menu_bar.addMenu("Graph")
+        refresh_graph_action = graph_menu.addAction("Refresh Graph",
+                                                    self.graph_widget.refresh_button_pressed)
+        refresh_graph_action.setShortcuts(["Ctrl+R", "F5"])
+        graph_menu.addAction("Increase resolution", "Ctrl+=", self.graph_widget.increase_resolution)
+        graph_menu.addAction("Decrease resolution", "Ctrl+-", self.graph_widget.decrease_resolution)
+        graph_menu.addAction("Reset resolution", "Ctrl+0", self.graph_widget.reset_resolution)
+        graph_menu.addAction("Center at origin", "Ctrl+O", self.graph_widget.center_origin)
+        graph_menu.addAction("Default range", "Ctrl+D", self.graph_widget.default_range)
+        graph_menu.addAction("Toggle fixed aspect ratio", "Ctrl+A",
+                             self.graph_widget.toggle_even_aspect_ratio)
+
+        # ---- CHARGES MENU OPTIONS ----
+        charge_menu = self.menu_bar.addMenu("Charges")
+        charge_menu.addAction("Remove last charge", "Ctrl+Backspace",
+                              self.graph_widget.remove_charge)
+        charge_menu.addAction("Undo last removal", "Ctrl+Shift+Backspace",
+                              self.graph_widget.undo_remove_charge)
+        charge_menu.addAction("Remove all charges", "Ctrl+Alt+Backspace",
+                              self.graph_widget.graph_window.remove_all_charges)
+        charge_menu.addAction("Re-add all charges", "Ctrl+Shift+Alt+Backspace",
+                              self.graph_widget.graph_window.readd_all_charges)
+
+        # ---- EQUATION MENU OPTIONS ----
+        equation_menu = self.menu_bar.addMenu("Equations")
+        equation_menu.addAction("Increase digits shown", "Ctrl+]", self._increment_equations_digits)
+        equation_menu.addAction("Decrease digits shown", "Ctrl+[", self._decrement_equations_digits)
 
     def _paint_shapes(self) -> None:
         """
@@ -238,43 +228,57 @@ class MainWindow(QtWidgets.QMainWindow):
         Read the values from the equations thread and update the labels.
         """
 
-        self.net_mag_equation_label.setHtml(self.equations_thread.mag_html)
-        self.x_equation_label.setHtml(self.equations_thread.x_html)
-        self.y_equation_label.setHtml(self.equations_thread.y_html)
+        mag_eqns = self.equations_thread.mag_eqns
+        x_eqns = self.equations_thread.x_eqns
+        y_eqns = self.equations_thread.y_eqns
 
-    def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:  # pylint: disable=invalid-name
+        mag_html = ""
+        for i, mag_eqn in enumerate(mag_eqns):
+            mag_html += f"E_{i}={latex(mag_eqn)},"
+
+        x_html = "E_x(x,y)="
+        for i, x_eqn in enumerate(x_eqns):
+            if len(x_eqns) > 1:
+                x_html += f"\\left({latex(x_eqn)}\\right)+"
+            else:
+                x_html += f"{latex(x_eqn)}+"
+
+        y_html = "E_y(x,y)="
+        for i, y_eqn in enumerate(y_eqns):
+            if len(y_eqns) > 1:
+                y_html += f"\\left({latex(y_eqn)}\\right)+"
+            else:
+                y_html += f"{latex(y_eqn)}+"
+
+        self.net_mag_equation_label.setHtml(make_source(mag_html[:-1]) if mag_eqns else "")
+        self.x_equation_label.setHtml(make_source(x_html[:-1]) if x_eqns else "")
+        self.y_equation_label.setHtml(make_source(y_html[:-1]) if y_eqns else "")
+
+    def _clear_equations(self) -> None:
         """
-        When the window is resized, automatically resize the equation web views.
-
-        TODO: figure out if this works.
+        When the equations thread is running, clear the current equations.
         """
 
-        super().resizeEvent(a0)
+        loading_html = "<center>Loading...</center>"
 
-        def set_height(height: str, label: QtWebEngineWidgets.QWebEngineView) -> None:
-            label.resize(label.width(), int(height) + 20)
+        self.net_mag_equation_label.setHtml(loading_html)
+        self.x_equation_label.setHtml(loading_html)
+        self.y_equation_label.setHtml(loading_html)
 
-        # TODO: figure out how to do this properly (this doesn't work)
-        self.net_mag_equation_label.page().runJavaScript(
-            "document.documentElement.scrollHeight;",
-            lambda height: set_height(height, self.net_mag_equation_label))
-        self.x_equation_label.page().runJavaScript(
-            "document.documentElement.scrollHeight;",
-            lambda height: set_height(height, self.x_equation_label))
-        self.y_equation_label.page().runJavaScript(
-            "document.documentElement.scrollHeight;",
-            lambda height: set_height(height, self.y_equation_label))
+    def _increment_equations_digits(self):
+        """
+        Increase the number of digits shown in the equations window by 1.
+        """
 
-    def increment_equations_digits(self):
-        """
-        Increase the number of digits shown in the equations window by 1
-        """
-        self.equations_thread.increase_digits(1)
-        self.equations_thread.start()
+        self.equations_thread.change_rounding(1)
+        self.equations_thread.update_rounding()
+        self._update_equations()
 
-    def decrement_equations_digits(self):
+    def _decrement_equations_digits(self):
         """
-        Decrease the number of digits shown in the equations window by 1
+        Decrease the number of digits shown in the equations window by 1.
         """
-        self.equations_thread.decrease_digits(1)
-        self.equations_thread.start()
+
+        self.equations_thread.change_rounding(-1)
+        self.equations_thread.update_rounding()
+        self._update_equations()

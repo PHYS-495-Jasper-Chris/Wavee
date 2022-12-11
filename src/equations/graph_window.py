@@ -5,7 +5,7 @@ A graph window, holding the electric field of arbitrary charge distributions.
 from typing import Callable, List, Optional
 
 import numpy as np
-from sympy import latex
+from sympy import Basic
 
 # pylint: disable=import-error
 from equations.base_charge import BaseCharge
@@ -158,7 +158,7 @@ class GraphWindow:
 
         return e_y
 
-    def electric_field_mag_html(self, rounding: int) -> str:
+    def electric_field_mag_eqns(self) -> List[Basic]:
         """
         Get each charge's electric field magnitude equation.
 
@@ -167,19 +167,9 @@ class GraphWindow:
             magnitude.
         """
 
-        if len(self.charges) == 0:
-            return ""
+        return [charge.electric_field_mag_eqn().simplify() for charge in self.charges]
 
-        full_eqn: str = ""
-
-        for i, charge in enumerate(self.charges):
-            charge_string = latex(charge.electric_field_mag_eqn(rounding=rounding).simplify())
-            full_eqn += f"E_{i}={charge_string},"
-
-        full_eqn = full_eqn[:-1]
-        return GraphWindow._make_source(full_eqn)
-
-    def electric_field_x_html(self, rounding: int) -> str:
+    def electric_field_x_eqns(self) -> List[Basic]:
         """
         Get the cumulative electric field x-component equation by summing each charge's x-component
         equation.
@@ -189,23 +179,9 @@ class GraphWindow:
             x-component equation.
         """
 
-        if len(self.charges) == 0:
-            return ""
+        return [charge.electric_field_x_eqn().simplify() for charge in self.charges]
 
-        full_eqn: str = ""
-
-        for charge in self.charges:
-            charge_string = latex(charge.electric_field_x_eqn(rounding=rounding).simplify())
-
-            if len(self.charges) > 1:
-                full_eqn += f"\\left({charge_string}\\right)+"
-            else:
-                full_eqn += charge_string
-
-        full_eqn = "E_x(x,y)=" + (full_eqn[:-1] if len(self.charges) > 1 else full_eqn)
-        return GraphWindow._make_source(full_eqn)
-
-    def electric_field_y_html(self, rounding: int) -> str:
+    def electric_field_y_eqns(self) -> List[Basic]:
         """
         Get the cumulative electric field y-component equation by summing each charge's y-component
         equation.
@@ -215,48 +191,4 @@ class GraphWindow:
             y-component equation.
         """
 
-        if len(self.charges) == 0:
-            return ""
-
-        full_eqn: str = ""
-
-        for charge in self.charges:
-            charge_string = latex(charge.electric_field_y_eqn(rounding=rounding).simplify())
-
-            if len(self.charges) > 1:
-                full_eqn += f"\\left({charge_string}\\right)+"
-            else:
-                full_eqn += charge_string
-
-        full_eqn = "E_y(x,y)=" + (full_eqn[:-1] if len(self.charges) > 1 else full_eqn)
-        return GraphWindow._make_source(full_eqn)
-
-    @staticmethod
-    def _make_source(full_eqn: str) -> str:
-        """
-        Makes a MathJax string representation of a LaTeX equation string.
-
-        Args:
-            full_eqn (str): The full LaTeX equation to render.
-
-        Returns:
-            str: The MathJax HTML to render, containing the relevant equation.
-        """
-
-        return f"""
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>MathJax example</title>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async
-          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-  </script>
-</head>
-<body>
-    <p>$${full_eqn}$$</p>
-</body>
-</html>
-"""
+        return [charge.electric_field_y_eqn().simplify() for charge in self.charges]

@@ -211,15 +211,27 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         # Build the dimensions based solely on the charges, or the provided dimensions.
         dimensions = dimensions or default_dimensions
 
-        # Draw arrows at uniform test points based current view and resolution
-        top_left = dimensions.top_left
-        bottom_right = dimensions.bottom_right
+        self._plot_arrows(dimensions, max_mag_length)
 
+        if should_autoscale:
+            # Enable autoscaling if no dimension set.
+            view_box.enableAutoRange()
+
+    def _plot_arrows(self, dimensions: GraphBounds, max_mag_length: float) -> None:
+        """
+        Plot electric field magnitude arrows.
+
+        Args:
+            dimensions (GraphBounds): The bounding dimensions of the graph window.
+            max_mag_length (float): The length of the largest magnitude arrow.
+        """
+
+        # Draw arrows at uniform test points based current view and resolution
         x_indices = self.graph_resolution
         y_indices = max(int(self.height() / self.width() * x_indices), 1)
 
-        x_distance = bottom_right.x - top_left.x
-        y_distance = top_left.y - bottom_right.y
+        x_distance = dimensions.bottom_right.x - dimensions.top_left.x
+        y_distance = dimensions.top_left.y - dimensions.bottom_right.y
 
         p_x = [[0.0] * y_indices for _ in range(x_indices)]
         p_y = [[0.0] * y_indices for _ in range(x_indices)]
@@ -234,7 +246,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
             except ZeroDivisionError:
                 x_percentage = 0.5
 
-            x_pos = x_percentage * x_distance + top_left.x
+            x_pos = x_percentage * x_distance + dimensions.top_left.x
 
             for j in range(y_indices):
                 try:
@@ -242,7 +254,7 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                 except ZeroDivisionError:
                     y_percentage = 0.5
 
-                y_pos = y_percentage * y_distance + bottom_right.y
+                y_pos = y_percentage * y_distance + dimensions.bottom_right.y
 
                 p_x[i][j] = x_pos
                 p_y[i][j] = y_pos
@@ -250,13 +262,14 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                 try:
                     ef_mag_x = self.graph_window.electric_field_x(Point2D(x_pos, y_pos))
                     ef_mag_y = self.graph_window.electric_field_y(Point2D(x_pos, y_pos))
-                    ef_mag_net = np.sqrt(ef_mag_x**2 + ef_mag_y**2)
-                    mag_x[i][j] = ef_mag_x
-                    mag_y[i][j] = ef_mag_y
-                    net_mag[i][j] = ef_mag_net
 
                 except ZeroDivisionError:
-                    pass
+                    continue
+
+                ef_mag_net = np.sqrt(ef_mag_x**2 + ef_mag_y**2)
+                mag_x[i][j] = ef_mag_x
+                mag_y[i][j] = ef_mag_y
+                net_mag[i][j] = ef_mag_net
 
         # Build sorted array holding indexes of magnitude
         MagIndexes = NamedTuple("MagIndexes", [("magnitude", float), ("x", int), ("y", int)])
@@ -286,10 +299,6 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
                                            brush=brush_color,
                                            angle=angle)
                 self.addItem(arrow_item)
-
-        if should_autoscale:
-            # Enable autoscaling if no dimension set.
-            view_box.enableAutoRange()
 
     def reset_resolution(self) -> None:
         """
@@ -378,6 +387,9 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
     def _plot_charges(self) -> GraphBounds:
         """
         Plot the charges themselves.
+
+        Returns:
+            GraphBounds: The bounding dimensions of the charges themselves.
         """
 
         leftmost, rightmost, topmost, bottommost = np.inf, -np.inf, -np.inf, np.inf
@@ -471,6 +483,8 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         dimensions = None
 
         if False in np.isfinite([leftmost, rightmost, topmost, bottommost]):
+            # If any dimension is not finite, then the graph is not bounded in that direction. Fall
+            # back to (-1, -1) and (1, 1) as the bounding dimensions.
             dimensions = GraphBounds(Point2D(-1, 1), Point2D(1, -1))
 
         rightmost = max(rightmost, leftmost + 1.0)
@@ -553,10 +567,10 @@ class DroppablePlotWidget(pyqtgraph.PlotWidget):
         g_shift = g_diff * percentile
         b_shift = b_diff * percentile
 
-        r = min_color.r - r_shift
-        g = min_color.g - g_shift
-        b = min_color.b - b_shift
-        return RGBTuple(int(r), int(g), int(b))
+        red = min_color.r - r_shift
+        green = min_color.g - g_shift
+        blue = min_color.b - b_shift
+        return RGBTuple(int(red), int(green), int(blue))
 
     def charges_updated(self) -> None:
         """

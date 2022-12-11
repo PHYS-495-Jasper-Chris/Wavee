@@ -28,7 +28,7 @@ def _remove_infinities(inequality: sympy.Basic) -> List[sympy.Rel]:
         ineqs = ([inequality] if not inequality.has(nums.Infinity)
                  and not inequality.has(nums.NegativeInfinity) else [])
 
-    return ineqs
+    return ineqs  # type: ignore
 
 
 def clean_inequality(inequality: Union[sympy.Rel, Iterable[sympy.Rel]],
@@ -52,3 +52,33 @@ def round_symbolic(expression: sympy.Basic, digits: int) -> sympy.Basic:
 
     return expression.xreplace(
         {n.evalf(): round(n, digits) for n in expression.atoms(sympy.Number)})
+
+
+def make_source(full_eqn: str) -> str:
+    """
+    Makes a MathJax string representation of a LaTeX equation string.
+
+    Args:
+        full_eqn (str): The full LaTeX equation to render.
+
+    Returns:
+        str: The MathJax HTML to render, containing the relevant equation.
+    """
+
+    return f"""
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>MathJax example</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+</head>
+<body>
+    <p>$${full_eqn}$$</p>
+</body>
+</html>
+"""

@@ -3,7 +3,7 @@ An abstract charge, from which subclasses overload.
 """
 
 import abc
-from typing import Callable, Optional
+from typing import Callable
 
 from PyQt6 import QtCore
 from sympy import Basic
@@ -24,12 +24,6 @@ class BaseCharge(abc.ABC):
 
     Note that this is not the same signal used when a charge is removed or added - that signal is
     emitted from ``Window``.
-    """
-
-    default_rounding = -1
-    """
-    number of decimal places to show when creating the equation string. If value is -1 no rounding
-    will be done
     """
 
     @abc.abstractmethod
@@ -83,39 +77,27 @@ class BaseCharge(abc.ABC):
         """
 
     @abc.abstractmethod
-    def electric_field_mag_eqn(self, rounding: Optional[int] = None) -> Basic:
+    def electric_field_mag_eqn(self) -> Basic:
         """
         Returns the position-independent electric field equation.
-
-        Args:
-            rounding (Optional[int]): The rounding to apply to floats in this equation. If none is
-            specified, uses ``default_rounding``.
 
         Returns:
             Basic: sympy representation of the signed magnitude of the electric field.
         """
 
     @abc.abstractmethod
-    def electric_field_x_eqn(self, rounding: Optional[int] = None) -> Basic:
+    def electric_field_x_eqn(self) -> Basic:
         """
         Returns the position-independent electric field x-component equation.
-
-        Args:
-            rounding (Optional[int]): The rounding to apply to floats in this equation. If none is
-            specified, uses ``default_rounding``.
 
         Returns:
             Basic: sympy representation of the x-component of the electric field.
         """
 
     @abc.abstractmethod
-    def electric_field_y_eqn(self, rounding: Optional[int] = None) -> Basic:
+    def electric_field_y_eqn(self) -> Basic:
         """
         Returns the position-independent electric field y-component equation.
-
-        Args:
-            rounding (Optional[int]): The rounding to apply to floats in this equation. If none is
-            specified, uses ``default_rounding``.
 
         Returns:
             Basic: sympy representation of the y-component of the electric field.
