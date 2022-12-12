@@ -24,7 +24,7 @@ pip install PyQt6-WebEngine
 ---
 
 ## Overview
-![overview]("/overview1.png")
+![overview](images/overview1.png)
 
 Waveϵ is a GUI application designed to simulate electric fields in 2D. This program allows users to drag and drop charged objects into a test plane and view the electric field. This includes: visually observing the electric field vector graph arrows, formula to calculate the electric field at any point, and an exact value of the magnitude at the position of the mouse within the test plane.
 
@@ -38,7 +38,7 @@ The application has four main windows which the user will interact with:
 
 4. **Settings:** The settings menus allows the user more control over the application including: undo and redo the placement of charges, changing the number of electric field arrows that get drawn, rounding digits for the equations.
 
-![overview]("/overview2.png")
+![overview](images/overview2.png)
 
 ## More about Waveϵ
 
