@@ -1,0 +1,61 @@
+\hypertarget{namespaceequations_1_1sympy__helper}{}\doxysection{equations.\+sympy\+\_\+helper Namespace Reference}
+\label{namespaceequations_1_1sympy__helper}\index{equations.sympy\_helper@{equations.sympy\_helper}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+sympy.\+And \mbox{\hyperlink{namespaceequations_1_1sympy__helper_a0a767eba900490a4e89481ed03485806}{clean\+\_\+inequality}} (Union\mbox{[}sympy.\+Rel, Iterable\mbox{[}sympy.\+Rel\mbox{]}\mbox{]} inequality, sympy.\+Symbol symbol)
+\item 
+sympy.\+Basic \mbox{\hyperlink{namespaceequations_1_1sympy__helper_a4719f3878111cbb9f63f900be936f1dd}{round\+\_\+symbolic}} (sympy.\+Basic expression, int digits)
+\item 
+str \mbox{\hyperlink{namespaceequations_1_1sympy__helper_ae535c7a01586219367545bcc770f8760}{make\+\_\+source}} (str full\+\_\+eqn)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}A helper module providing convenience functions for sympy.
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespaceequations_1_1sympy__helper_a0a767eba900490a4e89481ed03485806}\label{namespaceequations_1_1sympy__helper_a0a767eba900490a4e89481ed03485806}} 
+\index{equations.sympy\_helper@{equations.sympy\_helper}!clean\_inequality@{clean\_inequality}}
+\index{clean\_inequality@{clean\_inequality}!equations.sympy\_helper@{equations.sympy\_helper}}
+\doxysubsubsection{\texorpdfstring{clean\_inequality()}{clean\_inequality()}}
+{\footnotesize\ttfamily  sympy.\+And equations.\+sympy\+\_\+helper.\+clean\+\_\+inequality (\begin{DoxyParamCaption}\item[{Union\mbox{[}sympy.\+Rel, Iterable\mbox{[}sympy.\+Rel\mbox{]}\mbox{]}}]{inequality,  }\item[{sympy.\+Symbol}]{symbol }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Builds an easy-to-understand inequality, solving for ``symbol`` and removing infinities.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{sympy__helper_8py_source_l00034}{34}} of file \mbox{\hyperlink{sympy__helper_8py_source}{sympy\+\_\+helper.\+py}}.
+
+\mbox{\Hypertarget{namespaceequations_1_1sympy__helper_ae535c7a01586219367545bcc770f8760}\label{namespaceequations_1_1sympy__helper_ae535c7a01586219367545bcc770f8760}} 
+\index{equations.sympy\_helper@{equations.sympy\_helper}!make\_source@{make\_source}}
+\index{make\_source@{make\_source}!equations.sympy\_helper@{equations.sympy\_helper}}
+\doxysubsubsection{\texorpdfstring{make\_source()}{make\_source()}}
+{\footnotesize\ttfamily  str equations.\+sympy\+\_\+helper.\+make\+\_\+source (\begin{DoxyParamCaption}\item[{str}]{full\+\_\+eqn }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Makes a MathJax string representation of a LaTeX equation string.
+
+Args:
+    full_eqn (str): The full LaTeX equation to render.
+
+Returns:
+    str: The MathJax HTML to render, containing the relevant equation.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{sympy__helper_8py_source_l00057}{57}} of file \mbox{\hyperlink{sympy__helper_8py_source}{sympy\+\_\+helper.\+py}}.
+
+\mbox{\Hypertarget{namespaceequations_1_1sympy__helper_a4719f3878111cbb9f63f900be936f1dd}\label{namespaceequations_1_1sympy__helper_a4719f3878111cbb9f63f900be936f1dd}} 
+\index{equations.sympy\_helper@{equations.sympy\_helper}!round\_symbolic@{round\_symbolic}}
+\index{round\_symbolic@{round\_symbolic}!equations.sympy\_helper@{equations.sympy\_helper}}
+\doxysubsubsection{\texorpdfstring{round\_symbolic()}{round\_symbolic()}}
+{\footnotesize\ttfamily  sympy.\+Basic equations.\+sympy\+\_\+helper.\+round\+\_\+symbolic (\begin{DoxyParamCaption}\item[{sympy.\+Basic}]{expression,  }\item[{int}]{digits }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Rounds floats within sympy expression to given digits.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{sympy__helper_8py_source_l00045}{45}} of file \mbox{\hyperlink{sympy__helper_8py_source}{sympy\+\_\+helper.\+py}}.
+

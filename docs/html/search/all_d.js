@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['readd_5fall_5fcharges_0',['readd_all_charges',['../classequations_1_1graph__window_1_1_graph_window.html#ad815f2e96e6b872084aa58580cc9860c',1,'equations::graph_window::GraphWindow']]],
+  ['refresh_5fbutton_1',['refresh_button',['../classui__main__window_1_1_ui___main_window.html#a22554097bbb416d0d0dc783f370d6690',1,'ui_main_window::Ui_MainWindow']]],
+  ['refresh_5fbutton_5fpressed_2',['refresh_button_pressed',['../classview_1_1droppable__plot__widget_1_1_droppable_plot_widget.html#a7b007b647a44618948292fec9ca1a413',1,'view::droppable_plot_widget::DroppablePlotWidget']]],
+  ['remove_5fall_5fcharges_3',['remove_all_charges',['../classequations_1_1graph__window_1_1_graph_window.html#a791d94c173425f3a171b4a1cee2a5f38',1,'equations::graph_window::GraphWindow']]],
+  ['remove_5fcharge_4',['remove_charge',['../classview_1_1droppable__plot__widget_1_1_droppable_plot_widget.html#a8bdd23cec2793e2610722d11020dac7b',1,'view::droppable_plot_widget::DroppablePlotWidget']]],
+  ['remove_5flast_5fcharge_5',['remove_last_charge',['../classequations_1_1graph__window_1_1_graph_window.html#aa7982c7109d0d94e442c8120d7cc478b',1,'equations::graph_window::GraphWindow']]],
+  ['reset_5fresolution_6',['reset_resolution',['../classview_1_1droppable__plot__widget_1_1_droppable_plot_widget.html#a54dd21af739b8e03c8b5c61df436b58e',1,'view::droppable_plot_widget::DroppablePlotWidget']]],
+  ['retranslateui_7',['retranslateUi',['../classui__main__window_1_1_ui___main_window.html#aaed8960ea547d0c07d54ea1a6cb92c93',1,'ui_main_window::Ui_MainWindow']]],
+  ['rgbtuple_8',['RGBTuple',['../namespaceview_1_1droppable__plot__widget.html#a8df3d9be21e8f6e5848ef286637af733',1,'view::droppable_plot_widget']]],
+  ['ring_5fcharge_9',['RING_CHARGE',['../classview_1_1draggable__label_1_1_draggable_label_1_1_label_types.html#ad67eb935aca7d926a3b344bab55afd4f',1,'view::draggable_label::DraggableLabel::LabelTypes']]],
+  ['ring_5fcharge_2epy_10',['ring_charge.py',['../ring__charge_8py.html',1,'']]],
+  ['ring_5fcharge_5fdrawing_11',['ring_charge_drawing',['../classui__main__window_1_1_ui___main_window.html#a96726cf3c99fab920ee09d5813e6aba9',1,'ui_main_window::Ui_MainWindow']]],
+  ['ring_5fcharge_5flabel_12',['ring_charge_label',['../classui__main__window_1_1_ui___main_window.html#a3475a084dbc38285ba223f81d0d267ef',1,'ui_main_window::Ui_MainWindow']]],
+  ['ringcharge_13',['RingCharge',['../classequations_1_1ring__charge_1_1_ring_charge.html',1,'equations::ring_charge']]],
+  ['round_5fsymbolic_14',['round_symbolic',['../namespaceequations_1_1sympy__helper.html#a4719f3878111cbb9f63f900be936f1dd',1,'equations::sympy_helper']]],
+  ['rounding_15',['rounding',['../classequations_1_1equation__thread_1_1_equation_thread.html#af6b2788a6147bee7ebd6dd91c7af3b14',1,'equations::equation_thread::EquationThread']]],
+  ['run_16',['run',['../classequations_1_1equation__thread_1_1_equation_thread.html#ae59dbf79a8fbf7adb1ac6d9b50083905',1,'equations::equation_thread::EquationThread']]]
+];

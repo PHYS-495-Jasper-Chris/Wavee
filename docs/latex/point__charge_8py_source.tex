@@ -1,0 +1,198 @@
+\hypertarget{point__charge_8py_source}{}\doxysection{point\+\_\+charge.\+py}
+\label{point__charge_8py_source}\index{src/equations/point\_charge.py@{src/equations/point\_charge.py}}
+\mbox{\hyperlink{point__charge_8py}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00001}\mbox{\hyperlink{namespaceequations_1_1point__charge}{00001}} \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00002}00002 \textcolor{stringliteral}{Calculate the electric field of a point charge.}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00003}00003 \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00004}00004 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00005}00005 \textcolor{keyword}{import} numpy \textcolor{keyword}{as} np}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00006}00006 \textcolor{keyword}{import} sympy}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00007}00007 \textcolor{keyword}{from} PyQt6 \textcolor{keyword}{import} QtCore, QtWidgets}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00008}00008 \textcolor{keyword}{from} sympy.abc \textcolor{keyword}{import} x, y}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00009}00009 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00010}00010 \textcolor{comment}{\# pylint: disable=import-\/error}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00011}00011 \textcolor{keyword}{from} \mbox{\hyperlink{namespaceequations_1_1base__charge}{equations.base\_charge}} \textcolor{keyword}{import} BaseCharge}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00012}00012 \textcolor{keyword}{from} \mbox{\hyperlink{namespaceequations_1_1constants}{equations.constants}} \textcolor{keyword}{import} COULOMB\_CONSTANT, COULOMB\_CONSTANT\_SYM, Point2D}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00013}00013 \textcolor{keyword}{from} \mbox{\hyperlink{namespaceview_1_1multi__line__input__dialog}{view.multi\_line\_input\_dialog}} \textcolor{keyword}{import} MultiLineInputDialog}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00014}00014 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00015}00015 \textcolor{comment}{\# pylint: enable=import-\/error}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00016}00016 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00017}00017 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00018}\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge}{00018}} \textcolor{keyword}{class }\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge}{PointCharge}}(\mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge}{BaseCharge}}):}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00019}00019     \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00020}00020 \textcolor{stringliteral}{    A single point charge, }\textcolor{keyword}{with} a position \textcolor{keywordflow}{and} a charge.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00021}00021     \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00022}00022 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00023}\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a86d458cdf5121b1f9bc3c952e1776334}{00023}} \textcolor{stringliteral}{    }\textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a86d458cdf5121b1f9bc3c952e1776334}{\_\_init\_\_}}(self, position: Point2D, charge: float) -\/> \textcolor{keywordtype}{None}:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00024}\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_aa78a6f8dbdedd74b70221a7d0347ab0a}{00024}}         self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_aa78a6f8dbdedd74b70221a7d0347ab0a}{position}} = position}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00025}\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a57e70ee5b30bbd7d8cf79a3742adfa0c}{00025}}         self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a57e70ee5b30bbd7d8cf79a3742adfa0c}{charge}} = charge}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00026}00026 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00027}\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a035cb85a74da132c57ccab36dd9bd1ed}{00027}}     \textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a035cb85a74da132c57ccab36dd9bd1ed}{electric\_field\_magnitude}}(self, point: Point2D) -\/> float:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00028}00028         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00029}00029 \textcolor{stringliteral}{        Return the electric field magnitude generated by this point charge at a given point.}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00030}00030 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00031}00031 \textcolor{stringliteral}{        Args:}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00032}00032 \textcolor{stringliteral}{            point (Point2D): x, y location of test point.}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00033}00033 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00034}00034 \textcolor{stringliteral}{        Returns:}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00035}00035 \textcolor{stringliteral}{            float: magnitude of electric field.}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00036}00036 \textcolor{stringliteral}{        "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00037}00037 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00038}00038 \textcolor{stringliteral}{        radius = self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_acd391935e951562fa76e622f1a60df08}{\_radius}}(point)}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00039}00039 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00040}00040 \textcolor{stringliteral}{        }\textcolor{comment}{\# Make sure we don't divide by 0}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00041}00041         \textcolor{keywordflow}{if} radius == 0.0:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00042}00042             \textcolor{keywordflow}{return} 0.0}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00043}00043 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00044}00044         \textcolor{keywordflow}{return} COULOMB\_CONSTANT * self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a57e70ee5b30bbd7d8cf79a3742adfa0c}{charge}} / radius**2}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00045}00045 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00046}\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a97aaef441b83449ac48977bbfb56e989}{00046}}     \textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a97aaef441b83449ac48977bbfb56e989}{electric\_field\_x}}(self, point: Point2D) -\/> float:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00047}00047         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00048}00048 \textcolor{stringliteral}{        Calculate the x component of the magnetic field generated by the point charge at a given}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00049}00049 \textcolor{stringliteral}{        point.}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00050}00050 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00051}00051 \textcolor{stringliteral}{        Args:}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00052}00052 \textcolor{stringliteral}{            point (Point2D): test point to check.}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00053}00053 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00054}00054 \textcolor{stringliteral}{        Returns:}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00055}00055 \textcolor{stringliteral}{            float: x component of electric field.}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00056}00056 \textcolor{stringliteral}{        "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00057}00057 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00058}00058 \textcolor{stringliteral}{        }\textcolor{keywordflow}{return} self.\mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge_a5d33fa9e4de29156dbad0dd2e0b5c834}{electric\_field\_magnitude}}\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a035cb85a74da132c57ccab36dd9bd1ed}{electric\_field\_magnitude}}(point) * np.cos(self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_aacef08aa67f51ca18afc5551ad4c44de}{\_theta}}(point))}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00059}00059 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00060}\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a8624d7d0a420c11d786a5ec693168fa4}{00060}}     \textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a8624d7d0a420c11d786a5ec693168fa4}{electric\_field\_y}}(self, point: Point2D) -\/> float:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00061}00061         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00062}00062 \textcolor{stringliteral}{        Calculate the y component of the magnetic field generated by the point charge at a given}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00063}00063 \textcolor{stringliteral}{        point.}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00064}00064 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00065}00065 \textcolor{stringliteral}{        Args:}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00066}00066 \textcolor{stringliteral}{            point (Point2D): test point to check.}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00067}00067 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00068}00068 \textcolor{stringliteral}{        Returns:}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00069}00069 \textcolor{stringliteral}{            float: y component of electric field.}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00070}00070 \textcolor{stringliteral}{        "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00071}00071 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00072}00072 \textcolor{stringliteral}{        }\textcolor{keywordflow}{return} self.\mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge_a5d33fa9e4de29156dbad0dd2e0b5c834}{electric\_field\_magnitude}}\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a035cb85a74da132c57ccab36dd9bd1ed}{electric\_field\_magnitude}}(point) * np.sin(self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_aacef08aa67f51ca18afc5551ad4c44de}{\_theta}}(point))}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00073}00073 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00074}\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_ad643de3399c2a60ffcff0c0a9cdced4f}{00074}}     \textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_ad643de3399c2a60ffcff0c0a9cdced4f}{open\_menu}}(self, pos: QtCore.QPointF) -\/> bool:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00075}00075         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00076}00076 \textcolor{stringliteral}{        Open a context menu }\textcolor{keywordflow}{for} this charge.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00077}00077 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00078}00078         Configures options associated \textcolor{keyword}{with} the charge.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00079}00079 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00080}00080         Args:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00081}00081             pos (QPointF): The location to open the menu at.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00082}00082 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00083}00083         Returns:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00084}00084             bool: \textcolor{keyword}{True} \textcolor{keywordflow}{if} this charge should be deleted, \textcolor{keyword}{False} otherwise.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00085}00085         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00086}00086 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00087}00087 \textcolor{stringliteral}{        menu = QtWidgets.QMenu()}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00088}00088 \textcolor{stringliteral}{        set\_center = menu.addAction("{}Set Position"{}})}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00089}00089         set\_charge = menu.addAction(\textcolor{stringliteral}{"{}Set Charge"{}})}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00090}00090         rmv\_charge = menu.addAction(\textcolor{stringliteral}{"{}Remove Charge"{}})}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00091}00091 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00092}00092         \textcolor{keywordflow}{while} \textcolor{keyword}{True}:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00093}00093             action = menu.exec(pos.toPoint())}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00094}00094 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00095}00095             \textcolor{keywordflow}{if} action == set\_charge:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00096}00096                 val, success = QtWidgets.QInputDialog().getDouble(menu, \textcolor{stringliteral}{"{}Set Charge"{}},}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00097}00097                                                                   \textcolor{stringliteral}{"{}Set Charge (C)"{}})}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00098}00098                 \textcolor{keywordflow}{if} success:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00099}00099                     self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a57e70ee5b30bbd7d8cf79a3742adfa0c}{charge}} = val}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00100}00100                     self.charge\_updated()}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00101}00101             \textcolor{keywordflow}{elif} action == set\_center:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00102}00102                 new\_center, success = \mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog}{MultiLineInputDialog}}([\textcolor{stringliteral}{"{}X Position"{}}, \textcolor{stringliteral}{"{}Y Position"{}}],}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00103}00103                                                            menu).get\_doubles()}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00104}00104 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00105}00105                 \textcolor{keywordflow}{if} success \textcolor{keywordflow}{and} \textcolor{keyword}{False} \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} np.isfinite(new\_center):}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00106}00106                     self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_aa78a6f8dbdedd74b70221a7d0347ab0a}{position}} = Point2D(*new\_center)}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00107}00107                     self.charge\_updated()}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00108}00108             \textcolor{keywordflow}{elif} action == rmv\_charge:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00109}00109                 \textcolor{keywordflow}{return} \textcolor{keyword}{True}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00110}00110             \textcolor{keywordflow}{elif} action \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00111}00111                 \textcolor{keywordflow}{return} \textcolor{keyword}{False}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00112}00112 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00113}\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a61448512a83813b5dc443b2439dc4f94}{00113}}     \textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a61448512a83813b5dc443b2439dc4f94}{electric\_field\_mag\_eqn}}(self) -\/> sympy.Basic:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00114}00114         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00115}00115 \textcolor{stringliteral}{        Returns the position-\/independent electric field equation of magnitude }\textcolor{keywordflow}{for} this point charge.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00116}00116 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00117}00117         Returns:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00118}00118             Basic: sympy representation of the signed magnitude of the electric field.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00119}00119         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00120}00120 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00121}00121 \textcolor{stringliteral}{        }\textcolor{comment}{\# The equation for a point charge is k q / r\string^2}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00122}00122         \textcolor{comment}{\# r = sqrt(x\_dist\string^2 + y\_dist\string^2)}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00123}00123         \textcolor{comment}{\# x\_dist = abs(x -\/ self.center.x)}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00124}00124         x\_dist, y\_dist = abs(x -\/ self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_aa78a6f8dbdedd74b70221a7d0347ab0a}{position}}.x), abs(y -\/ self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_aa78a6f8dbdedd74b70221a7d0347ab0a}{position}}.y)}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00125}00125 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00126}00126         \textcolor{keywordflow}{return} COULOMB\_CONSTANT\_SYM * self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a57e70ee5b30bbd7d8cf79a3742adfa0c}{charge}} / (x\_dist + y\_dist)}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00127}00127 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00128}\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_ae4dce43719f0c89b8f0386d83c0e669c}{00128}}     \textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_ae4dce43719f0c89b8f0386d83c0e669c}{electric\_field\_x\_eqn}}(self) -\/> sympy.Basic:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00129}00129         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00130}00130 \textcolor{stringliteral}{        Returns the position-\/independent electric field x-\/component equation }\textcolor{keywordflow}{for} this point charge.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00131}00131 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00132}00132         Returns:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00133}00133             Basic: sympy representation of the x-\/component of the electric field.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00134}00134         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00135}00135 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00136}00136 \textcolor{stringliteral}{        mag = self.\mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge_a273adfa5717c7fe2e80edf119612a3a6}{electric\_field\_mag\_eqn}}\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a61448512a83813b5dc443b2439dc4f94}{electric\_field\_mag\_eqn}}()}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00137}00137 \textcolor{stringliteral}{        theta = self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_addde680791679038d80a1e0ea206ac72}{\_theta\_eqn}}()}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00138}00138 \textcolor{stringliteral}{        }\textcolor{keywordflow}{return} mag * sympy.cos(theta)  \textcolor{comment}{\# type: ignore}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00139}00139 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00140}\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a598aecb816f178d235a2788434a91cff}{00140}}     \textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a598aecb816f178d235a2788434a91cff}{electric\_field\_y\_eqn}}(self) -\/> sympy.Basic:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00141}00141         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00142}00142 \textcolor{stringliteral}{        Returns the position-\/independent electric field y-\/component equation }\textcolor{keywordflow}{for} this point charge.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00143}00143 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00144}00144         Returns:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00145}00145             Basic: sympy representation of the y-\/component of the electric field.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00146}00146         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00147}00147 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00148}00148 \textcolor{stringliteral}{        mag = self.\mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge_a273adfa5717c7fe2e80edf119612a3a6}{electric\_field\_mag\_eqn}}\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_a61448512a83813b5dc443b2439dc4f94}{electric\_field\_mag\_eqn}}()}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00149}00149 \textcolor{stringliteral}{        theta = self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_addde680791679038d80a1e0ea206ac72}{\_theta\_eqn}}()}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00150}00150 \textcolor{stringliteral}{        }\textcolor{keywordflow}{return} mag * sympy.sin(theta)  \textcolor{comment}{\# type: ignore}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00151}00151 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00152}00152     \textcolor{keyword}{def }\_radius(self, point: Point2D) -\/> float:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00153}00153         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00154}00154 \textcolor{stringliteral}{        Returns the radial distance }\textcolor{keyword}{from} the given point.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00155}00155 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00156}00156         Args:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00157}00157             point (Point2D): point to get radial distance \textcolor{keyword}{from}.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00158}00158 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00159}00159         Returns:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00160}00160             float: radial distance \textcolor{keyword}{from} given point.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00161}00161         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00162}00162 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00163}00163 \textcolor{stringliteral}{        }\textcolor{keywordflow}{if} len(point) != len(self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_aa78a6f8dbdedd74b70221a7d0347ab0a}{position}}):}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00164}00164             \textcolor{keywordflow}{raise} RuntimeError(}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00165}00165                 \textcolor{stringliteral}{"{}Point given does not match dimension of point charge position. point dim: "{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00166}00166                 f\textcolor{stringliteral}{"{}\{len(point)\} | charge dim: \{len(self.position)\}"{}})}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00167}00167 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00168}00168         sides\_sum = 0.0}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00169}00169         \textcolor{keywordflow}{for} i, point\_n \textcolor{keywordflow}{in} enumerate(point):}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00170}00170             sides\_sum += abs(self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_aa78a6f8dbdedd74b70221a7d0347ab0a}{position}}[i] -\/ point\_n)**2}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00171}00171 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00172}00172         \textcolor{keywordflow}{return} np.sqrt(sides\_sum)}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00173}00173 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00174}00174     \textcolor{keyword}{def }\_theta(self, point: Point2D) -\/> float:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00175}00175         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00176}00176 \textcolor{stringliteral}{        Calculate the angle }\textcolor{keyword}{from} point charge location to test point.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00177}00177 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00178}00178         Args:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00179}00179             point (Point2D): test point.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00180}00180 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00181}00181         Returns:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00182}00182             float: angle \textcolor{keywordflow}{in} radians.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00183}00183         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00184}00184 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00185}00185 \textcolor{stringliteral}{        }\textcolor{keywordflow}{return} np.arctan2(point.y -\/ self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_aa78a6f8dbdedd74b70221a7d0347ab0a}{position}}.y, point.x -\/ self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_aa78a6f8dbdedd74b70221a7d0347ab0a}{position}}.x)}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00186}00186 }
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00187}00187     \textcolor{keyword}{def }\_theta\_eqn(self) -\/> sympy.Basic:}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00188}00188         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00189}00189 \textcolor{stringliteral}{        Returns the angle between any x, y point }\textcolor{keywordflow}{and} the point charge location.}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00190}00190         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00191}00191 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{point__charge_8py_source_l00192}00192 \textcolor{stringliteral}{        }\textcolor{keywordflow}{return} sympy.atan2(y -\/ self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_aa78a6f8dbdedd74b70221a7d0347ab0a}{position}}.y, x -\/ self.\mbox{\hyperlink{classequations_1_1point__charge_1_1_point_charge_aa78a6f8dbdedd74b70221a7d0347ab0a}{position}}.x)  \textcolor{comment}{\# type: ignore}}
+
+\end{DoxyCode}

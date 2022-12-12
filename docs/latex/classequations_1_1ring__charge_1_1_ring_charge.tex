@@ -1,0 +1,278 @@
+\hypertarget{classequations_1_1ring__charge_1_1_ring_charge}{}\doxysection{equations.\+ring\+\_\+charge.\+Ring\+Charge Class Reference}
+\label{classequations_1_1ring__charge_1_1_ring_charge}\index{equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}}
+Inheritance diagram for equations.\+ring\+\_\+charge.\+Ring\+Charge\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{classequations_1_1ring__charge_1_1_ring_charge}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+None \mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a2f35972b4cffbecab7bd28fe857b357a}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, Point2D \mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_acd25744af62cfb4d019f716dbff6692d}{center}}, float \mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a0203eebb79326dac69bae9a601323c5a}{inner\+\_\+radius}}, float \mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a25c606cca01d1c44af98f9205991457c}{outer\+\_\+radius}}, float \mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a82939be70e80916c0e2d93e8c696a74a}{charge\+\_\+density}})
+\item 
+float \mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a3c280fe008828d6faae666ec21427d26}{electric\+\_\+field\+\_\+magnitude}} (self, Point2D point)
+\item 
+float \mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a4e67dfc28849c38f840b26a03ee234bc}{electric\+\_\+field\+\_\+x}} (self, Point2D point)
+\item 
+float \mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_af79310973cb37dcc650da316260657f2}{electric\+\_\+field\+\_\+y}} (self, Point2D point)
+\item 
+bool \mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a92bdbdb847b9440a2fc83d4ecf0d6122}{open\+\_\+menu}} (self, Qt\+Core.\+QPointF pos)
+\item 
+sympy.\+Basic \mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_ac59197d30a3d84304804aff0fa95df0b}{electric\+\_\+field\+\_\+mag\+\_\+eqn}} (self)
+\item 
+sympy.\+Basic \mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_af5a7c927a0c4b02a13794d02cbd0f98f}{electric\+\_\+field\+\_\+x\+\_\+eqn}} (self)
+\item 
+sympy.\+Basic \mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_af8f48fa2cd465d3c6ce52b0c66195c46}{electric\+\_\+field\+\_\+y\+\_\+eqn}} (self)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_acd25744af62cfb4d019f716dbff6692d}{center}}
+\item 
+\mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a0203eebb79326dac69bae9a601323c5a}{inner\+\_\+radius}}
+\item 
+\mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a25c606cca01d1c44af98f9205991457c}{outer\+\_\+radius}}
+\item 
+\mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a82939be70e80916c0e2d93e8c696a74a}{charge\+\_\+density}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}A cylindrical ring of charge.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{ring__charge_8py_source_l00018}{18}} of file \mbox{\hyperlink{ring__charge_8py_source}{ring\+\_\+charge.\+py}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classequations_1_1ring__charge_1_1_ring_charge_a2f35972b4cffbecab7bd28fe857b357a}\label{classequations_1_1ring__charge_1_1_ring_charge_a2f35972b4cffbecab7bd28fe857b357a}} 
+\index{equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily  None equations.\+ring\+\_\+charge.\+Ring\+Charge.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{Point2D}]{center,  }\item[{float}]{inner\+\_\+radius,  }\item[{float}]{outer\+\_\+radius,  }\item[{float}]{charge\+\_\+density }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Initialize the ring of charge with a center, an inner radius, an outer radius, and a charge
+density.
+
+Args:
+    center (Point2D): The center of the ring of charge.
+    inner_radius (float): The inner radius of the ring of charge. Inside this, there is no
+        charge.
+    outer_radius (float): The outer radius of the ring of charge. Outside this, there is no
+        charge.
+    charge_density (float): The charge density, in C/m^2, between ``inner_radius`` and
+        ``outer_radius``.
+\end{DoxyVerb}
+ 
+
+Reimplemented in \mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_a1a4274ada04c1f5729f5aade35b97a4e}{equations.\+circle\+\_\+charge.\+Circle\+Charge}}.
+
+
+
+Definition at line \mbox{\hyperlink{ring__charge_8py_source_l00023}{23}} of file \mbox{\hyperlink{ring__charge_8py_source}{ring\+\_\+charge.\+py}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classequations_1_1ring__charge_1_1_ring_charge_ac59197d30a3d84304804aff0fa95df0b}\label{classequations_1_1ring__charge_1_1_ring_charge_ac59197d30a3d84304804aff0fa95df0b}} 
+\index{equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}!electric\_field\_mag\_eqn@{electric\_field\_mag\_eqn}}
+\index{electric\_field\_mag\_eqn@{electric\_field\_mag\_eqn}!equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}}
+\doxysubsubsection{\texorpdfstring{electric\_field\_mag\_eqn()}{electric\_field\_mag\_eqn()}}
+{\footnotesize\ttfamily  sympy.\+Basic equations.\+ring\+\_\+charge.\+Ring\+Charge.\+electric\+\_\+field\+\_\+mag\+\_\+eqn (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the position-independent electric field equation of magnitude for this ring charge.
+
+Returns:
+    Basic: sympy representation of the signed magnitude of the electric field.
+\end{DoxyVerb}
+ 
+
+Reimplemented from \mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge_a273adfa5717c7fe2e80edf119612a3a6}{equations.\+base\+\_\+charge.\+Base\+Charge}}.
+
+
+
+Definition at line \mbox{\hyperlink{ring__charge_8py_source_l00161}{161}} of file \mbox{\hyperlink{ring__charge_8py_source}{ring\+\_\+charge.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1ring__charge_1_1_ring_charge_a3c280fe008828d6faae666ec21427d26}\label{classequations_1_1ring__charge_1_1_ring_charge_a3c280fe008828d6faae666ec21427d26}} 
+\index{equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}!electric\_field\_magnitude@{electric\_field\_magnitude}}
+\index{electric\_field\_magnitude@{electric\_field\_magnitude}!equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}}
+\doxysubsubsection{\texorpdfstring{electric\_field\_magnitude()}{electric\_field\_magnitude()}}
+{\footnotesize\ttfamily  float equations.\+ring\+\_\+charge.\+Ring\+Charge.\+electric\+\_\+field\+\_\+magnitude (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{Point2D}]{point }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Return the electric field magnitude generated by this ring of charge at a given point.
+
+Args:
+    point (Point2D): x, y location of test point.
+
+Returns:
+    float: magnitude of electric field.
+\end{DoxyVerb}
+ 
+
+Reimplemented from \mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge_a5d33fa9e4de29156dbad0dd2e0b5c834}{equations.\+base\+\_\+charge.\+Base\+Charge}}.
+
+
+
+Definition at line \mbox{\hyperlink{ring__charge_8py_source_l00053}{53}} of file \mbox{\hyperlink{ring__charge_8py_source}{ring\+\_\+charge.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1ring__charge_1_1_ring_charge_a4e67dfc28849c38f840b26a03ee234bc}\label{classequations_1_1ring__charge_1_1_ring_charge_a4e67dfc28849c38f840b26a03ee234bc}} 
+\index{equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}!electric\_field\_x@{electric\_field\_x}}
+\index{electric\_field\_x@{electric\_field\_x}!equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}}
+\doxysubsubsection{\texorpdfstring{electric\_field\_x()}{electric\_field\_x()}}
+{\footnotesize\ttfamily  float equations.\+ring\+\_\+charge.\+Ring\+Charge.\+electric\+\_\+field\+\_\+x (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{Point2D}]{point }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Calculate the x component of the magnetic field generated by the charge at a given point.
+
+Args:
+    point (Point2D): test point to check.
+
+Returns:
+    float: x component of electric field.
+\end{DoxyVerb}
+ 
+
+Reimplemented from \mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge_a1419f387166dd5515a1ef2612da2b65e}{equations.\+base\+\_\+charge.\+Base\+Charge}}.
+
+
+
+Definition at line \mbox{\hyperlink{ring__charge_8py_source_l00086}{86}} of file \mbox{\hyperlink{ring__charge_8py_source}{ring\+\_\+charge.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1ring__charge_1_1_ring_charge_af5a7c927a0c4b02a13794d02cbd0f98f}\label{classequations_1_1ring__charge_1_1_ring_charge_af5a7c927a0c4b02a13794d02cbd0f98f}} 
+\index{equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}!electric\_field\_x\_eqn@{electric\_field\_x\_eqn}}
+\index{electric\_field\_x\_eqn@{electric\_field\_x\_eqn}!equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}}
+\doxysubsubsection{\texorpdfstring{electric\_field\_x\_eqn()}{electric\_field\_x\_eqn()}}
+{\footnotesize\ttfamily  sympy.\+Basic equations.\+ring\+\_\+charge.\+Ring\+Charge.\+electric\+\_\+field\+\_\+x\+\_\+eqn (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the position-independent electric field x-component equation for this ring charge.
+
+Returns:
+    Basic: sympy representation of the x-component of the electric field.
+\end{DoxyVerb}
+ 
+
+Reimplemented from \mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge_a06f0db8fbcbb8ccf081ad1be9c1b30bd}{equations.\+base\+\_\+charge.\+Base\+Charge}}.
+
+
+
+Definition at line \mbox{\hyperlink{ring__charge_8py_source_l00194}{194}} of file \mbox{\hyperlink{ring__charge_8py_source}{ring\+\_\+charge.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1ring__charge_1_1_ring_charge_af79310973cb37dcc650da316260657f2}\label{classequations_1_1ring__charge_1_1_ring_charge_af79310973cb37dcc650da316260657f2}} 
+\index{equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}!electric\_field\_y@{electric\_field\_y}}
+\index{electric\_field\_y@{electric\_field\_y}!equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}}
+\doxysubsubsection{\texorpdfstring{electric\_field\_y()}{electric\_field\_y()}}
+{\footnotesize\ttfamily  float equations.\+ring\+\_\+charge.\+Ring\+Charge.\+electric\+\_\+field\+\_\+y (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{Point2D}]{point }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Calculate the y component of the magnetic field generated by the charge at a given point.
+
+Args:
+    point (Point2D): test point to check.
+
+Returns:
+    float: y component of electric field.
+\end{DoxyVerb}
+ 
+
+Reimplemented from \mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge_a76b9f212dfc38012bbea77028e68508a}{equations.\+base\+\_\+charge.\+Base\+Charge}}.
+
+
+
+Definition at line \mbox{\hyperlink{ring__charge_8py_source_l00099}{99}} of file \mbox{\hyperlink{ring__charge_8py_source}{ring\+\_\+charge.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1ring__charge_1_1_ring_charge_af8f48fa2cd465d3c6ce52b0c66195c46}\label{classequations_1_1ring__charge_1_1_ring_charge_af8f48fa2cd465d3c6ce52b0c66195c46}} 
+\index{equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}!electric\_field\_y\_eqn@{electric\_field\_y\_eqn}}
+\index{electric\_field\_y\_eqn@{electric\_field\_y\_eqn}!equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}}
+\doxysubsubsection{\texorpdfstring{electric\_field\_y\_eqn()}{electric\_field\_y\_eqn()}}
+{\footnotesize\ttfamily  sympy.\+Basic equations.\+ring\+\_\+charge.\+Ring\+Charge.\+electric\+\_\+field\+\_\+y\+\_\+eqn (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the position-independent electric field y-component equation for this ring charge.
+
+Returns:
+    Basic: sympy representation of the y-component of the electric field.
+\end{DoxyVerb}
+ 
+
+Reimplemented from \mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge_ac3e1cc48aaaf5ff7261e58b3294119ed}{equations.\+base\+\_\+charge.\+Base\+Charge}}.
+
+
+
+Definition at line \mbox{\hyperlink{ring__charge_8py_source_l00206}{206}} of file \mbox{\hyperlink{ring__charge_8py_source}{ring\+\_\+charge.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1ring__charge_1_1_ring_charge_a92bdbdb847b9440a2fc83d4ecf0d6122}\label{classequations_1_1ring__charge_1_1_ring_charge_a92bdbdb847b9440a2fc83d4ecf0d6122}} 
+\index{equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}!open\_menu@{open\_menu}}
+\index{open\_menu@{open\_menu}!equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}}
+\doxysubsubsection{\texorpdfstring{open\_menu()}{open\_menu()}}
+{\footnotesize\ttfamily  bool equations.\+ring\+\_\+charge.\+Ring\+Charge.\+open\+\_\+menu (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{Qt\+Core.\+QPointF}]{pos }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Open a context menu for this charge.
+
+Configures options associated with the charge.
+
+Args:
+    pos (QPointF): The location to open the menu at.
+
+Returns:
+    bool: True if this charge should be deleted, False otherwise.
+\end{DoxyVerb}
+ 
+
+Reimplemented from \mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge_a1271e2d8e6e28e6fc871ae89c7e88a16}{equations.\+base\+\_\+charge.\+Base\+Charge}}.
+
+
+
+Reimplemented in \mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_ac85de52bfe9f37529409e74a35a3224f}{equations.\+circle\+\_\+charge.\+Circle\+Charge}}.
+
+
+
+Definition at line \mbox{\hyperlink{ring__charge_8py_source_l00112}{112}} of file \mbox{\hyperlink{ring__charge_8py_source}{ring\+\_\+charge.\+py}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classequations_1_1ring__charge_1_1_ring_charge_acd25744af62cfb4d019f716dbff6692d}\label{classequations_1_1ring__charge_1_1_ring_charge_acd25744af62cfb4d019f716dbff6692d}} 
+\index{equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}!center@{center}}
+\index{center@{center}!equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}}
+\doxysubsubsection{\texorpdfstring{center}{center}}
+{\footnotesize\ttfamily equations.\+ring\+\_\+charge.\+Ring\+Charge.\+center}
+
+
+
+Definition at line \mbox{\hyperlink{ring__charge_8py_source_l00048}{48}} of file \mbox{\hyperlink{ring__charge_8py_source}{ring\+\_\+charge.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1ring__charge_1_1_ring_charge_a82939be70e80916c0e2d93e8c696a74a}\label{classequations_1_1ring__charge_1_1_ring_charge_a82939be70e80916c0e2d93e8c696a74a}} 
+\index{equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}!charge\_density@{charge\_density}}
+\index{charge\_density@{charge\_density}!equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}}
+\doxysubsubsection{\texorpdfstring{charge\_density}{charge\_density}}
+{\footnotesize\ttfamily equations.\+ring\+\_\+charge.\+Ring\+Charge.\+charge\+\_\+density}
+
+
+
+Definition at line \mbox{\hyperlink{ring__charge_8py_source_l00051}{51}} of file \mbox{\hyperlink{ring__charge_8py_source}{ring\+\_\+charge.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1ring__charge_1_1_ring_charge_a0203eebb79326dac69bae9a601323c5a}\label{classequations_1_1ring__charge_1_1_ring_charge_a0203eebb79326dac69bae9a601323c5a}} 
+\index{equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}!inner\_radius@{inner\_radius}}
+\index{inner\_radius@{inner\_radius}!equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}}
+\doxysubsubsection{\texorpdfstring{inner\_radius}{inner\_radius}}
+{\footnotesize\ttfamily equations.\+ring\+\_\+charge.\+Ring\+Charge.\+inner\+\_\+radius}
+
+
+
+Definition at line \mbox{\hyperlink{ring__charge_8py_source_l00049}{49}} of file \mbox{\hyperlink{ring__charge_8py_source}{ring\+\_\+charge.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1ring__charge_1_1_ring_charge_a25c606cca01d1c44af98f9205991457c}\label{classequations_1_1ring__charge_1_1_ring_charge_a25c606cca01d1c44af98f9205991457c}} 
+\index{equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}!outer\_radius@{outer\_radius}}
+\index{outer\_radius@{outer\_radius}!equations.ring\_charge.RingCharge@{equations.ring\_charge.RingCharge}}
+\doxysubsubsection{\texorpdfstring{outer\_radius}{outer\_radius}}
+{\footnotesize\ttfamily equations.\+ring\+\_\+charge.\+Ring\+Charge.\+outer\+\_\+radius}
+
+
+
+Definition at line \mbox{\hyperlink{ring__charge_8py_source_l00050}{50}} of file \mbox{\hyperlink{ring__charge_8py_source}{ring\+\_\+charge.\+py}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/equations/\mbox{\hyperlink{ring__charge_8py}{ring\+\_\+charge.\+py}}\end{DoxyCompactItemize}

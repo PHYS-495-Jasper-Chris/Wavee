@@ -1,0 +1,251 @@
+\hypertarget{classequations_1_1graph__window_1_1_graph_window}{}\doxysection{equations.\+graph\+\_\+window.\+Graph\+Window Class Reference}
+\label{classequations_1_1graph__window_1_1_graph_window}\index{equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+None \mbox{\hyperlink{classequations_1_1graph__window_1_1_graph_window_a0aace3af703a5d262155e18108d1fe53}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, Optional\mbox{[}List\mbox{[}\mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge}{Base\+Charge}}\mbox{]}\mbox{]} \mbox{\hyperlink{classequations_1_1graph__window_1_1_graph_window_aa72cbf913c3cfec2a2cc4dbbab5c8f7c}{charges}}=None)
+\item 
+None \mbox{\hyperlink{classequations_1_1graph__window_1_1_graph_window_a9dfac68a8b653b28fcef9e8dd70a43d9}{add\+\_\+charge}} (self, \mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge}{Base\+Charge}} point\+\_\+charge)
+\item 
+None \mbox{\hyperlink{classequations_1_1graph__window_1_1_graph_window_aa7982c7109d0d94e442c8120d7cc478b}{remove\+\_\+last\+\_\+charge}} (self)
+\item 
+None \mbox{\hyperlink{classequations_1_1graph__window_1_1_graph_window_a30aff3437e95f2aaa0223fd368dc997e}{undo\+\_\+charge\+\_\+removal}} (self)
+\item 
+None \mbox{\hyperlink{classequations_1_1graph__window_1_1_graph_window_a791d94c173425f3a171b4a1cee2a5f38}{remove\+\_\+all\+\_\+charges}} (self)
+\item 
+None \mbox{\hyperlink{classequations_1_1graph__window_1_1_graph_window_ad815f2e96e6b872084aa58580cc9860c}{readd\+\_\+all\+\_\+charges}} (self)
+\item 
+float \mbox{\hyperlink{classequations_1_1graph__window_1_1_graph_window_a11827139bd8107aea7557ed81cb3cea0}{net\+\_\+electric\+\_\+field}} (self, Point2D position)
+\item 
+float \mbox{\hyperlink{classequations_1_1graph__window_1_1_graph_window_a43d602d04dadf8dff442b69e1c74b8d8}{electric\+\_\+field\+\_\+x}} (self, Point2D position)
+\item 
+float \mbox{\hyperlink{classequations_1_1graph__window_1_1_graph_window_a161a8bd1d05d86fbbbb069bb9e59e481}{electric\+\_\+field\+\_\+y}} (self, Point2D position)
+\item 
+List\mbox{[}Basic\mbox{]} \mbox{\hyperlink{classequations_1_1graph__window_1_1_graph_window_a2a275abefe5c8ecc0f3067f5fd1c2ff1}{electric\+\_\+field\+\_\+mag\+\_\+eqns}} (self)
+\item 
+List\mbox{[}Basic\mbox{]} \mbox{\hyperlink{classequations_1_1graph__window_1_1_graph_window_a63dbbf412cf4254002d3ec3640aed865}{electric\+\_\+field\+\_\+x\+\_\+eqns}} (self)
+\item 
+List\mbox{[}Basic\mbox{]} \mbox{\hyperlink{classequations_1_1graph__window_1_1_graph_window_ae9347021b2d006e342d687c46b11e543}{electric\+\_\+field\+\_\+y\+\_\+eqns}} (self)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classequations_1_1graph__window_1_1_graph_window_aa72cbf913c3cfec2a2cc4dbbab5c8f7c}{charges}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}A collection of charges, to be graphed
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{graph__window_8py_source_l00017}{17}} of file \mbox{\hyperlink{graph__window_8py_source}{graph\+\_\+window.\+py}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classequations_1_1graph__window_1_1_graph_window_a0aace3af703a5d262155e18108d1fe53}\label{classequations_1_1graph__window_1_1_graph_window_a0aace3af703a5d262155e18108d1fe53}} 
+\index{equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily  None equations.\+graph\+\_\+window.\+Graph\+Window.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{Optional\mbox{[}List\mbox{[}\mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge}{Base\+Charge}}\mbox{]}\mbox{]} }]{charges = {\ttfamily None} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Initialize a collection of charges of any kind.
+
+Args:
+    charges (Optional[List[PointCharge]]): The list of charges. Defaults to an empty list.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{graph__window_8py_source_l00030}{30}} of file \mbox{\hyperlink{graph__window_8py_source}{graph\+\_\+window.\+py}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classequations_1_1graph__window_1_1_graph_window_a9dfac68a8b653b28fcef9e8dd70a43d9}\label{classequations_1_1graph__window_1_1_graph_window_a9dfac68a8b653b28fcef9e8dd70a43d9}} 
+\index{equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}!add\_charge@{add\_charge}}
+\index{add\_charge@{add\_charge}!equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}}
+\doxysubsubsection{\texorpdfstring{add\_charge()}{add\_charge()}}
+{\footnotesize\ttfamily  None equations.\+graph\+\_\+window.\+Graph\+Window.\+add\+\_\+charge (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{\mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge}{Base\+Charge}}}]{point\+\_\+charge }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Add point charge to the test window.
+
+Args:
+    point_charge (PointCharge): Point charge to be added.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{graph__window_8py_source_l00042}{42}} of file \mbox{\hyperlink{graph__window_8py_source}{graph\+\_\+window.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1graph__window_1_1_graph_window_a2a275abefe5c8ecc0f3067f5fd1c2ff1}\label{classequations_1_1graph__window_1_1_graph_window_a2a275abefe5c8ecc0f3067f5fd1c2ff1}} 
+\index{equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}!electric\_field\_mag\_eqns@{electric\_field\_mag\_eqns}}
+\index{electric\_field\_mag\_eqns@{electric\_field\_mag\_eqns}!equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}}
+\doxysubsubsection{\texorpdfstring{electric\_field\_mag\_eqns()}{electric\_field\_mag\_eqns()}}
+{\footnotesize\ttfamily  List\mbox{[}Basic\mbox{]} equations.\+graph\+\_\+window.\+Graph\+Window.\+electric\+\_\+field\+\_\+mag\+\_\+eqns (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Get each charge's electric field magnitude equation.
+
+Returns:
+    str: A string representation of the HTML rendering of each charge's electric field
+    magnitude.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{graph__window_8py_source_l00161}{161}} of file \mbox{\hyperlink{graph__window_8py_source}{graph\+\_\+window.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1graph__window_1_1_graph_window_a43d602d04dadf8dff442b69e1c74b8d8}\label{classequations_1_1graph__window_1_1_graph_window_a43d602d04dadf8dff442b69e1c74b8d8}} 
+\index{equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}!electric\_field\_x@{electric\_field\_x}}
+\index{electric\_field\_x@{electric\_field\_x}!equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}}
+\doxysubsubsection{\texorpdfstring{electric\_field\_x()}{electric\_field\_x()}}
+{\footnotesize\ttfamily  float equations.\+graph\+\_\+window.\+Graph\+Window.\+electric\+\_\+field\+\_\+x (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{Point2D}]{position }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Calculate the x component of the electric field at a point.
+
+Args:
+    position (Point2D): The position to measure the electric field at.
+
+Returns:
+    float: x component of electric field.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{graph__window_8py_source_l00121}{121}} of file \mbox{\hyperlink{graph__window_8py_source}{graph\+\_\+window.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1graph__window_1_1_graph_window_a63dbbf412cf4254002d3ec3640aed865}\label{classequations_1_1graph__window_1_1_graph_window_a63dbbf412cf4254002d3ec3640aed865}} 
+\index{equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}!electric\_field\_x\_eqns@{electric\_field\_x\_eqns}}
+\index{electric\_field\_x\_eqns@{electric\_field\_x\_eqns}!equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}}
+\doxysubsubsection{\texorpdfstring{electric\_field\_x\_eqns()}{electric\_field\_x\_eqns()}}
+{\footnotesize\ttfamily  List\mbox{[}Basic\mbox{]} equations.\+graph\+\_\+window.\+Graph\+Window.\+electric\+\_\+field\+\_\+x\+\_\+eqns (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Get the cumulative electric field x-component equation by summing each charge's x-component
+equation.
+
+Returns:
+    str: A string representation of the HTML rendering of the cumulative electric field
+    x-component equation.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{graph__window_8py_source_l00172}{172}} of file \mbox{\hyperlink{graph__window_8py_source}{graph\+\_\+window.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1graph__window_1_1_graph_window_a161a8bd1d05d86fbbbb069bb9e59e481}\label{classequations_1_1graph__window_1_1_graph_window_a161a8bd1d05d86fbbbb069bb9e59e481}} 
+\index{equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}!electric\_field\_y@{electric\_field\_y}}
+\index{electric\_field\_y@{electric\_field\_y}!equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}}
+\doxysubsubsection{\texorpdfstring{electric\_field\_y()}{electric\_field\_y()}}
+{\footnotesize\ttfamily  float equations.\+graph\+\_\+window.\+Graph\+Window.\+electric\+\_\+field\+\_\+y (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{Point2D}]{position }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Calculate the y component of the electric field at a point.
+
+Args:
+    position (Point2D): The position to measure the electric field at.
+
+Returns:
+    float: y component of electric field.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{graph__window_8py_source_l00141}{141}} of file \mbox{\hyperlink{graph__window_8py_source}{graph\+\_\+window.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1graph__window_1_1_graph_window_ae9347021b2d006e342d687c46b11e543}\label{classequations_1_1graph__window_1_1_graph_window_ae9347021b2d006e342d687c46b11e543}} 
+\index{equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}!electric\_field\_y\_eqns@{electric\_field\_y\_eqns}}
+\index{electric\_field\_y\_eqns@{electric\_field\_y\_eqns}!equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}}
+\doxysubsubsection{\texorpdfstring{electric\_field\_y\_eqns()}{electric\_field\_y\_eqns()}}
+{\footnotesize\ttfamily  List\mbox{[}Basic\mbox{]} equations.\+graph\+\_\+window.\+Graph\+Window.\+electric\+\_\+field\+\_\+y\+\_\+eqns (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Get the cumulative electric field y-component equation by summing each charge's y-component
+equation.
+
+Returns:
+    str: A string representation of the HTML rendering of the cumulative electric field
+    y-component equation.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{graph__window_8py_source_l00184}{184}} of file \mbox{\hyperlink{graph__window_8py_source}{graph\+\_\+window.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1graph__window_1_1_graph_window_a11827139bd8107aea7557ed81cb3cea0}\label{classequations_1_1graph__window_1_1_graph_window_a11827139bd8107aea7557ed81cb3cea0}} 
+\index{equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}!net\_electric\_field@{net\_electric\_field}}
+\index{net\_electric\_field@{net\_electric\_field}!equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}}
+\doxysubsubsection{\texorpdfstring{net\_electric\_field()}{net\_electric\_field()}}
+{\footnotesize\ttfamily  float equations.\+graph\+\_\+window.\+Graph\+Window.\+net\+\_\+electric\+\_\+field (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{Point2D}]{position }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Calculate the net electric field magnitude at a point
+
+Args:
+    position (Point2D): The position to measure the electric field at
+
+Returns:
+    float: magnitude of electric field
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{graph__window_8py_source_l00108}{108}} of file \mbox{\hyperlink{graph__window_8py_source}{graph\+\_\+window.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1graph__window_1_1_graph_window_ad815f2e96e6b872084aa58580cc9860c}\label{classequations_1_1graph__window_1_1_graph_window_ad815f2e96e6b872084aa58580cc9860c}} 
+\index{equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}!readd\_all\_charges@{readd\_all\_charges}}
+\index{readd\_all\_charges@{readd\_all\_charges}!equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}}
+\doxysubsubsection{\texorpdfstring{readd\_all\_charges()}{readd\_all\_charges()}}
+{\footnotesize\ttfamily  None equations.\+graph\+\_\+window.\+Graph\+Window.\+readd\+\_\+all\+\_\+charges (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Re-add all charges that have been removed to the window, removing them from the list of
+removed charges.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{graph__window_8py_source_l00094}{94}} of file \mbox{\hyperlink{graph__window_8py_source}{graph\+\_\+window.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1graph__window_1_1_graph_window_a791d94c173425f3a171b4a1cee2a5f38}\label{classequations_1_1graph__window_1_1_graph_window_a791d94c173425f3a171b4a1cee2a5f38}} 
+\index{equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}!remove\_all\_charges@{remove\_all\_charges}}
+\index{remove\_all\_charges@{remove\_all\_charges}!equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}}
+\doxysubsubsection{\texorpdfstring{remove\_all\_charges()}{remove\_all\_charges()}}
+{\footnotesize\ttfamily  None equations.\+graph\+\_\+window.\+Graph\+Window.\+remove\+\_\+all\+\_\+charges (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Remove all charges that are currently on the window, adding them to the list of removed
+charges.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{graph__window_8py_source_l00080}{80}} of file \mbox{\hyperlink{graph__window_8py_source}{graph\+\_\+window.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1graph__window_1_1_graph_window_aa7982c7109d0d94e442c8120d7cc478b}\label{classequations_1_1graph__window_1_1_graph_window_aa7982c7109d0d94e442c8120d7cc478b}} 
+\index{equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}!remove\_last\_charge@{remove\_last\_charge}}
+\index{remove\_last\_charge@{remove\_last\_charge}!equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}}
+\doxysubsubsection{\texorpdfstring{remove\_last\_charge()}{remove\_last\_charge()}}
+{\footnotesize\ttfamily  None equations.\+graph\+\_\+window.\+Graph\+Window.\+remove\+\_\+last\+\_\+charge (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Remove the last charge that was added (ie, the charge at the end of the list of charges).
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{graph__window_8py_source_l00056}{56}} of file \mbox{\hyperlink{graph__window_8py_source}{graph\+\_\+window.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1graph__window_1_1_graph_window_a30aff3437e95f2aaa0223fd368dc997e}\label{classequations_1_1graph__window_1_1_graph_window_a30aff3437e95f2aaa0223fd368dc997e}} 
+\index{equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}!undo\_charge\_removal@{undo\_charge\_removal}}
+\index{undo\_charge\_removal@{undo\_charge\_removal}!equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}}
+\doxysubsubsection{\texorpdfstring{undo\_charge\_removal()}{undo\_charge\_removal()}}
+{\footnotesize\ttfamily  None equations.\+graph\+\_\+window.\+Graph\+Window.\+undo\+\_\+charge\+\_\+removal (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Undo the latest removal if any exists.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{graph__window_8py_source_l00068}{68}} of file \mbox{\hyperlink{graph__window_8py_source}{graph\+\_\+window.\+py}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classequations_1_1graph__window_1_1_graph_window_aa72cbf913c3cfec2a2cc4dbbab5c8f7c}\label{classequations_1_1graph__window_1_1_graph_window_aa72cbf913c3cfec2a2cc4dbbab5c8f7c}} 
+\index{equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}!charges@{charges}}
+\index{charges@{charges}!equations.graph\_window.GraphWindow@{equations.graph\_window.GraphWindow}}
+\doxysubsubsection{\texorpdfstring{charges}{charges}}
+{\footnotesize\ttfamily equations.\+graph\+\_\+window.\+Graph\+Window.\+charges}
+
+
+
+Definition at line \mbox{\hyperlink{graph__window_8py_source_l00038}{38}} of file \mbox{\hyperlink{graph__window_8py_source}{graph\+\_\+window.\+py}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/equations/\mbox{\hyperlink{graph__window_8py}{graph\+\_\+window.\+py}}\end{DoxyCompactItemize}
