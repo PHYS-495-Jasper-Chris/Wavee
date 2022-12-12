@@ -58,7 +58,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                            slot=self._mouse_moved)
         # Set icon
         icon = QtGui.QIcon()
-        icon_path = os.path.join(sys.path[0], "../logo.png")
+        icon_path = os.path.join(sys.path[0], "../images/logo.png")
         icon.addFile(icon_path, QtCore.QSize(256, 256))
         self.setWindowIcon(icon)
 
