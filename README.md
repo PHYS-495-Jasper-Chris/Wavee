@@ -23,6 +23,10 @@ pip install PyQt6-WebEngine
 
 ---
 
+## Documentation
+
+Full code documentation can be found at https://phys-495-jasper-chris.github.io/Wavee/
+
 ## Overview
 ![overview](images/overview1.png)
 
@@ -36,13 +40,13 @@ The application has four main windows which the user will interact with:
 
 3. **Equations View:** The equations view area shows a generic equation which can be used to calculate the magnitude of the magnetic field due to each component. As well as the net magnetic field for the x and y component respectively.
 
-4. **Settings:** The settings menus allows the user more control over the application including: undo and redo the placement of charges, changing the number of electric field arrows that get drawn, rounding digits for the equations.
+4. **Settings:** The settings menus allows the user more control over the application including: undo and redo the placement of charges, changing the number of electric field arrows that get drawn, and rounding digits for the equations.
 
 ![overview](images/overview2.png)
 
 ## More about Waveϵ
 
-We created Waveϵ as our senior design project for the University of Southern California Physics/Computer Science Senior Design project (PHYS 495). This project is intended to help students visualize the concepts covered in Electricity and Magnetism classes. Getting tools like this into the hands of students allow for a better visual understanding of how electric forces work at an introductory level.
+We created Waveϵ as our project for the University of Southern California Physics/Computer Science Senior project (PHYS 495). This project is intended to help students visualize the concepts covered in Electricity and Magnetism classes. Getting tools like this into the hands of students allow for a better visual understanding of how electric forces work at an introductory level.
 
 We would like to thank our project advisor Aiichiro Nakano as well as the USC Physics department for their support. This project would not have been possible otherwise.
 
