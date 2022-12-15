@@ -3,7 +3,6 @@ The main window.
 """
 import os
 import sys
-import ctypes
 from typing import Tuple
 
 import pyqtgraph
@@ -56,16 +55,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.proxy = pyqtgraph.SignalProxy(self.graph_widget.scene().sigMouseMoved,
                                            rateLimit=60,
                                            slot=self._mouse_moved)
-        # Set icon
-        icon = QtGui.QIcon()
-        icon_path = os.path.join(sys.path[0], "../images/logo.png")
-        icon.addFile(icon_path, QtCore.QSize(256, 256))
-        self.setWindowIcon(icon)
-
-        # Fix icon on windows machines
-        if os.name == "nt":
-            win_app_id = u'uscstudentproject.wavee' # arbitrary string
-            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(win_app_id)
 
         self._add_menus()
         self._paint_shapes()
@@ -73,8 +62,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.equations_thread.start()
 
         self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
-
-        self.show()
 
     def _add_menus(self) -> None:
         """

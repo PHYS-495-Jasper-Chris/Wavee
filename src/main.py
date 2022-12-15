@@ -2,9 +2,11 @@
 Instantiate the graphical user interface.
 """
 
+import ctypes
+import os
 import sys
 
-from PyQt6 import QtCore, QtWidgets
+from PyQt6 import QtCore, QtWidgets, QtGui
 
 from view.main_window import MainWindow
 
@@ -19,7 +21,19 @@ def main():
     # Disable all Qt messages
     QtCore.qInstallMessageHandler(lambda _, __, ___: None)
 
-    _ = MainWindow()
+    window = MainWindow()
+
+    # Set icon
+    icon_path = os.path.join(sys.path[0], "../images/logo.png")
+    icon = QtGui.QIcon(icon_path)
+    app.setWindowIcon(icon)
+
+    # Fix icon on windows machines
+    if sys.platform == "windows":
+        win_app_id = "PHYS495.wavee"  # arbitrary string
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(win_app_id)
+
+    window.show()
 
     sys.exit(app.exec())
 
