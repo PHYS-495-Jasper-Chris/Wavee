@@ -163,7 +163,7 @@ class GraphWindow:
         Get each charge's electric field magnitude equation.
 
         Returns:
-            str: A string representation of the HTML rendering of each charge's electric field
+            List[Basic]: A list of the simplified equation of each charge's electric field
             magnitude.
         """
 
@@ -175,7 +175,7 @@ class GraphWindow:
         equation.
 
         Returns:
-            str: A string representation of the HTML rendering of the cumulative electric field
+            List[Basic]: A list of the simplified equation of each charge's electric field
             x-component equation.
         """
 
@@ -187,7 +187,7 @@ class GraphWindow:
         equation.
 
         Returns:
-            str: A string representation of the HTML rendering of the cumulative electric field
+            List[Basic]: A list of the simplified equation of each charge's electric field
             y-component equation.
         """
 
