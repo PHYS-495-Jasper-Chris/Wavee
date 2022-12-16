@@ -246,7 +246,7 @@ class InfiniteLineCharge(BaseCharge):
 
         if self.y_coef == 0.0:
             # Only have x component, so let the line point straight up (independent of x's sign).
-            return np.pi / 2
+            return 3 * np.pi / 2
 
         if self.x_coef == 0.0:
             # Only have y component, so let the line point straight in the +x direction (independent

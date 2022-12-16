@@ -1,0 +1,133 @@
+\hypertarget{multi__line__input__dialog_8py_source}{}\doxysection{multi\+\_\+line\+\_\+input\+\_\+dialog.\+py}
+\label{multi__line__input__dialog_8py_source}\index{src/view/multi\_line\_input\_dialog.py@{src/view/multi\_line\_input\_dialog.py}}
+\mbox{\hyperlink{multi__line__input__dialog_8py}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00001}\mbox{\hyperlink{namespaceview_1_1multi__line__input__dialog}{00001}} \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00002}00002 \textcolor{stringliteral}{A QDialog with multiple input lines.}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00003}00003 \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00004}00004 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00005}00005 \textcolor{keyword}{from} typing \textcolor{keyword}{import} List, Optional, Tuple, Type, TypeVar}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00006}00006 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00007}00007 \textcolor{keyword}{from} PyQt6 \textcolor{keyword}{import} QtCore, QtWidgets}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00008}00008 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00009}00009 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00010}00010 \textcolor{keyword}{class }\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog}{MultiLineInputDialog}}(QtWidgets.QDialog):}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00011}00011     \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00012}00012 \textcolor{stringliteral}{    A QDialog }\textcolor{keyword}{with} multiple input lines.}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00013}00013     \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00014}00014 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00015}\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog}{00015}} \textcolor{stringliteral}{    LineType = TypeVar("{}LineType"{}}, bound=QtWidgets.QWidget)}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00016}00016     \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00017}\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_ae87ec420736f112c1d404f581c1fb209}{00017}} \textcolor{stringliteral}{    A generic line edit type.}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00018}00018 \textcolor{stringliteral}{    "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00019}00019 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00020}00020 \textcolor{stringliteral}{    }\textcolor{keyword}{def }\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a0b7e2dd8bfb83505fa8a346c538ad37d}{\_\_init\_\_}}(self,}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00021}00021                  labels: List[str],}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00022}\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a0b7e2dd8bfb83505fa8a346c538ad37d}{00022}}                  parent: Optional[QtWidgets.QWidget] = \textcolor{keywordtype}{None},}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00023}00023                  description: Optional[str] = \textcolor{keywordtype}{None}) -\/> \textcolor{keywordtype}{None}:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00024}00024         super().\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a0b7e2dd8bfb83505fa8a346c538ad37d}{\_\_init\_\_}}(parent)}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00025}00025 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00026}00026         self.\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a7d8b4ebf6f12808a19683ecf2dbb2862}{labels}} = labels}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00027}00027         self.\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_acc35ed42a77e45ded1d1c7e5a2b62e4c}{description}} = description}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00028}\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a7d8b4ebf6f12808a19683ecf2dbb2862}{00028}} }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00029}\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_acc35ed42a77e45ded1d1c7e5a2b62e4c}{00029}}     \textcolor{keyword}{def }\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a12316b8220ad1718884cad5aa06f67b4}{get\_doubles}}(}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00030}00030         self,}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00031}00031         value: float = 0.0,}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00032}00032         minimum: float = float(\textcolor{stringliteral}{"{}-\/inf"{}}),}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00033}00033         maximum: float = float(\textcolor{stringliteral}{"{}inf"{}})}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00034}00034     ) -\/> Tuple[List[float], bool]:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00035}00035         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00036}00036 \textcolor{stringliteral}{        Get all input lines }\textcolor{keyword}{as} floats, \textcolor{keyword}{as} well \textcolor{keyword}{as} a bool demonstrating the status.}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00037}00037 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00038}00038         If the dialog was accepted \textcolor{keywordflow}{and} all lines could be successfully converted to floats,}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00039}00039         then success \textcolor{keywordflow}{is} set to \textcolor{keyword}{True}. Otherwise, the success \textcolor{keywordflow}{is} \textcolor{keyword}{False}.}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00040}00040 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00041}00041         Any floats that could \textcolor{keywordflow}{not} be converted (\textcolor{keywordflow}{or} on a rejected dialog) are set to NaN.}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00042}00042 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00043}00043         Args:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00044}00044             value (float): The default value to set the spinners to. Defaults to 0.}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00045}00045             minimum (float): The minimum possible value. Defaults to -\/INF.}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00046}00046             maximum (float): The maximum possible value. Defaults to INF.}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00047}\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a12316b8220ad1718884cad5aa06f67b4}{00047}} }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00048}00048         Returns:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00049}00049             Tuple[List[float], bool]: Every line\textcolor{stringliteral}{'s value as a float and the success as a bool.}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00050}00050 \textcolor{stringliteral}{        "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00051}00051 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00052}00052 \textcolor{stringliteral}{        spin\_boxes = self.\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_aad252ca3364047fca4910df9a309c632}{\_make\_layout}}(QtWidgets.QDoubleSpinBox)}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00053}00053 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00054}00054 \textcolor{stringliteral}{        }\textcolor{keywordflow}{for} spin\_box \textcolor{keywordflow}{in} spin\_boxes:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00055}00055             spin\_box.setValue(value)}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00056}00056             spin\_box.setMinimum(minimum)}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00057}00057             spin\_box.setMaximum(maximum)}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00058}00058             spin\_box.setMinimumWidth(100)}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00059}00059             spin\_box.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00060}00060 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00061}00061         doubles, success = [float(\textcolor{stringliteral}{"{}nan"{}}) \textcolor{keywordflow}{for} \_ \textcolor{keywordflow}{in} spin\_boxes], \textcolor{keyword}{False}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00062}00062 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00063}00063         \textcolor{keywordflow}{if} self.exec() == QtWidgets.QDialog.DialogCode.Accepted:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00064}00064             success = \textcolor{keyword}{True}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00065}00065             \textcolor{keywordflow}{for} i, spin\_box \textcolor{keywordflow}{in} enumerate(spin\_boxes):}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00066}00066                 \textcolor{keywordflow}{try}:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00067}00067                     doubles[i] = float(spin\_box.text())}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00068}00068                 \textcolor{keywordflow}{except} ValueError:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00069}00069                     success = \textcolor{keyword}{False}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00070}00070 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00071}00071         \textcolor{keywordflow}{return} doubles, success}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00072}00072 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00073}00073     \textcolor{keyword}{def }\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a1b36280a55b269a710ee8c9c1de979be}{get\_texts}}(self) -\/> Tuple[List[str], bool]:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00074}00074         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00075}00075 \textcolor{stringliteral}{        Get all input lines }\textcolor{keyword}{as} strings, \textcolor{keyword}{as} well \textcolor{keyword}{as} a bool demonstrating the status.}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00076}00076 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00077}00077         If the dialog was accepted, then success \textcolor{keywordflow}{is} set to \textcolor{keyword}{True}. Otherwise, the success \textcolor{keywordflow}{is} \textcolor{keyword}{False}.}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00078}00078 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00079}00079         Returns:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00080}00080             tuple[List[str], bool]: Every line\textcolor{stringliteral}{'s text as a str and the success as a bool.}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00081}00081 \textcolor{stringliteral}{        "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00082}00082 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00083}\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a1b36280a55b269a710ee8c9c1de979be}{00083}} \textcolor{stringliteral}{        line\_edits = self.\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_aad252ca3364047fca4910df9a309c632}{\_make\_layout}}(QtWidgets.QLineEdit)}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00084}00084 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00085}00085 \textcolor{stringliteral}{        texts, success = ["{}"{}} \textcolor{keywordflow}{for} \_ \textcolor{keywordflow}{in} line\_edits], \textcolor{keyword}{False}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00086}00086 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00087}00087         \textcolor{keywordflow}{if} self.exec() == QtWidgets.QDialog.DialogCode.Accepted:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00088}00088             success = \textcolor{keyword}{True}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00089}00089 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00090}00090             line\_edit: QtWidgets.QLineEdit}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00091}00091             \textcolor{keywordflow}{for} i, line\_edit \textcolor{keywordflow}{in} enumerate(line\_edits):}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00092}00092                 texts[i] = line\_edit.text()}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00093}00093 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00094}00094         \textcolor{keywordflow}{return} texts, success}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00095}00095 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00096}00096     \textcolor{keyword}{def }\_make\_layout(self, line\_type: Type[LineType]) -\/> List[LineType]:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00097}00097         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00098}00098 \textcolor{stringliteral}{        Make the layout }\textcolor{keyword}{with} a specific line type.}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00099}00099 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00100}00100         Args:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00101}00101             line\_type (Type[LineType]): The type of user-\/editable line to add to the layout.}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00102}00102 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00103}00103         Returns:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00104}00104             List[LineType]: The list of user-\/editable lines based on the ``line\_type``.}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00105}00105         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00106}00106 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00107}00107 \textcolor{stringliteral}{        layout = QtWidgets.QFormLayout(self)}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00108}00108 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00109}00109 \textcolor{stringliteral}{        }\textcolor{keywordflow}{if} self.\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_acc35ed42a77e45ded1d1c7e5a2b62e4c}{description}} \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00110}00110             layout.addRow(QtWidgets.QLabel(self.\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_acc35ed42a77e45ded1d1c7e5a2b62e4c}{description}}, self))}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00111}00111 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00112}00112         lines = []}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00113}00113         \textcolor{keywordflow}{for} label \textcolor{keywordflow}{in} self.\mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a7d8b4ebf6f12808a19683ecf2dbb2862}{labels}}:}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00114}00114             lines.append(line\_type(self))}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00115}00115             layout.addRow(QtWidgets.QLabel(label), lines[-\/1])}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00116}00116 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00117}00117         button\_box = QtWidgets.QDialogButtonBox(}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00118}00118             QtWidgets.QDialogButtonBox.StandardButton.Ok |}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00119}00119             QtWidgets.QDialogButtonBox.StandardButton.Cancel, QtCore.Qt.Orientation.Horizontal,}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00120}00120             self)}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00121}00121         button\_box.accepted.connect(self.accept)}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00122}00122         button\_box.rejected.connect(self.reject)}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00123}00123         layout.addRow(button\_box)}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00124}00124 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00125}00125         self.setLayout(layout)}
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00126}00126 }
+\DoxyCodeLine{\Hypertarget{multi__line__input__dialog_8py_source_l00127}00127         \textcolor{keywordflow}{return} lines}
+
+\end{DoxyCode}

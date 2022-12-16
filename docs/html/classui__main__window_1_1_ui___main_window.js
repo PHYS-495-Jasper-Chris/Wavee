@@ -1,0 +1,26 @@
+var classui__main__window_1_1_ui___main_window =
+[
+    [ "retranslateUi", "classui__main__window_1_1_ui___main_window.html#aaed8960ea547d0c07d54ea1a6cb92c93", null ],
+    [ "setupUi", "classui__main__window_1_1_ui___main_window.html#a6ab51bef11978c9ba558d1367ba3c513", null ],
+    [ "button_menu", "classui__main__window_1_1_ui___main_window.html#a5ec58e51f6619527efa6839b662bf3e5", null ],
+    [ "central_widget", "classui__main__window_1_1_ui___main_window.html#a6a0809c7f13a2143e001b0f5b442937a", null ],
+    [ "charge_layout", "classui__main__window_1_1_ui___main_window.html#acff27c9f84f1c0ac0e592a3e40687d9e", null ],
+    [ "charge_widget", "classui__main__window_1_1_ui___main_window.html#a0bc3bd8f72b61dc1126dbfccab43848c", null ],
+    [ "circle_charge_drawing", "classui__main__window_1_1_ui___main_window.html#a862b49491b6f87c1f66e2a7e2ef76ce5", null ],
+    [ "circle_charge_label", "classui__main__window_1_1_ui___main_window.html#a4f201cda854322eb30531ac6e8c247f0", null ],
+    [ "equation_layout", "classui__main__window_1_1_ui___main_window.html#af3bc45da4681cb869037768c5d8a427e", null ],
+    [ "graph_widget", "classui__main__window_1_1_ui___main_window.html#aa5c1c012041d4b060135f3f1306939ae", null ],
+    [ "grid_layout", "classui__main__window_1_1_ui___main_window.html#a6ca4067208df022313a0e0044f38dc2c", null ],
+    [ "line_charge_drawing", "classui__main__window_1_1_ui___main_window.html#a0297491eb7281d8dffec18d9033d68d2", null ],
+    [ "line_charge_label", "classui__main__window_1_1_ui___main_window.html#ab8e3083de4dfe507b6542d2f1816f24f", null ],
+    [ "menu_bar", "classui__main__window_1_1_ui___main_window.html#afed4a5f3fceaa60fba4ae13856e53199", null ],
+    [ "net_mag_equation_label", "classui__main__window_1_1_ui___main_window.html#a064f51feb59858b0312035ed4c28e640", null ],
+    [ "point_charge_circle", "classui__main__window_1_1_ui___main_window.html#a24f39b6a855c18242b70ee5d6904c157", null ],
+    [ "point_charge_label", "classui__main__window_1_1_ui___main_window.html#adc65f9d0a0d804096dedc43694c79d6b", null ],
+    [ "refresh_button", "classui__main__window_1_1_ui___main_window.html#a22554097bbb416d0d0dc783f370d6690", null ],
+    [ "ring_charge_drawing", "classui__main__window_1_1_ui___main_window.html#a96726cf3c99fab920ee09d5813e6aba9", null ],
+    [ "ring_charge_label", "classui__main__window_1_1_ui___main_window.html#a3475a084dbc38285ba223f81d0d267ef", null ],
+    [ "status_bar", "classui__main__window_1_1_ui___main_window.html#a42e45206462b65a6f8adcfd0ba707a5c", null ],
+    [ "x_equation_label", "classui__main__window_1_1_ui___main_window.html#ad387de028624c959a03e3ef62deecb84", null ],
+    [ "y_equation_label", "classui__main__window_1_1_ui___main_window.html#aa8f1288a6ab75d30cf7a6dff9f68776c", null ]
+];

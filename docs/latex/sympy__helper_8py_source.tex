@@ -1,0 +1,90 @@
+\hypertarget{sympy__helper_8py_source}{}\doxysection{sympy\+\_\+helper.\+py}
+\label{sympy__helper_8py_source}\index{src/equations/sympy\_helper.py@{src/equations/sympy\_helper.py}}
+\mbox{\hyperlink{sympy__helper_8py}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00001}\mbox{\hyperlink{namespaceequations_1_1sympy__helper}{00001}} \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00002}00002 \textcolor{stringliteral}{A helper module providing convenience functions for sympy.}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00003}00003 \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00004}00004 }
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00005}00005 \textcolor{keyword}{from} typing \textcolor{keyword}{import} Iterable, List, Union}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00006}00006 }
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00007}00007 \textcolor{keyword}{import} sympy}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00008}00008 \textcolor{keyword}{import} sympy.core.numbers \textcolor{keyword}{as} nums}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00009}00009 }
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00010}00010 }
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00011}00011 \textcolor{keyword}{def }\_remove\_infinities(inequality: sympy.Basic) -\/> List[sympy.Rel]:}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00012}00012     \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00013}00013 \textcolor{stringliteral}{    Remove infinities }\textcolor{keyword}{from} inequality, returning a list of simplified inequalities.}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00014}00014 }
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00015}00015     ``inequality`` \textcolor{keywordflow}{is} either a list of inequalities \textcolor{keywordflow}{or} a single inequality.}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00016}00016     \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00017}00017 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00018}00018 \textcolor{stringliteral}{    }\textcolor{keywordflow}{if} len(inequality.args) <= 0:}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00019}00019         \textcolor{keywordflow}{return} []}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00020}00020 }
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00021}00021     ineqs = []}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00022}00022 }
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00023}00023     \textcolor{keywordflow}{if} isinstance(inequality.args[0], sympy.Rel):}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00024}00024         \textcolor{keywordflow}{for} ineq \textcolor{keywordflow}{in} inequality.args:}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00025}00025             \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} ineq.has(nums.Infinity) \textcolor{keywordflow}{and} \textcolor{keywordflow}{not} ineq.has(nums.NegativeInfinity):}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00026}00026                 ineqs.append(ineq)}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00027}00027     \textcolor{keywordflow}{else}:}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00028}00028         ineqs = ([inequality] \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} inequality.has(nums.Infinity)}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00029}00029                  \textcolor{keywordflow}{and} \textcolor{keywordflow}{not} inequality.has(nums.NegativeInfinity) \textcolor{keywordflow}{else} [])}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00030}00030 }
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00031}00031     \textcolor{keywordflow}{return} ineqs  \textcolor{comment}{\# type: ignore}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00032}00032 }
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00033}00033 }
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00034}00034 \textcolor{keyword}{def }clean\_inequality(inequality: Union[sympy.Rel, Iterable[sympy.Rel]],}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00035}00035                      symbol: sympy.Symbol) -\/> sympy.And:}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00036}00036     \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00037}00037 \textcolor{stringliteral}{    Builds an easy-\/to-\/understand inequality, solving }\textcolor{keywordflow}{for} ``symbol`` \textcolor{keywordflow}{and} removing infinities.}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00038}00038     \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00039}00039 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00040}00040 \textcolor{stringliteral}{    ineqs = \_remove\_infinities(sympy.reduce\_inequalities(inequality, [symbol]))}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00041}\mbox{\hyperlink{namespaceequations_1_1sympy__helper_a0a767eba900490a4e89481ed03485806}{00041}} \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00042}00042 \textcolor{stringliteral}{    }\textcolor{keywordflow}{return} sympy.And(*ineqs)}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00043}00043 }
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00044}00044 }
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00045}00045 \textcolor{keyword}{def }round\_symbolic(expression: sympy.Basic, digits: int) -\/> sympy.Basic:}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00046}00046     \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00047}00047 \textcolor{stringliteral}{    Rounds floats within sympy expression to given digits.}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00048}00048 \textcolor{stringliteral}{    "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00049}00049 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00050}00050 \textcolor{stringliteral}{    }\textcolor{keywordflow}{if} digits < 0:}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00051}00051         \textcolor{keywordflow}{return} expression}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00052}\mbox{\hyperlink{namespaceequations_1_1sympy__helper_a4719f3878111cbb9f63f900be936f1dd}{00052}} }
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00053}00053     \textcolor{keywordflow}{return} expression.xreplace(}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00054}00054         \{n.evalf(): round(n, digits) \textcolor{keywordflow}{for} n \textcolor{keywordflow}{in} expression.atoms(sympy.Number)\})}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00055}00055 }
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00056}00056 }
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00057}00057 \textcolor{keyword}{def }make\_source(full\_eqn: str) -\/> str:}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00058}00058     \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00059}00059 \textcolor{stringliteral}{    Makes a MathJax string representation of a LaTeX equation string.}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00060}00060 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00061}00061 \textcolor{stringliteral}{    Args:}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00062}00062 \textcolor{stringliteral}{        full\_eqn (str): The full LaTeX equation to render.}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00063}00063 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00064}00064 \textcolor{stringliteral}{    Returns:}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00065}00065 \textcolor{stringliteral}{        str: The MathJax HTML to render, containing the relevant equation.}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00066}00066 \textcolor{stringliteral}{    "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00067}00067 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00068}00068 \textcolor{stringliteral}{    }\textcolor{keywordflow}{return} f\textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00069}00069 \textcolor{stringliteral}{<!DOCTYPE html>}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00070}\mbox{\hyperlink{namespaceequations_1_1sympy__helper_ae535c7a01586219367545bcc770f8760}{00070}} \textcolor{stringliteral}{<html>}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00071}00071 \textcolor{stringliteral}{<head>}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00072}00072 \textcolor{stringliteral}{  <meta charset="{}utf-\/8"{}}>}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00073}00073   <meta name=\textcolor{stringliteral}{"{}viewport"{}} content=\textcolor{stringliteral}{"{}width=device-\/width"{}}>}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00074}00074   <title>MathJax example</title>}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00075}00075   <script src=\textcolor{stringliteral}{"{}https://polyfill.io/v3/polyfill.min.js?features=es6"{}}></script>}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00076}00076   <script id=\textcolor{stringliteral}{"{}MathJax-\/script"{}} \textcolor{keyword}{async}}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00077}00077           src=\textcolor{stringliteral}{"{}https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-\/mml-\/chtml.js"{}}>}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00078}00078   </script>}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00079}00079 </head>}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00080}00080 <body>}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00081}00081     <p>\$\$\{full\_eqn\}\$\$</p>}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00082}00082 </body>}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00083}00083 </html>}
+\DoxyCodeLine{\Hypertarget{sympy__helper_8py_source_l00084}00084 \textcolor{stringliteral}{"{}"{}"{}}}
+
+\end{DoxyCode}

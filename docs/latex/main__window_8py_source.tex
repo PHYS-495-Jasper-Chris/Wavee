@@ -1,0 +1,289 @@
+\hypertarget{main__window_8py_source}{}\doxysection{main\+\_\+window.\+py}
+\label{main__window_8py_source}\index{src/view/main\_window.py@{src/view/main\_window.py}}
+\mbox{\hyperlink{main__window_8py}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00001}\mbox{\hyperlink{namespaceview_1_1main__window}{00001}} \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00002}00002 \textcolor{stringliteral}{The main window.}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00003}00003 \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00004}00004 \textcolor{keyword}{import} os}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00005}00005 \textcolor{keyword}{import} sys}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00006}00006 \textcolor{keyword}{from} typing \textcolor{keyword}{import} Tuple}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00007}00007 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00008}00008 \textcolor{keyword}{import} pyqtgraph}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00009}00009 \textcolor{keyword}{from} PyQt6 \textcolor{keyword}{import} QtCore, QtGui, QtWebEngineWidgets, QtWidgets, uic}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00010}00010 \textcolor{keyword}{from} sympy \textcolor{keyword}{import} latex}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00011}00011 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00012}00012 \textcolor{comment}{\# pylint: disable=import-\/error}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00013}00013 \textcolor{keyword}{from} \mbox{\hyperlink{namespaceequations_1_1constants}{equations.constants}} \textcolor{keyword}{import} Point2D}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00014}00014 \textcolor{keyword}{from} \mbox{\hyperlink{namespaceequations_1_1equation__thread}{equations.equation\_thread}} \textcolor{keyword}{import} EquationThread}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00015}00015 \textcolor{keyword}{from} \mbox{\hyperlink{namespaceequations_1_1sympy__helper}{equations.sympy\_helper}} \textcolor{keyword}{import} make\_source}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00016}00016 \textcolor{keyword}{from} \mbox{\hyperlink{namespaceview_1_1draggable__label}{view.draggable\_label}} \textcolor{keyword}{import} DraggableLabel}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00017}00017 \textcolor{keyword}{from} \mbox{\hyperlink{namespaceview_1_1droppable__plot__widget}{view.droppable\_plot\_widget}} \textcolor{keyword}{import} DroppablePlotWidget}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00018}00018 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00019}00019 \textcolor{comment}{\# pylint: enable=import-\/error}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00020}00020 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00021}00021 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00022}00022 \textcolor{keyword}{class }\mbox{\hyperlink{classview_1_1main__window_1_1_main_window}{MainWindow}}(QtWidgets.QMainWindow):}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00023}00023     \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00024}00024 \textcolor{stringliteral}{    The main window, holding sub-\/views.}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00025}00025 \textcolor{stringliteral}{    "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00026}00026 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00027}\mbox{\hyperlink{classview_1_1main__window_1_1_main_window}{00027}} \textcolor{stringliteral}{    }\textcolor{comment}{\# Type annotations for UI elements}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00028}00028     central\_widget: QtWidgets.QWidget}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00029}00029     grid\_layout: QtWidgets.QGridLayout}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00030}00030     graph\_widget: DroppablePlotWidget}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00031}00031     net\_mag\_equation\_label: QtWebEngineWidgets.QWebEngineView}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00032}00032     x\_equation\_label: QtWebEngineWidgets.QWebEngineView}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00033}00033     y\_equation\_label: QtWebEngineWidgets.QWebEngineView}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00034}00034     point\_charge\_circle: DraggableLabel}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00035}00035     line\_charge\_drawing: DraggableLabel}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00036}00036     circle\_charge\_drawing: DraggableLabel}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00037}00037     ring\_charge\_drawing: DraggableLabel}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00038}00038     refresh\_button: QtWidgets.QPushButton}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00039}00039     menu\_bar: QtWidgets.QMenuBar}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00040}00040     status\_bar: QtWidgets.QStatusBar}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00041}00041 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00042}00042     \textcolor{keyword}{def }\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ac69022ec76d5c5d06414470dc97b52fa}{\_\_init\_\_}}(self) -\/> None:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00043}00043         super().\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ac69022ec76d5c5d06414470dc97b52fa}{\_\_init\_\_}}()}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00044}\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ac69022ec76d5c5d06414470dc97b52fa}{00044}} }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00045}00045         uic.load\_ui.loadUi(os.path.join(sys.path[0], \textcolor{stringliteral}{"{}view/ui/main\_window.ui"{}}), self)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00046}00046 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00047}00047         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}} = \mbox{\hyperlink{classequations_1_1equation__thread_1_1_equation_thread}{EquationThread}}(self.graph\_widget.graph\_window, self)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00048}00048         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}}.started.connect(self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a6ac760b1500b2140bc557f7d909de10d}{\_clear\_equations}})}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00049}\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{00049}}         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}}.finished.connect(self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a436c3c292f8c93a212e6e787b6f00981}{\_update\_equations}})}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00050}00050 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00051}00051         self.graph\_widget.graph\_window.charges\_updated = self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a6e28d43f86d0e8ac18d52093cc2a75c8}{\_charges\_updated}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00052}00052 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00053}00053         self.refresh\_button.clicked.connect(self.graph\_widget.refresh\_button\_pressed)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00054}00054 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00055}00055         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a3fb04f135606f25b0d130b5c5bd2d099}{proxy}} = pyqtgraph.SignalProxy(self.graph\_widget.scene().sigMouseMoved,}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00056}00056                                            rateLimit=60,}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00057}\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a3fb04f135606f25b0d130b5c5bd2d099}{00057}}                                            slot=self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab76980dfd6ee32f807a070c900062d63}{\_mouse\_moved}})}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00058}00058 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00059}00059         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a15cc94545e11f49756a8e8f189b99aeb}{\_add\_menus}}()}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00060}00060         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a1fc740661311baa4753ebe934befb4e9}{\_paint\_shapes}}()}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00061}00061         self.graph\_widget.build\_plots()}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00062}00062         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}}.start()}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00063}00063 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00064}00064         self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00065}00065 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00066}00066         self.show()}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00067}00067 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00068}00068     \textcolor{keyword}{def }\_add\_menus(self) -\/> None:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00069}00069         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00070}00070 \textcolor{stringliteral}{        Add menus }\textcolor{keywordflow}{and} actions to window.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00071}00071         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00072}00072 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00073}00073 \textcolor{stringliteral}{        }\textcolor{comment}{\# -\/-\/-\/-\/ GRAPH MENU OPTIONS -\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00074}00074         graph\_menu = self.menu\_bar.addMenu(\textcolor{stringliteral}{"{}Graph"{}})}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00075}00075         refresh\_graph\_action = graph\_menu.addAction(\textcolor{stringliteral}{"{}Refresh Graph"{}},}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00076}00076                                                     self.graph\_widget.refresh\_button\_pressed)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00077}00077         refresh\_graph\_action.setShortcuts([\textcolor{stringliteral}{"{}Ctrl+R"{}}, \textcolor{stringliteral}{"{}F5"{}}])}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00078}00078         graph\_menu.addAction(\textcolor{stringliteral}{"{}Increase resolution"{}}, \textcolor{stringliteral}{"{}Ctrl+="{}}, self.graph\_widget.increase\_resolution)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00079}00079         graph\_menu.addAction(\textcolor{stringliteral}{"{}Decrease resolution"{}}, \textcolor{stringliteral}{"{}Ctrl+-\/"{}}, self.graph\_widget.decrease\_resolution)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00080}00080         graph\_menu.addAction(\textcolor{stringliteral}{"{}Reset resolution"{}}, \textcolor{stringliteral}{"{}Ctrl+0"{}}, self.graph\_widget.reset\_resolution)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00081}00081         graph\_menu.addAction(\textcolor{stringliteral}{"{}Center at origin"{}}, \textcolor{stringliteral}{"{}Ctrl+O"{}}, self.graph\_widget.center\_origin)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00082}00082         graph\_menu.addAction(\textcolor{stringliteral}{"{}Default range"{}}, \textcolor{stringliteral}{"{}Ctrl+D"{}}, self.graph\_widget.default\_range)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00083}00083         graph\_menu.addAction(\textcolor{stringliteral}{"{}Toggle fixed aspect ratio"{}}, \textcolor{stringliteral}{"{}Ctrl+A"{}},}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00084}00084                              self.graph\_widget.toggle\_even\_aspect\_ratio)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00085}00085 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00086}00086         \textcolor{comment}{\# -\/-\/-\/-\/ CHARGES MENU OPTIONS -\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00087}00087         charge\_menu = self.menu\_bar.addMenu(\textcolor{stringliteral}{"{}Charges"{}})}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00088}00088         charge\_menu.addAction(\textcolor{stringliteral}{"{}Remove last charge"{}}, \textcolor{stringliteral}{"{}Ctrl+Backspace"{}},}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00089}00089                               self.graph\_widget.remove\_charge)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00090}00090         charge\_menu.addAction(\textcolor{stringliteral}{"{}Undo last removal"{}}, \textcolor{stringliteral}{"{}Ctrl+Shift+Backspace"{}},}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00091}00091                               self.graph\_widget.undo\_remove\_charge)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00092}00092         charge\_menu.addAction(\textcolor{stringliteral}{"{}Remove all charges"{}}, \textcolor{stringliteral}{"{}Ctrl+Alt+Backspace"{}},}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00093}00093                               self.graph\_widget.graph\_window.remove\_all\_charges)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00094}00094         charge\_menu.addAction(\textcolor{stringliteral}{"{}Re-\/add all charges"{}}, \textcolor{stringliteral}{"{}Ctrl+Shift+Alt+Backspace"{}},}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00095}00095                               self.graph\_widget.graph\_window.readd\_all\_charges)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00096}00096 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00097}00097         \textcolor{comment}{\# -\/-\/-\/-\/ EQUATION MENU OPTIONS -\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00098}00098         equation\_menu = self.menu\_bar.addMenu(\textcolor{stringliteral}{"{}Equations"{}})}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00099}00099         equation\_menu.addAction(\textcolor{stringliteral}{"{}Increase digits shown"{}}, \textcolor{stringliteral}{"{}Ctrl+]"{}}, self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ae430d68e21464cf75860ff08a3918353}{\_increment\_equations\_digits}})}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00100}00100         equation\_menu.addAction(\textcolor{stringliteral}{"{}Decrease digits shown"{}}, \textcolor{stringliteral}{"{}Ctrl+["{}}, self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_aa7beb3e498b0fac93d87baba987df552}{\_decrement\_equations\_digits}})}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00101}00101 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00102}00102     \textcolor{keyword}{def }\_paint\_shapes(self) -\/> None:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00103}00103         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00104}00104 \textcolor{stringliteral}{        Create an icon }\textcolor{keywordflow}{for} each charge type \textcolor{keywordflow}{in} the right hand drag \textcolor{keywordflow}{and} drop menu.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00105}00105         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00106}00106 \textcolor{stringliteral}{        self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_af400ffd87f66f97eb7e91818bb4a52b8}{\_paint\_point\_charge\_icon}}()}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00107}00107 \textcolor{stringliteral}{        self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab28ef246395fb32f7295adb6f94dab82}{\_paint\_infinite\_line\_charge\_icon}}()}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00108}00108 \textcolor{stringliteral}{        self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_aa36f6c401d514c3f5b82fd11a173bad9}{\_paint\_circle\_charge\_icon}}()}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00109}00109 \textcolor{stringliteral}{        self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a3b2371d4ab66e92c9da26f4e17282f1e}{\_paint\_ring\_charge\_icon}}()}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00110}00110 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00111}00111 \textcolor{stringliteral}{    }\textcolor{keyword}{def }\_paint\_point\_charge\_icon(self) -\/> None:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00112}00112         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00113}00113 \textcolor{stringliteral}{        Paint the drag }\textcolor{keywordflow}{and} drop circle \textcolor{keywordflow}{for} point charge on the right hand column.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00114}00114 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00115}00115         This \textcolor{keywordflow}{is} a solid red circle.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00116}00116         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00117}00117 \textcolor{stringliteral}{        }\textcolor{comment}{\# Paint circle}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00118}00118         canvas = QtGui.QPixmap(110, 110)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00119}00119         canvas.fill(self.palette().color(self.backgroundRole()))}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00120}00120 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00121}00121         painter = QtGui.QPainter(canvas)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00122}00122         painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00123}00123         painter.setPen(QtGui.QPen(QtCore.Qt.GlobalColor.red, 5))}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00124}00124         painter.setBrush(QtCore.Qt.GlobalColor.red)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00125}00125         painter.drawEllipse(5, 5, 100, 100)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00126}00126         painter.end()}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00127}00127 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00128}00128         self.point\_charge\_circle.setPixmap(canvas)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00129}00129         self.point\_charge\_circle.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00130}00130         self.point\_charge\_circle.label\_type = DraggableLabel.LabelTypes.POINT\_CHARGE}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00131}00131 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00132}00132     \textcolor{keyword}{def }\_paint\_infinite\_line\_charge\_icon(self) -\/> None:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00133}00133         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00134}00134 \textcolor{stringliteral}{        Paint the drag }\textcolor{keywordflow}{and} drop line \textcolor{keywordflow}{for} line charge elements on the right hand column.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00135}00135 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00136}00136         This \textcolor{keywordflow}{is} a solid vertical line.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00137}00137         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00138}00138 \textcolor{stringliteral}{        }\textcolor{comment}{\# Paint straight line}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00139}00139         canvas = QtGui.QPixmap(110, 110)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00140}00140         canvas.fill(self.palette().color(self.backgroundRole()))}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00141}00141 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00142}00142         painter = QtGui.QPainter(canvas)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00143}00143         painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00144}00144         painter.setPen(QtGui.QPen(QtCore.Qt.GlobalColor.red, 5))}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00145}00145         painter.drawLine(55, 5, 55, 100)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00146}00146         painter.end()}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00147}00147 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00148}00148         self.line\_charge\_drawing.setPixmap(canvas)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00149}00149         self.line\_charge\_drawing.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00150}00150         self.line\_charge\_drawing.label\_type = DraggableLabel.LabelTypes.INFINITE\_LINE\_CHARGE}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00151}00151 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00152}00152     \textcolor{keyword}{def }\_paint\_circle\_charge\_icon(self) -\/> None:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00153}00153         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00154}00154 \textcolor{stringliteral}{        Paint the drag }\textcolor{keywordflow}{and} drop circle \textcolor{keywordflow}{for} circle charge elements on the right hand column.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00155}00155 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00156}00156         This \textcolor{keywordflow}{is} a transparent red circle \textcolor{keyword}{with} a solid red border.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00157}00157         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00158}00158 \textcolor{stringliteral}{        }\textcolor{comment}{\# Paint circle charge}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00159}00159         canvas = QtGui.QPixmap(110, 110)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00160}00160         canvas.fill(self.palette().color(self.backgroundRole()))}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00161}00161 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00162}00162         painter = QtGui.QPainter(canvas)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00163}00163         painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00164}00164         painter.setPen(QtGui.QPen(QtCore.Qt.GlobalColor.red, 5))}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00165}00165         painter.setBrush(QtGui.QBrush(QtGui.QColor(255, 0, 0, alpha=50)))}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00166}00166         painter.drawEllipse(5, 5, 100, 100)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00167}00167         painter.end()}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00168}00168 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00169}00169         self.circle\_charge\_drawing.setPixmap(canvas)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00170}00170         self.circle\_charge\_drawing.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00171}00171         self.circle\_charge\_drawing.label\_type = DraggableLabel.LabelTypes.CIRCLE\_CHARGE}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00172}00172 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00173}00173     \textcolor{keyword}{def }\_paint\_ring\_charge\_icon(self) -\/> None:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00174}00174         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00175}00175 \textcolor{stringliteral}{        Paint the drag }\textcolor{keywordflow}{and} drop ring \textcolor{keywordflow}{for} ring charge elements on the right hand column.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00176}00176 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00177}00177         This \textcolor{keywordflow}{is} a completely transparent circle \textcolor{keyword}{with} a thick red border.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00178}00178         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00179}00179 \textcolor{stringliteral}{        }\textcolor{comment}{\# Paint ring charge}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00180}00180         canvas = QtGui.QPixmap(110, 110)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00181}00181         canvas.fill(self.palette().color(self.backgroundRole()))}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00182}00182 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00183}00183         painter = QtGui.QPainter(canvas)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00184}00184         painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00185}00185         painter.setPen(QtGui.QPen(QtCore.Qt.GlobalColor.red, 20))}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00186}00186         painter.drawEllipse(10, 10, 90, 90)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00187}00187         painter.end()}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00188}00188 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00189}00189         self.ring\_charge\_drawing.setPixmap(canvas)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00190}00190         self.ring\_charge\_drawing.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00191}00191         self.ring\_charge\_drawing.label\_type = DraggableLabel.LabelTypes.RING\_CHARGE}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00192}00192 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00193}00193     \textcolor{keyword}{def }\_mouse\_moved(self, event: Tuple[QtCore.QPointF]) -\/> \textcolor{keywordtype}{None}:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00194}00194         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00195}00195 \textcolor{stringliteral}{        Callback executed when the mouse moves }\textcolor{keywordflow}{in} the graph widget.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00196}00196 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00197}00197         Args:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00198}00198             event (Tuple[QPointF]): A tuple containing the position of the mouse.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00199}00199         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00200}00200 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00201}00201 \textcolor{stringliteral}{        pos = event[0]}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00202}00202 \textcolor{stringliteral}{        }\textcolor{keywordflow}{if} self.graph\_widget.sceneBoundingRect().contains(pos):}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00203}00203             mouse\_point: QtCore.QPointF = self.graph\_widget.get\_pi\_vb()[1].mapSceneToView(pos)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00204}00204             x\_pos, y\_pos = mouse\_point.x(), mouse\_point.y()}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00205}00205             ef\_mag\_net = self.graph\_widget.graph\_window.net\_electric\_field(Point2D(x\_pos, y\_pos))}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00206}00206 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00207}00207             x\_fs = \textcolor{stringliteral}{"{}e"{}} \textcolor{keywordflow}{if} abs(x\_pos) > 1e5 \textcolor{keywordflow}{or} (x\_pos != 0.0 \textcolor{keywordflow}{and} abs(x\_pos) < 1e-\/2) \textcolor{keywordflow}{else} \textcolor{stringliteral}{"{}f"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00208}00208             y\_fs = \textcolor{stringliteral}{"{}e"{}} \textcolor{keywordflow}{if} abs(y\_pos) > 1e5 \textcolor{keywordflow}{or} (y\_pos != 0.0 \textcolor{keywordflow}{and} abs(y\_pos) < 1e-\/2) \textcolor{keywordflow}{else} \textcolor{stringliteral}{"{}f"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00209}00209             text = f\textcolor{stringliteral}{"{}X: \{x\_pos:+.2\{x\_fs\}\} Y: \{y\_pos:+.2\{y\_fs\}\} Magnitude: \{ef\_mag\_net:.6g\}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00210}00210 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00211}00211             self.graph\_widget.setToolTip(text)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00212}00212             self.status\_bar.showMessage(text)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00213}00213 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00214}00214     \textcolor{keyword}{def }\_charges\_updated(self) -\/> None:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00215}00215         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00216}00216 \textcolor{stringliteral}{        When charges change, do several things:}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00217}00217 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00218}00218 \textcolor{stringliteral}{        1.) Reload the graphs.}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00219}00219 \textcolor{stringliteral}{        2.) Reload the equations (this }\textcolor{keywordflow}{is} \_\_really\_\_ slow).}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00220}00220         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00221}00221 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00222}00222 \textcolor{stringliteral}{        self.graph\_widget.charges\_updated()}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00223}00223 \textcolor{stringliteral}{        self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}}.start()}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00224}00224 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00225}00225 \textcolor{stringliteral}{    }\textcolor{keyword}{def }\_update\_equations(self) -\/> None:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00226}00226         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00227}00227 \textcolor{stringliteral}{        Read the values }\textcolor{keyword}{from} the equations thread \textcolor{keywordflow}{and} update the labels.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00228}00228         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00229}00229 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00230}00230 \textcolor{stringliteral}{        mag\_eqns = self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}}.mag\_eqns}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00231}00231 \textcolor{stringliteral}{        x\_eqns = self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}}.x\_eqns}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00232}00232 \textcolor{stringliteral}{        y\_eqns = self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}}.y\_eqns}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00233}00233 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00234}00234 \textcolor{stringliteral}{        mag\_html = "{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00235}00235         \textcolor{keywordflow}{for} i, mag\_eqn \textcolor{keywordflow}{in} enumerate(mag\_eqns):}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00236}00236             mag\_html += f\textcolor{stringliteral}{"{}E\_\{i\}=\{latex(mag\_eqn)\},"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00237}00237 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00238}00238         x\_html = \textcolor{stringliteral}{"{}E\_x(x,y)="{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00239}00239         \textcolor{keywordflow}{for} i, x\_eqn \textcolor{keywordflow}{in} enumerate(x\_eqns):}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00240}00240             \textcolor{keywordflow}{if} len(x\_eqns) > 1:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00241}00241                 x\_html += f\textcolor{stringliteral}{"{}\(\backslash\)\(\backslash\)left(\{latex(x\_eqn)\}\(\backslash\)\(\backslash\)right)+"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00242}00242             \textcolor{keywordflow}{else}:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00243}00243                 x\_html += f\textcolor{stringliteral}{"{}\{latex(x\_eqn)\}+"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00244}00244 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00245}00245         y\_html = \textcolor{stringliteral}{"{}E\_y(x,y)="{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00246}00246         \textcolor{keywordflow}{for} i, y\_eqn \textcolor{keywordflow}{in} enumerate(y\_eqns):}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00247}00247             \textcolor{keywordflow}{if} len(y\_eqns) > 1:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00248}00248                 y\_html += f\textcolor{stringliteral}{"{}\(\backslash\)\(\backslash\)left(\{latex(y\_eqn)\}\(\backslash\)\(\backslash\)right)+"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00249}00249             \textcolor{keywordflow}{else}:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00250}00250                 y\_html += f\textcolor{stringliteral}{"{}\{latex(y\_eqn)\}+"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00251}00251 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00252}00252         self.net\_mag\_equation\_label.setHtml(make\_source(mag\_html[:-\/1]) \textcolor{keywordflow}{if} mag\_eqns \textcolor{keywordflow}{else} \textcolor{stringliteral}{"{}"{}})}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00253}00253         self.x\_equation\_label.setHtml(make\_source(x\_html[:-\/1]) \textcolor{keywordflow}{if} x\_eqns \textcolor{keywordflow}{else} \textcolor{stringliteral}{"{}"{}})}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00254}00254         self.y\_equation\_label.setHtml(make\_source(y\_html[:-\/1]) \textcolor{keywordflow}{if} y\_eqns \textcolor{keywordflow}{else} \textcolor{stringliteral}{"{}"{}})}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00255}00255 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00256}00256     \textcolor{keyword}{def }\_clear\_equations(self) -\/> None:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00257}00257         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00258}00258 \textcolor{stringliteral}{        When the equations thread }\textcolor{keywordflow}{is} running, clear the current equations.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00259}00259         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00260}00260 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00261}00261 \textcolor{stringliteral}{        loading\_html = "{}<center>Loading...</center>"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00262}00262 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00263}00263         self.net\_mag\_equation\_label.setHtml(loading\_html)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00264}00264         self.x\_equation\_label.setHtml(loading\_html)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00265}00265         self.y\_equation\_label.setHtml(loading\_html)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00266}00266 }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00267}00267     \textcolor{keyword}{def }\_increment\_equations\_digits(self):}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00268}00268         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00269}00269 \textcolor{stringliteral}{        Increase the number of digits shown }\textcolor{keywordflow}{in} the equations window by 1.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00270}00270         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00271}00271 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00272}00272 \textcolor{stringliteral}{        self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}}.change\_rounding(1)}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00273}00273 \textcolor{stringliteral}{        self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}}.update\_rounding()}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00274}00274 \textcolor{stringliteral}{        self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a436c3c292f8c93a212e6e787b6f00981}{\_update\_equations}}()}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00275}00275 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00276}00276 \textcolor{stringliteral}{    }\textcolor{keyword}{def }\_decrement\_equations\_digits(self):}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00277}00277         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00278}00278 \textcolor{stringliteral}{        Decrease the number of digits shown }\textcolor{keywordflow}{in} the equations window by 1.}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00279}00279         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00280}00280 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00281}00281 \textcolor{stringliteral}{        self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}}.change\_rounding(-\/1)}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00282}00282 \textcolor{stringliteral}{        self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}}.update\_rounding()}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00283}00283 \textcolor{stringliteral}{        self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a436c3c292f8c93a212e6e787b6f00981}{\_update\_equations}}()}}
+
+\end{DoxyCode}

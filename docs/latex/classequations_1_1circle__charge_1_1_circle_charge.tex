@@ -1,0 +1,145 @@
+\hypertarget{classequations_1_1circle__charge_1_1_circle_charge}{}\doxysection{equations.\+circle\+\_\+charge.\+Circle\+Charge Class Reference}
+\label{classequations_1_1circle__charge_1_1_circle_charge}\index{equations.circle\_charge.CircleCharge@{equations.circle\_charge.CircleCharge}}
+
+
+A single circle of charge, with a position, radius, and a charge density.  
+
+
+Inheritance diagram for equations.\+circle\+\_\+charge.\+Circle\+Charge\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{classequations_1_1circle__charge_1_1_circle_charge}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+None \mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_a1a4274ada04c1f5729f5aade35b97a4e}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, Point2D \mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_a6359bb272d32155e0403e1c8287b6e84}{center}}, float radius, float \mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_aae28e7192f7fd4d2722e2c5205057e63}{charge\+\_\+density}})
+\begin{DoxyCompactList}\small\item\em Initialize the ring of charge with a center, an inner radius, an outer radius, and a charge density. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_ac85de52bfe9f37529409e74a35a3224f}{open\+\_\+menu}} (self, Qt\+Core.\+QPointF pos)
+\begin{DoxyCompactList}\small\item\em Open a context menu for this charge. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_aae28e7192f7fd4d2722e2c5205057e63}{charge\+\_\+density}}
+\item 
+\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_ae7870acee3b33f5354dcc0c883e41ad5}{outer\+\_\+radius}}
+\item 
+\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_a6359bb272d32155e0403e1c8287b6e84}{center}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A single circle of charge, with a position, radius, and a charge density. 
+
+Definition at line \mbox{\hyperlink{circle__charge_8py_source_l00021}{21}} of file \mbox{\hyperlink{circle__charge_8py_source}{circle\+\_\+charge.\+py}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classequations_1_1circle__charge_1_1_circle_charge_a1a4274ada04c1f5729f5aade35b97a4e}\label{classequations_1_1circle__charge_1_1_circle_charge_a1a4274ada04c1f5729f5aade35b97a4e}} 
+\index{equations.circle\_charge.CircleCharge@{equations.circle\_charge.CircleCharge}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!equations.circle\_charge.CircleCharge@{equations.circle\_charge.CircleCharge}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily  None equations.\+circle\+\_\+charge.\+Circle\+Charge.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{Point2D}]{center,  }\item[{float}]{inner\+\_\+radius,  }\item[{float}]{outer\+\_\+radius }\end{DoxyParamCaption})}
+
+
+
+Initialize the ring of charge with a center, an inner radius, an outer radius, and a charge density. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em center} & The center of the ring of charge. \\
+\hline
+{\em inner\+\_\+radius} & The inner radius of the ring of charge. Inside this, there is no \\
+\hline
+{\em charge.} & \\
+\hline
+{\em outer\+\_\+radius} & The outer radius of the ring of charge. Outside this, there is no \\
+\hline
+{\em charge.} & \\
+\hline
+{\em charge\+\_\+density} & The charge density, in C/m$^\wedge$2, between {\ttfamily inner\+\_\+radius} and {\ttfamily outer\+\_\+radius}. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a2f35972b4cffbecab7bd28fe857b357a}{equations.\+ring\+\_\+charge.\+Ring\+Charge}}.
+
+
+
+Definition at line \mbox{\hyperlink{circle__charge_8py_source_l00023}{23}} of file \mbox{\hyperlink{circle__charge_8py_source}{circle\+\_\+charge.\+py}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classequations_1_1circle__charge_1_1_circle_charge_ac85de52bfe9f37529409e74a35a3224f}\label{classequations_1_1circle__charge_1_1_circle_charge_ac85de52bfe9f37529409e74a35a3224f}} 
+\index{equations.circle\_charge.CircleCharge@{equations.circle\_charge.CircleCharge}!open\_menu@{open\_menu}}
+\index{open\_menu@{open\_menu}!equations.circle\_charge.CircleCharge@{equations.circle\_charge.CircleCharge}}
+\doxysubsubsection{\texorpdfstring{open\_menu()}{open\_menu()}}
+{\footnotesize\ttfamily  bool equations.\+circle\+\_\+charge.\+Circle\+Charge.\+open\+\_\+menu (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{Qt\+Core.\+QPointF}]{pos }\end{DoxyParamCaption})}
+
+
+
+Open a context menu for this charge. 
+
+\begin{DoxyVerb}   Configures options associated with the charge.
+\end{DoxyVerb}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & The location to open the menu at.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+bool True if this charge should be deleted, False otherwise. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a92bdbdb847b9440a2fc83d4ecf0d6122}{equations.\+ring\+\_\+charge.\+Ring\+Charge}}.
+
+
+
+Definition at line \mbox{\hyperlink{circle__charge_8py_source_l00037}{37}} of file \mbox{\hyperlink{circle__charge_8py_source}{circle\+\_\+charge.\+py}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classequations_1_1circle__charge_1_1_circle_charge_a6359bb272d32155e0403e1c8287b6e84}\label{classequations_1_1circle__charge_1_1_circle_charge_a6359bb272d32155e0403e1c8287b6e84}} 
+\index{equations.circle\_charge.CircleCharge@{equations.circle\_charge.CircleCharge}!center@{center}}
+\index{center@{center}!equations.circle\_charge.CircleCharge@{equations.circle\_charge.CircleCharge}}
+\doxysubsubsection{\texorpdfstring{center}{center}}
+{\footnotesize\ttfamily equations.\+circle\+\_\+charge.\+Circle\+Charge.\+center}
+
+
+
+Definition at line \mbox{\hyperlink{circle__charge_8py_source_l00065}{65}} of file \mbox{\hyperlink{circle__charge_8py_source}{circle\+\_\+charge.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1circle__charge_1_1_circle_charge_aae28e7192f7fd4d2722e2c5205057e63}\label{classequations_1_1circle__charge_1_1_circle_charge_aae28e7192f7fd4d2722e2c5205057e63}} 
+\index{equations.circle\_charge.CircleCharge@{equations.circle\_charge.CircleCharge}!charge\_density@{charge\_density}}
+\index{charge\_density@{charge\_density}!equations.circle\_charge.CircleCharge@{equations.circle\_charge.CircleCharge}}
+\doxysubsubsection{\texorpdfstring{charge\_density}{charge\_density}}
+{\footnotesize\ttfamily equations.\+circle\+\_\+charge.\+Circle\+Charge.\+charge\+\_\+density}
+
+
+
+Definition at line \mbox{\hyperlink{circle__charge_8py_source_l00052}{52}} of file \mbox{\hyperlink{circle__charge_8py_source}{circle\+\_\+charge.\+py}}.
+
+\mbox{\Hypertarget{classequations_1_1circle__charge_1_1_circle_charge_ae7870acee3b33f5354dcc0c883e41ad5}\label{classequations_1_1circle__charge_1_1_circle_charge_ae7870acee3b33f5354dcc0c883e41ad5}} 
+\index{equations.circle\_charge.CircleCharge@{equations.circle\_charge.CircleCharge}!outer\_radius@{outer\_radius}}
+\index{outer\_radius@{outer\_radius}!equations.circle\_charge.CircleCharge@{equations.circle\_charge.CircleCharge}}
+\doxysubsubsection{\texorpdfstring{outer\_radius}{outer\_radius}}
+{\footnotesize\ttfamily equations.\+circle\+\_\+charge.\+Circle\+Charge.\+outer\+\_\+radius}
+
+
+
+Definition at line \mbox{\hyperlink{circle__charge_8py_source_l00058}{58}} of file \mbox{\hyperlink{circle__charge_8py_source}{circle\+\_\+charge.\+py}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/equations/\mbox{\hyperlink{circle__charge_8py}{circle\+\_\+charge.\+py}}\end{DoxyCompactItemize}
