@@ -1,14 +1,10 @@
 name: Build and Host Documentation
 
-on:
-  push:
-    branches:
-      # - "main"
-      - "*" # all branches for now
+on: [push]
 
 jobs:
   build_docs:
-    runs-on: "ubuntu-latest"
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repo
