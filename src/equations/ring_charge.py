@@ -76,8 +76,8 @@ class RingCharge(BaseCharge):
         q_enc = 0.0
         if radial_distance > self.inner_radius:
             effective_rad = min(radial_distance, self.outer_radius)
-            # q_enc = Integral[ρ, {r, inner, rad}]
-            # Since ρ is constant, this is Pi * (rad^2 - inner^2) * ρ
+            # q_enc = Integral[rho, {r, inner, rad}]
+            # Since rho is constant, this is Pi * (rad^2 - inner^2) * rho
             q_enc = self.charge_density * np.pi * (effective_rad**2 - self.inner_radius**2)
 
         # E = k * q_enc / 2 * pi * r
@@ -169,7 +169,7 @@ class RingCharge(BaseCharge):
         # r = sqrt((x - x0)**2 + (y - y0)**2)
         r_sym = sympy.sqrt((self.center.x - x)**2 + (self.center.y - y)**2)
 
-        # q_enc = Integral[ρ, {r, inner, rad}]
+        # q_enc = Integral[rho, {r, inner, rad}]
         if isinstance(self.charge_density, (float, int)):
             q_enc = self.charge_density * sympy.pi * (r_sym**2 - self.inner_radius**2)
             q_tot = self.charge_density * sympy.pi * (self.outer_radius**2 - self.inner_radius**2)
