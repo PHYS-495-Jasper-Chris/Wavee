@@ -115,7 +115,7 @@ Inheritance diagram for equations.circle_charge.CircleCharge:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a1a4274ada04c1f5729f5aade35b97a4e"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classequations_1_1circle__charge_1_1_circle_charge.html#a1a4274ada04c1f5729f5aade35b97a4e">__init__</a> (self, Point2D <a class="el" href="classequations_1_1circle__charge_1_1_circle_charge.html#a6359bb272d32155e0403e1c8287b6e84">center</a>, float radius, float <a class="el" href="classequations_1_1circle__charge_1_1_circle_charge.html#aae28e7192f7fd4d2722e2c5205057e63">charge_density</a>)</td></tr>
-<tr class="memdesc:a1a4274ada04c1f5729f5aade35b97a4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the ring of charge with a center, an inner radius, an outer radius, and a charge density.  <a href="classequations_1_1circle__charge_1_1_circle_charge.html#a1a4274ada04c1f5729f5aade35b97a4e">More...</a><br /></td></tr>
+<tr class="memdesc:a1a4274ada04c1f5729f5aade35b97a4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the ring of charge with a center, a radius, and a charge density.  <a href="classequations_1_1circle__charge_1_1_circle_charge.html#a1a4274ada04c1f5729f5aade35b97a4e">More...</a><br /></td></tr>
 <tr class="separator:a1a4274ada04c1f5729f5aade35b97a4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac85de52bfe9f37529409e74a35a3224f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classequations_1_1circle__charge_1_1_circle_charge.html#ac85de52bfe9f37529409e74a35a3224f">open_menu</a> (self, QtCore.QPointF pos)</td></tr>
 <tr class="memdesc:ac85de52bfe9f37529409e74a35a3224f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Open a context menu for this charge.  <a href="classequations_1_1circle__charge_1_1_circle_charge.html#ac85de52bfe9f37529409e74a35a3224f">More...</a><br /></td></tr>
@@ -188,7 +188,7 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >A single circle of charge, with a position, radius, and a charge density. </p>
 
-<p class="definition">Definition at line <a class="el" href="circle__charge_8py_source.html#l00021">21</a> of file <a class="el" href="circle__charge_8py_source.html">circle_charge.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="circle__charge_8py_source.html#l00019">19</a> of file <a class="el" href="circle__charge_8py_source.html">circle_charge.py</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1a4274ada04c1f5729f5aade35b97a4e" name="a1a4274ada04c1f5729f5aade35b97a4e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1a4274ada04c1f5729f5aade35b97a4e">&#9670;&#160;</a></span>__init__()</h2>
@@ -212,13 +212,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>inner_radius</em>, </td>
+          <td class="paramname"><em>radius</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>outer_radius</em>&#160;</td>
+          <td class="paramname"><em>charge_density</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -228,22 +228,19 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Initialize the ring of charge with a center, an inner radius, an outer radius, and a charge density. </p>
+<p>Initialize the ring of charge with a center, a radius, and a charge density. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">center</td><td>The center of the ring of charge. </td></tr>
-    <tr><td class="paramname">inner_radius</td><td>The inner radius of the ring of charge. Inside this, there is no </td></tr>
-    <tr><td class="paramname">charge.</td><td></td></tr>
-    <tr><td class="paramname">outer_radius</td><td>The outer radius of the ring of charge. Outside this, there is no </td></tr>
-    <tr><td class="paramname">charge.</td><td></td></tr>
-    <tr><td class="paramname">charge_density</td><td>The charge density, in C/m^2, between <code>inner_radius</code> and <code>outer_radius</code>. </td></tr>
+    <tr><td class="paramname">radius</td><td>The radius of the circle of charge. Outside this, there is no charge. </td></tr>
+    <tr><td class="paramname">charge_density</td><td>The charge density, in C/m^2, inside the <code>radius</code>. </td></tr>
   </table>
   </dd>
 </dl>
 
 <p>Reimplemented from <a class="el" href="classequations_1_1ring__charge_1_1_ring_charge.html#a2f35972b4cffbecab7bd28fe857b357a">equations.ring_charge.RingCharge</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="circle__charge_8py_source.html#l00023">23</a> of file <a class="el" href="circle__charge_8py_source.html">circle_charge.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="circle__charge_8py_source.html#l00029">29</a> of file <a class="el" href="circle__charge_8py_source.html">circle_charge.py</a>.</p>
 
 </div>
 </div>
@@ -288,7 +285,7 @@ bool True if this charge should be deleted, False otherwise. </dd></dl>
 
 <p>Reimplemented from <a class="el" href="classequations_1_1ring__charge_1_1_ring_charge.html#a92bdbdb847b9440a2fc83d4ecf0d6122">equations.ring_charge.RingCharge</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="circle__charge_8py_source.html#l00037">37</a> of file <a class="el" href="circle__charge_8py_source.html">circle_charge.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="circle__charge_8py_source.html#l00044">44</a> of file <a class="el" href="circle__charge_8py_source.html">circle_charge.py</a>.</p>
 
 </div>
 </div>
@@ -305,7 +302,7 @@ bool True if this charge should be deleted, False otherwise. </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="circle__charge_8py_source.html#l00065">65</a> of file <a class="el" href="circle__charge_8py_source.html">circle_charge.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="circle__charge_8py_source.html#l00072">72</a> of file <a class="el" href="circle__charge_8py_source.html">circle_charge.py</a>.</p>
 
 </div>
 </div>
@@ -321,7 +318,7 @@ bool True if this charge should be deleted, False otherwise. </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="circle__charge_8py_source.html#l00052">52</a> of file <a class="el" href="circle__charge_8py_source.html">circle_charge.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="circle__charge_8py_source.html#l00059">59</a> of file <a class="el" href="circle__charge_8py_source.html">circle_charge.py</a>.</p>
 
 </div>
 </div>
@@ -337,7 +334,7 @@ bool True if this charge should be deleted, False otherwise. </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="circle__charge_8py_source.html#l00058">58</a> of file <a class="el" href="circle__charge_8py_source.html">circle_charge.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="circle__charge_8py_source.html#l00065">65</a> of file <a class="el" href="circle__charge_8py_source.html">circle_charge.py</a>.</p>
 
 </div>
 </div>

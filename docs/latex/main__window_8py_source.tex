@@ -26,9 +26,9 @@
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00022}00022 \textcolor{keyword}{class }\mbox{\hyperlink{classview_1_1main__window_1_1_main_window}{MainWindow}}(QtWidgets.QMainWindow):}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00023}00023     \textcolor{stringliteral}{"{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00024}00024 \textcolor{stringliteral}{    The main window, holding sub-\/views.}}
-\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00025}00025 \textcolor{stringliteral}{    "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00025}\mbox{\hyperlink{classview_1_1main__window_1_1_main_window}{00025}} \textcolor{stringliteral}{    "{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00026}00026 \textcolor{stringliteral}{}}
-\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00027}\mbox{\hyperlink{classview_1_1main__window_1_1_main_window}{00027}} \textcolor{stringliteral}{    }\textcolor{comment}{\# Type annotations for UI elements}}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00027}00027 \textcolor{stringliteral}{    }\textcolor{comment}{\# Type annotations for UI elements}}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00028}00028     central\_widget: QtWidgets.QWidget}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00029}00029     grid\_layout: QtWidgets.QGridLayout}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00030}00030     graph\_widget: DroppablePlotWidget}
@@ -43,22 +43,22 @@
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00039}00039     menu\_bar: QtWidgets.QMenuBar}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00040}00040     status\_bar: QtWidgets.QStatusBar}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00041}00041 }
-\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00042}00042     \textcolor{keyword}{def }\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ac69022ec76d5c5d06414470dc97b52fa}{\_\_init\_\_}}(self) -\/> None:}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00042}\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ac69022ec76d5c5d06414470dc97b52fa}{00042}}     \textcolor{keyword}{def }\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ac69022ec76d5c5d06414470dc97b52fa}{\_\_init\_\_}}(self) -\/> None:}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00043}00043         super().\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ac69022ec76d5c5d06414470dc97b52fa}{\_\_init\_\_}}()}
-\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00044}\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ac69022ec76d5c5d06414470dc97b52fa}{00044}} }
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00044}00044 }
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00045}00045         uic.load\_ui.loadUi(os.path.join(sys.path[0], \textcolor{stringliteral}{"{}view/ui/main\_window.ui"{}}), self)}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00046}00046 }
-\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00047}00047         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}} = \mbox{\hyperlink{classequations_1_1equation__thread_1_1_equation_thread}{EquationThread}}(self.graph\_widget.graph\_window, self)}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00047}\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{00047}}         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}} = \mbox{\hyperlink{classequations_1_1equation__thread_1_1_equation_thread}{EquationThread}}(self.graph\_widget.graph\_window, self)}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00048}00048         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}}.started.connect(self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a6ac760b1500b2140bc557f7d909de10d}{\_clear\_equations}})}
-\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00049}\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{00049}}         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}}.finished.connect(self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a436c3c292f8c93a212e6e787b6f00981}{\_update\_equations}})}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00049}00049         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab4db8e000484c7accc0cf4ab41bde2ee}{equations\_thread}}.finished.connect(self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a436c3c292f8c93a212e6e787b6f00981}{\_update\_equations}})}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00050}00050 }
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00051}00051         self.graph\_widget.graph\_window.charges\_updated = self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a6e28d43f86d0e8ac18d52093cc2a75c8}{\_charges\_updated}}}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00052}00052 }
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00053}00053         self.refresh\_button.clicked.connect(self.graph\_widget.refresh\_button\_pressed)}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00054}00054 }
-\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00055}00055         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a3fb04f135606f25b0d130b5c5bd2d099}{proxy}} = pyqtgraph.SignalProxy(self.graph\_widget.scene().sigMouseMoved,}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00055}\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a3fb04f135606f25b0d130b5c5bd2d099}{00055}}         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a3fb04f135606f25b0d130b5c5bd2d099}{proxy}} = pyqtgraph.SignalProxy(self.graph\_widget.scene().sigMouseMoved,}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00056}00056                                            rateLimit=60,}
-\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00057}\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a3fb04f135606f25b0d130b5c5bd2d099}{00057}}                                            slot=self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab76980dfd6ee32f807a070c900062d63}{\_mouse\_moved}})}
+\DoxyCodeLine{\Hypertarget{main__window_8py_source_l00057}00057                                            slot=self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_ab76980dfd6ee32f807a070c900062d63}{\_mouse\_moved}})}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00058}00058 }
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00059}00059         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a15cc94545e11f49756a8e8f189b99aeb}{\_add\_menus}}()}
 \DoxyCodeLine{\Hypertarget{main__window_8py_source_l00060}00060         self.\mbox{\hyperlink{classview_1_1main__window_1_1_main_window_a1fc740661311baa4753ebe934befb4e9}{\_paint\_shapes}}()}

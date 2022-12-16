@@ -20,55 +20,64 @@
 \DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00016}00016 \textcolor{keyword}{class }\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge}{CircleCharge}}(\mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge}{RingCharge}}):}
 \DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00017}00017     \textcolor{stringliteral}{"{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00018}00018 \textcolor{stringliteral}{    A single circle of charge, }\textcolor{keyword}{with} a position, radius, \textcolor{keywordflow}{and} a charge density.}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00019}00019     \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00019}\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge}{00019}}     \textcolor{stringliteral}{"{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00020}00020 \textcolor{stringliteral}{}}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00021}\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge}{00021}} \textcolor{stringliteral}{    }\textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_a1a4274ada04c1f5729f5aade35b97a4e}{\_\_init\_\_}}(self, center: Point2D, radius: float, charge\_density: float) -\/> \textcolor{keywordtype}{None}:}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00022}00022         super().\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_a1a4274ada04c1f5729f5aade35b97a4e}{\_\_init\_\_}}(center, 0.0, radius, charge\_density)}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00023}\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_a1a4274ada04c1f5729f5aade35b97a4e}{00023}} }
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00024}00024     \textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_ac85de52bfe9f37529409e74a35a3224f}{open\_menu}}(self, pos: QtCore.QPointF) -\/> bool:}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00025}00025         \textcolor{stringliteral}{"{}"{}"{}}}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00026}00026 \textcolor{stringliteral}{        Open a context menu }\textcolor{keywordflow}{for} this charge.}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00027}00027 }
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00028}00028         Configures options associated \textcolor{keyword}{with} the charge.}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00029}00029 }
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00030}00030         Args:}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00031}00031             pos (QPointF): The location to open the menu at.}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00032}00032 }
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00033}00033         Returns:}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00034}00034             bool: \textcolor{keyword}{True} \textcolor{keywordflow}{if} this charge should be deleted, \textcolor{keyword}{False} otherwise.}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00035}00035         \textcolor{stringliteral}{"{}"{}"{}}}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00036}00036 \textcolor{stringliteral}{}}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00037}\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_ac85de52bfe9f37529409e74a35a3224f}{00037}} \textcolor{stringliteral}{        menu = QtWidgets.QMenu()}}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00038}00038 \textcolor{stringliteral}{        set\_charge = menu.addAction("{}Set Charge Density"{}})}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00039}00039         set\_radius = menu.addAction(\textcolor{stringliteral}{"{}Set Radius"{}})}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00040}00040         set\_center = menu.addAction(\textcolor{stringliteral}{"{}Set Center"{}})}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00041}00041         rmv\_charge = menu.addAction(\textcolor{stringliteral}{"{}Remove Charge"{}})}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00042}00042 }
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00043}00043         \textcolor{keywordflow}{while} \textcolor{keyword}{True}:}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00044}00044             action = menu.exec(pos.toPoint())}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00045}00045 }
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00046}00046             \textcolor{keywordflow}{if} action == set\_charge:}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00047}00047                 val, success = QtWidgets.QInputDialog().getDouble(menu, \textcolor{stringliteral}{"{}Set Charge Density"{}},}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00048}00048                                                                   \textcolor{stringliteral}{"{}Set Charge Density (C/m\string^2)"{}})}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00049}00049                 \textcolor{keywordflow}{if} success:}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00050}00050                     self.\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_aae28e7192f7fd4d2722e2c5205057e63}{charge\_density}}\mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a82939be70e80916c0e2d93e8c696a74a}{charge\_density}} = val}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00051}00051                     self.charge\_updated()}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00052}\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_aae28e7192f7fd4d2722e2c5205057e63}{00052}}             \textcolor{keywordflow}{elif} action == set\_radius:}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00053}00053                 val, success = QtWidgets.QInputDialog().getDouble(menu, \textcolor{stringliteral}{"{}Set Radius"{}},}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00054}00054                                                                   \textcolor{stringliteral}{"{}Set Radius (m)"{}})}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00055}00055                 \textcolor{keywordflow}{if} success:}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00056}00056                     self.\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_ae7870acee3b33f5354dcc0c883e41ad5}{outer\_radius}}\mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a25c606cca01d1c44af98f9205991457c}{outer\_radius}} = val}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00057}00057                     self.charge\_updated()}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00058}\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_ae7870acee3b33f5354dcc0c883e41ad5}{00058}}             \textcolor{keywordflow}{elif} action == set\_center:}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00059}00059                 new\_center, success = \mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog}{MultiLineInputDialog}}([\textcolor{stringliteral}{"{}X Position"{}}, \textcolor{stringliteral}{"{}Y Position"{}}],}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00060}00060                                                            menu).get\_doubles()}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00061}00061 }
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00062}00062                 \textcolor{keywordflow}{if} success \textcolor{keywordflow}{and} \textcolor{keyword}{False} \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} np.isfinite(new\_center):}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00063}00063                     self.\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_a6359bb272d32155e0403e1c8287b6e84}{center}}\mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_acd25744af62cfb4d019f716dbff6692d}{center}} = Point2D(*new\_center)}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00064}00064                     self.charge\_updated()}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00065}\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_a6359bb272d32155e0403e1c8287b6e84}{00065}}             \textcolor{keywordflow}{elif} action == rmv\_charge:}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00066}00066                 \textcolor{keywordflow}{return} \textcolor{keyword}{True}}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00067}00067             \textcolor{keywordflow}{elif} action \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:}
-\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00068}00068                 \textcolor{keywordflow}{return} \textcolor{keyword}{False}}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00021}00021 \textcolor{stringliteral}{    }\textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_a1a4274ada04c1f5729f5aade35b97a4e}{\_\_init\_\_}}(self, center: Point2D, radius: float, charge\_density: float) -\/> \textcolor{keywordtype}{None}:}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00022}00022         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00023}00023 \textcolor{stringliteral}{        Initialize the ring of charge }\textcolor{keyword}{with} a center, a radius, \textcolor{keywordflow}{and} a charge density.}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00024}00024 }
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00025}00025         Args:}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00026}00026             center (Point2D): The center of the ring of charge.}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00027}00027             radius (float): The radius of the circle of charge. Outside this, there \textcolor{keywordflow}{is} no charge.}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00028}00028             charge\_density (float): The charge density, \textcolor{keywordflow}{in} C/m\string^2, inside the ``radius``.}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00029}\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_a1a4274ada04c1f5729f5aade35b97a4e}{00029}}         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00030}00030 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00031}00031 \textcolor{stringliteral}{        super().\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_a1a4274ada04c1f5729f5aade35b97a4e}{\_\_init\_\_}}(center, 0.0, radius, charge\_density)}}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00032}00032 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00033}00033 \textcolor{stringliteral}{    }\textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_ac85de52bfe9f37529409e74a35a3224f}{open\_menu}}(self, pos: QtCore.QPointF) -\/> bool:}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00034}00034         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00035}00035 \textcolor{stringliteral}{        Open a context menu }\textcolor{keywordflow}{for} this charge.}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00036}00036 }
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00037}00037         Configures options associated \textcolor{keyword}{with} the charge.}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00038}00038 }
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00039}00039         Args:}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00040}00040             pos (QPointF): The location to open the menu at.}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00041}00041 }
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00042}00042         Returns:}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00043}00043             bool: \textcolor{keyword}{True} \textcolor{keywordflow}{if} this charge should be deleted, \textcolor{keyword}{False} otherwise.}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00044}\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_ac85de52bfe9f37529409e74a35a3224f}{00044}}         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00045}00045 \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00046}00046 \textcolor{stringliteral}{        menu = QtWidgets.QMenu()}}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00047}00047 \textcolor{stringliteral}{        set\_charge = menu.addAction("{}Set Charge Density"{}})}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00048}00048         set\_radius = menu.addAction(\textcolor{stringliteral}{"{}Set Radius"{}})}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00049}00049         set\_center = menu.addAction(\textcolor{stringliteral}{"{}Set Center"{}})}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00050}00050         rmv\_charge = menu.addAction(\textcolor{stringliteral}{"{}Remove Charge"{}})}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00051}00051 }
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00052}00052         \textcolor{keywordflow}{while} \textcolor{keyword}{True}:}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00053}00053             action = menu.exec(pos.toPoint())}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00054}00054 }
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00055}00055             \textcolor{keywordflow}{if} action == set\_charge:}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00056}00056                 val, success = QtWidgets.QInputDialog().getDouble(menu, \textcolor{stringliteral}{"{}Set Charge Density"{}},}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00057}00057                                                                   \textcolor{stringliteral}{"{}Set Charge Density (C/m\string^2)"{}})}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00058}00058                 \textcolor{keywordflow}{if} success:}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00059}\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_aae28e7192f7fd4d2722e2c5205057e63}{00059}}                     self.\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_aae28e7192f7fd4d2722e2c5205057e63}{charge\_density}}\mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a82939be70e80916c0e2d93e8c696a74a}{charge\_density}} = val}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00060}00060                     self.charge\_updated()}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00061}00061             \textcolor{keywordflow}{elif} action == set\_radius:}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00062}00062                 val, success = QtWidgets.QInputDialog().getDouble(menu, \textcolor{stringliteral}{"{}Set Radius"{}},}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00063}00063                                                                   \textcolor{stringliteral}{"{}Set Radius (m)"{}})}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00064}00064                 \textcolor{keywordflow}{if} success:}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00065}\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_ae7870acee3b33f5354dcc0c883e41ad5}{00065}}                     self.\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_ae7870acee3b33f5354dcc0c883e41ad5}{outer\_radius}}\mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_a25c606cca01d1c44af98f9205991457c}{outer\_radius}} = val}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00066}00066                     self.charge\_updated()}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00067}00067             \textcolor{keywordflow}{elif} action == set\_center:}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00068}00068                 new\_center, success = \mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog}{MultiLineInputDialog}}([\textcolor{stringliteral}{"{}X Position"{}}, \textcolor{stringliteral}{"{}Y Position"{}}],}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00069}00069                                                            menu).get\_doubles()}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00070}00070 }
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00071}00071                 \textcolor{keywordflow}{if} success \textcolor{keywordflow}{and} \textcolor{keyword}{False} \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} np.isfinite(new\_center):}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00072}\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_a6359bb272d32155e0403e1c8287b6e84}{00072}}                     self.\mbox{\hyperlink{classequations_1_1circle__charge_1_1_circle_charge_a6359bb272d32155e0403e1c8287b6e84}{center}}\mbox{\hyperlink{classequations_1_1ring__charge_1_1_ring_charge_acd25744af62cfb4d019f716dbff6692d}{center}} = Point2D(*new\_center)}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00073}00073                     self.charge\_updated()}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00074}00074             \textcolor{keywordflow}{elif} action == rmv\_charge:}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00075}00075                 \textcolor{keywordflow}{return} \textcolor{keyword}{True}}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00076}00076             \textcolor{keywordflow}{elif} action \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:}
+\DoxyCodeLine{\Hypertarget{circle__charge_8py_source_l00077}00077                 \textcolor{keywordflow}{return} \textcolor{keyword}{False}}
 
 \end{DoxyCode}

@@ -18,30 +18,29 @@
 \DoxyCodeLine{\Hypertarget{main_8py_source_l00014}00014 \textcolor{keyword}{def }\mbox{\hyperlink{namespacemain_af613cea4cba4fb7de8e40896b3368945}{main}}():}
 \DoxyCodeLine{\Hypertarget{main_8py_source_l00015}00015     \textcolor{stringliteral}{"{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{main_8py_source_l00016}00016 \textcolor{stringliteral}{    Start the graphical user interface.}}
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00017}00017 \textcolor{stringliteral}{    "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00017}\mbox{\hyperlink{namespacemain_af613cea4cba4fb7de8e40896b3368945}{00017}} \textcolor{stringliteral}{    "{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{main_8py_source_l00018}00018 \textcolor{stringliteral}{}}
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00019}\mbox{\hyperlink{namespacemain_af613cea4cba4fb7de8e40896b3368945}{00019}} \textcolor{stringliteral}{    app = QtWidgets.QApplication(sys.argv)}}
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00019}00019 \textcolor{stringliteral}{    app = QtWidgets.QApplication(sys.argv)}}
 \DoxyCodeLine{\Hypertarget{main_8py_source_l00020}00020 \textcolor{stringliteral}{}}
 \DoxyCodeLine{\Hypertarget{main_8py_source_l00021}00021 \textcolor{stringliteral}{    }\textcolor{comment}{\# Disable all Qt messages}}
 \DoxyCodeLine{\Hypertarget{main_8py_source_l00022}00022     QtCore.qInstallMessageHandler(\textcolor{keyword}{lambda} \_, \_\_, \_\_\_: \textcolor{keywordtype}{None})}
 \DoxyCodeLine{\Hypertarget{main_8py_source_l00023}00023 }
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00024}00024 }
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00025}00025     \textcolor{comment}{\# Set icon}}
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00026}00026     icon\_path = os.path.join(sys.path[0], \textcolor{stringliteral}{"{}../images/logo.png"{}})}
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00027}00027     icon = QtGui.QIcon(icon\_path)}
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00028}00028     app.setWindowIcon(icon)}
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00029}00029 }
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00030}00030     \textcolor{comment}{\# Fix icon on windows machines}}
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00031}00031     \textcolor{keywordflow}{if} sys.platform == \textcolor{stringliteral}{"{}win32"{}}:}
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00032}00032         win\_app\_id = \textcolor{stringliteral}{"{}PHYS495.wavee"{}}  \textcolor{comment}{\# arbitrary string}}
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00033}00033         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(win\_app\_id)}
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00034}00034 }
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00035}00035     \_ = \mbox{\hyperlink{classview_1_1main__window_1_1_main_window}{MainWindow}}()}
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00036}00036 }
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00037}00037     sys.exit(app.exec())}
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00024}00024     \textcolor{comment}{\# Set icon}}
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00025}00025     icon\_path = os.path.join(sys.path[0], \textcolor{stringliteral}{"{}../images/logo.png"{}})}
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00026}00026     icon = QtGui.QIcon(icon\_path)}
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00027}00027     app.setWindowIcon(icon)}
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00028}00028 }
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00029}00029     \textcolor{comment}{\# Fix icon on windows machines}}
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00030}00030     \textcolor{keywordflow}{if} sys.platform == \textcolor{stringliteral}{"{}win32"{}}:}
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00031}00031         win\_app\_id = \textcolor{stringliteral}{"{}PHYS495.wavee"{}}  \textcolor{comment}{\# arbitrary string}}
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00032}00032         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(win\_app\_id)}
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00033}00033 }
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00034}00034     \_ = \mbox{\hyperlink{classview_1_1main__window_1_1_main_window}{MainWindow}}()}
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00035}00035 }
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00036}00036     sys.exit(app.exec())}
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00037}00037 }
 \DoxyCodeLine{\Hypertarget{main_8py_source_l00038}00038 }
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00039}00039 }
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00040}00040 \textcolor{keywordflow}{if} \_\_name\_\_ == \textcolor{stringliteral}{"{}\_\_main\_\_"{}}:}
-\DoxyCodeLine{\Hypertarget{main_8py_source_l00041}00041     \mbox{\hyperlink{namespacemain}{main}}()}
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00039}00039 \textcolor{keywordflow}{if} \_\_name\_\_ == \textcolor{stringliteral}{"{}\_\_main\_\_"{}}:}
+\DoxyCodeLine{\Hypertarget{main_8py_source_l00040}00040     \mbox{\hyperlink{namespacemain}{main}}()}
 
 \end{DoxyCode}

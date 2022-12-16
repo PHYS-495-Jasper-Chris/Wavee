@@ -25,9 +25,9 @@
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00021}00021 \textcolor{keyword}{class }\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge}{InfiniteLineCharge}}(\mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge}{BaseCharge}}):}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00022}00022     \textcolor{stringliteral}{"{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00023}00023 \textcolor{stringliteral}{    A single infinite line of charge, }\textcolor{keyword}{with} a slope \textcolor{keywordflow}{and} offset (m \& b), \textcolor{keywordflow}{and} a charge density.}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00024}00024     \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00024}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge}{00024}}     \textcolor{stringliteral}{"{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00025}00025 \textcolor{stringliteral}{}}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00026}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge}{00026}} \textcolor{stringliteral}{    }\textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a9cd2d72924144b602c3bd3ed28bea570}{\_\_init\_\_}}(self, x\_coef: float, y\_coef: float, offset: float, charge\_density: float) -\/> \textcolor{keywordtype}{None}:}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00026}00026 \textcolor{stringliteral}{    }\textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a9cd2d72924144b602c3bd3ed28bea570}{\_\_init\_\_}}(self, x\_coef: float, y\_coef: float, offset: float, charge\_density: float) -\/> \textcolor{keywordtype}{None}:}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00027}00027         \textcolor{stringliteral}{"{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00028}00028 \textcolor{stringliteral}{        Initialize the infinite line charge }\textcolor{keyword}{with} its equation \textcolor{keywordflow}{and} charge density.}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00029}00029 }
@@ -42,19 +42,19 @@
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00038}00038 }
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00039}00039         Raises:}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00040}00040             RuntimeError: Cannot have both the x \textcolor{keywordflow}{and} y coefficient equating to zero.}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00041}00041         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00041}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a9cd2d72924144b602c3bd3ed28bea570}{00041}}         \textcolor{stringliteral}{"{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00042}00042 \textcolor{stringliteral}{}}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00043}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a9cd2d72924144b602c3bd3ed28bea570}{00043}} \textcolor{stringliteral}{        }\textcolor{keywordflow}{if} x\_coef == 0 \textcolor{keywordflow}{and} y\_coef == 0:}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00043}00043 \textcolor{stringliteral}{        }\textcolor{keywordflow}{if} x\_coef == 0 \textcolor{keywordflow}{and} y\_coef == 0:}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00044}00044             \textcolor{keywordflow}{raise} RuntimeError(}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00045}00045                 \textcolor{stringliteral}{"{}Invalid infinite line charge equation: x\_coef and y\_coef cannot simultaneously be "{}}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00046}00046                 \textcolor{stringliteral}{"{}0"{}})}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00047}00047 }
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00048}00048         self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_aa6e76686ba32ed485fbeca7bf19fde69}{x\_coef}} = x\_coef}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00049}00049         self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_ac72aeffd85feeeb323d0bcca10f1251e}{y\_coef}} = y\_coef}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00050}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_aa6e76686ba32ed485fbeca7bf19fde69}{00050}}         self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_aa8e4a1f08b34c25b929e8aba9ef90cd3}{offset}} = offset}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00051}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_ac72aeffd85feeeb323d0bcca10f1251e}{00051}}         self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_ae186b669660ce12a2f01730d1374cde0}{charge\_density}} = charge\_density}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00052}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_aa8e4a1f08b34c25b929e8aba9ef90cd3}{00052}} }
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00053}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_ae186b669660ce12a2f01730d1374cde0}{00053}}     \textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a7fae0e244f67c048e50becfe6d9f8a1d}{electric\_field\_magnitude}}(self, point: Point2D) -\/> float:}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00048}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_aa6e76686ba32ed485fbeca7bf19fde69}{00048}}         self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_aa6e76686ba32ed485fbeca7bf19fde69}{x\_coef}} = x\_coef}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00049}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_ac72aeffd85feeeb323d0bcca10f1251e}{00049}}         self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_ac72aeffd85feeeb323d0bcca10f1251e}{y\_coef}} = y\_coef}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00050}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_aa8e4a1f08b34c25b929e8aba9ef90cd3}{00050}}         self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_aa8e4a1f08b34c25b929e8aba9ef90cd3}{offset}} = offset}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00051}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_ae186b669660ce12a2f01730d1374cde0}{00051}}         self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_ae186b669660ce12a2f01730d1374cde0}{charge\_density}} = charge\_density}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00052}00052 }
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00053}00053     \textcolor{keyword}{def }\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a7fae0e244f67c048e50becfe6d9f8a1d}{electric\_field\_magnitude}}(self, point: Point2D) -\/> float:}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00054}00054         \textcolor{stringliteral}{"{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00055}00055 \textcolor{stringliteral}{        The net magnitude of the electric field at the given point.}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00056}00056 \textcolor{stringliteral}{}}
@@ -63,9 +63,9 @@
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00059}00059 \textcolor{stringliteral}{}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00060}00060 \textcolor{stringliteral}{        Returns:}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00061}00061 \textcolor{stringliteral}{            float: The net (signed) magnitude of the electric field at the given point.}}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00062}00062 \textcolor{stringliteral}{        "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00062}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a7fae0e244f67c048e50becfe6d9f8a1d}{00062}} \textcolor{stringliteral}{        "{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00063}00063 \textcolor{stringliteral}{}}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00064}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a7fae0e244f67c048e50becfe6d9f8a1d}{00064}} \textcolor{stringliteral}{        radial\_distance = self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_aea3a44fbabb2faf2222a8e2821c7a4a1}{\_radial\_distance}}(point)}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00064}00064 \textcolor{stringliteral}{        radial\_distance = self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_aea3a44fbabb2faf2222a8e2821c7a4a1}{\_radial\_distance}}(point)}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00065}00065 \textcolor{stringliteral}{}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00066}00066 \textcolor{stringliteral}{        }\textcolor{comment}{\# Make sure we don't divide by 0}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00067}00067         \textcolor{keywordflow}{if} radial\_distance == 0.0:}
@@ -84,9 +84,9 @@
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00080}00080 \textcolor{stringliteral}{        Returns:}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00081}00081 \textcolor{stringliteral}{            float: Magnitude of the electric field's x-\/component due to the infinite line charge at}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00082}00082 \textcolor{stringliteral}{            this point.}}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00083}00083 \textcolor{stringliteral}{        "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00083}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a935e17760144193533e0ee7526be5d61}{00083}} \textcolor{stringliteral}{        "{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00084}00084 \textcolor{stringliteral}{}}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00085}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a935e17760144193533e0ee7526be5d61}{00085}} \textcolor{stringliteral}{        }\textcolor{comment}{\# The direction of the electric field is completely orthogonal to the direction of the line}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00085}00085 \textcolor{stringliteral}{        }\textcolor{comment}{\# The direction of the electric field is completely orthogonal to the direction of the line}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00086}00086         \textcolor{comment}{\# charge itself, so add a pi/2 rotation to the angle.}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00087}00087         magnitude = self.\mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge_a5d33fa9e4de29156dbad0dd2e0b5c834}{electric\_field\_magnitude}}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a7fae0e244f67c048e50becfe6d9f8a1d}{electric\_field\_magnitude}}(point) * np.cos(self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a45f45e8c25724dd134419b79d1538d04}{\_line\_angle}}() + np.pi / 2)}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00088}00088 }
@@ -105,9 +105,9 @@
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00101}00101 \textcolor{stringliteral}{        Returns:}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00102}00102 \textcolor{stringliteral}{            float: Magnitude of the electric field's y-\/component due to the infinite line charge at}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00103}00103 \textcolor{stringliteral}{            this point.}}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00104}00104 \textcolor{stringliteral}{        "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00104}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a483db213ef522860674fafa5a114b6c4}{00104}} \textcolor{stringliteral}{        "{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00105}00105 \textcolor{stringliteral}{}}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00106}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a483db213ef522860674fafa5a114b6c4}{00106}} \textcolor{stringliteral}{        }\textcolor{comment}{\# The direction of the electric field is completely orthogonal to the direction of the line}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00106}00106 \textcolor{stringliteral}{        }\textcolor{comment}{\# The direction of the electric field is completely orthogonal to the direction of the line}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00107}00107         \textcolor{comment}{\# charge itself, so add a pi/2 rotation to the angle.}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00108}00108         magnitude = self.\mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge_a5d33fa9e4de29156dbad0dd2e0b5c834}{electric\_field\_magnitude}}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a7fae0e244f67c048e50becfe6d9f8a1d}{electric\_field\_magnitude}}(point) * np.sin(self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a45f45e8c25724dd134419b79d1538d04}{\_line\_angle}}() + np.pi / 2)}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00109}00109 }
@@ -127,9 +127,9 @@
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00123}00123 }
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00124}00124         Returns:}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00125}00125             bool: \textcolor{keyword}{True} \textcolor{keywordflow}{if} this charge should be deleted, \textcolor{keyword}{False} otherwise.}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00126}00126         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00126}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a7dc4c00a4266f516c90197e0b2d13fdb}{00126}}         \textcolor{stringliteral}{"{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00127}00127 \textcolor{stringliteral}{}}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00128}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a7dc4c00a4266f516c90197e0b2d13fdb}{00128}} \textcolor{stringliteral}{        menu = QtWidgets.QMenu()}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00128}00128 \textcolor{stringliteral}{        menu = QtWidgets.QMenu()}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00129}00129 \textcolor{stringliteral}{        set\_charge = menu.addAction("{}Set Charge Density"{}})}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00130}00130         set\_eqn = menu.addAction(\textcolor{stringliteral}{"{}Set Equation of Line"{}})}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00131}00131         rmv\_charge = menu.addAction(\textcolor{stringliteral}{"{}Remove Charge"{}})}
@@ -163,9 +163,9 @@
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00159}00159 }
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00160}00160         Returns:}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00161}00161             Basic: sympy representation of the signed magnitude of the electric field.}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00162}00162         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00162}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a3119478408a5df73343d5e7276614c6e}{00162}}         \textcolor{stringliteral}{"{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00163}00163 \textcolor{stringliteral}{}}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00164}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a3119478408a5df73343d5e7276614c6e}{00164}} \textcolor{stringliteral}{        }\textcolor{comment}{\# E = 2k λ/r}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00164}00164 \textcolor{stringliteral}{        }\textcolor{comment}{\# E = 2k λ/r}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00165}00165         \textcolor{comment}{\# radial distance}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00166}00166         r\_sym = (abs(self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_aa6e76686ba32ed485fbeca7bf19fde69}{x\_coef}} * x + self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_ac72aeffd85feeeb323d0bcca10f1251e}{y\_coef}} * y + self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_aa8e4a1f08b34c25b929e8aba9ef90cd3}{offset}})}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00167}00167                  / sympy.sqrt(self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_aa6e76686ba32ed485fbeca7bf19fde69}{x\_coef}}**2 + self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_ac72aeffd85feeeb323d0bcca10f1251e}{y\_coef}}**2))}
@@ -178,9 +178,9 @@
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00174}00174 }
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00175}00175         Returns:}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00176}00176             Basic: sympy representation of the x-\/component of the electric field.}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00177}00177         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00177}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_aaec67866befeddabaf5f9d9e91b3eb4c}{00177}}         \textcolor{stringliteral}{"{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00178}00178 \textcolor{stringliteral}{}}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00179}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_aaec67866befeddabaf5f9d9e91b3eb4c}{00179}} \textcolor{stringliteral}{        x\_comp = np.cos(self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a45f45e8c25724dd134419b79d1538d04}{\_line\_angle}}() + np.pi / 2)}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00179}00179 \textcolor{stringliteral}{        x\_comp = np.cos(self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a45f45e8c25724dd134419b79d1538d04}{\_line\_angle}}() + np.pi / 2)}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00180}00180 \textcolor{stringliteral}{        magnitude = self.\mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge_a273adfa5717c7fe2e80edf119612a3a6}{electric\_field\_mag\_eqn}}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a3119478408a5df73343d5e7276614c6e}{electric\_field\_mag\_eqn}}() * x\_comp}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00181}00181 \textcolor{stringliteral}{}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00182}00182 \textcolor{stringliteral}{        }\textcolor{keywordflow}{if} magnitude == 0.0:}
@@ -196,9 +196,9 @@
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00192}00192 }
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00193}00193         Returns:}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00194}00194             Basic: sympy representation of the y-\/component of the electric field.}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00195}00195         \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00195}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a57add4ab8b60c7a73ae99c8af2ac4d8c}{00195}}         \textcolor{stringliteral}{"{}"{}"{}}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00196}00196 \textcolor{stringliteral}{}}
-\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00197}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a57add4ab8b60c7a73ae99c8af2ac4d8c}{00197}} \textcolor{stringliteral}{        y\_comp = np.sin(self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a45f45e8c25724dd134419b79d1538d04}{\_line\_angle}}() + np.pi / 2)}}
+\DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00197}00197 \textcolor{stringliteral}{        y\_comp = np.sin(self.\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a45f45e8c25724dd134419b79d1538d04}{\_line\_angle}}() + np.pi / 2)}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00198}00198 \textcolor{stringliteral}{        magnitude = self.\mbox{\hyperlink{classequations_1_1base__charge_1_1_base_charge_a273adfa5717c7fe2e80edf119612a3a6}{electric\_field\_mag\_eqn}}\mbox{\hyperlink{classequations_1_1infinite__line__charge_1_1_infinite_line_charge_a3119478408a5df73343d5e7276614c6e}{electric\_field\_mag\_eqn}}() * y\_comp}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00199}00199 \textcolor{stringliteral}{}}
 \DoxyCodeLine{\Hypertarget{infinite__line__charge_8py_source_l00200}00200 \textcolor{stringliteral}{        }\textcolor{keywordflow}{if} magnitude == 0.0:}
