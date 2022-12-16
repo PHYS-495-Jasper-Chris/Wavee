@@ -1,0 +1,26 @@
+name: Build and Host Documentation
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  build_docs:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Install Python
+        uses: actions/setup-python@v4
+
+      - name: Install doxypypy
+        run: pip install git+https://github.com/Feneric/doxypypy
+
+      - name: Install Doxygen
+        run: sudo apt-get update && sudo apt-get install doxygen
+
+      - name: Run Doxygen
+        run: doxygen
