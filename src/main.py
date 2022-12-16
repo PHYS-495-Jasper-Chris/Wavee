@@ -21,7 +21,6 @@ def main():
     # Disable all Qt messages
     QtCore.qInstallMessageHandler(lambda _, __, ___: None)
 
-    window = MainWindow()
 
     # Set icon
     icon_path = os.path.join(sys.path[0], "../images/logo.png")
@@ -33,7 +32,7 @@ def main():
         win_app_id = "PHYS495.wavee"  # arbitrary string
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(win_app_id)
 
-    window.show()
+    _ = MainWindow()
 
     sys.exit(app.exec())
 

@@ -63,6 +63,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.setWindowState(QtCore.Qt.WindowState.WindowMaximized)
 
+        self.show()
+
     def _add_menus(self) -> None:
         """
         Add menus and actions to window.
