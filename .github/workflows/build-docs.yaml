@@ -3,7 +3,8 @@ name: Build and Host Documentation
 on:
   push:
     branches:
-      - "main"
+      # - "main"
+      - "*" # all branches for now
 
 jobs:
   build_docs:
