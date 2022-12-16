@@ -29,7 +29,7 @@ def main():
     app.setWindowIcon(icon)
 
     # Fix icon on windows machines
-    if sys.platform == "windows":
+    if sys.platform == "win32":
         win_app_id = "PHYS495.wavee"  # arbitrary string
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(win_app_id)
 
