@@ -23,9 +23,6 @@ var annotated_dup =
         [ "RingCharge", "classequations_1_1ring__charge_1_1_ring_charge.html", "classequations_1_1ring__charge_1_1_ring_charge" ]
       ] ]
     ] ],
-    [ "ui_main_window", "namespaceui__main__window.html", [
-      [ "Ui_MainWindow", "classui__main__window_1_1_ui___main_window.html", "classui__main__window_1_1_ui___main_window" ]
-    ] ],
     [ "view", "namespaceview.html", [
       [ "draggable_label", "namespaceview_1_1draggable__label.html", [
         [ "DraggableLabel", "classview_1_1draggable__label_1_1_draggable_label.html", "classview_1_1draggable__label_1_1_draggable_label" ]

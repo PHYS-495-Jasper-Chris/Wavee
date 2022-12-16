@@ -52,7 +52,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"classview_1_1droppable__plot__widget_1_1_droppable_plot_widget.html#aaf78ffe62925ace9d42faaf0ba69f04f"
+"equation__thread_8py_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

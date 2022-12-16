@@ -1,5 +1,10 @@
 \hypertarget{classequations_1_1equation__thread_1_1_equation_thread}{}\doxysection{equations.\+equation\+\_\+thread.\+Equation\+Thread Class Reference}
 \label{classequations_1_1equation__thread_1_1_equation_thread}\index{equations.equation\_thread.EquationThread@{equations.equation\_thread.EquationThread}}
+
+
+A standalone thread for equation rendering, because this is highly computationally intensive and does not need to be blocking.  
+
+
 Inheritance diagram for equations.\+equation\+\_\+thread.\+Equation\+Thread\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -12,11 +17,11 @@ Inheritance diagram for equations.\+equation\+\_\+thread.\+Equation\+Thread\+:\b
 None \mbox{\hyperlink{classequations_1_1equation__thread_1_1_equation_thread_a4a0e3f1978d79cb8071208bd17e051be}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, \mbox{\hyperlink{classequations_1_1graph__window_1_1_graph_window}{Graph\+Window}} graph\+\_\+window, Optional\mbox{[}Qt\+Core.\+QObject\mbox{]} parent=None, int default\+\_\+rounding=2)
 \item 
 None \mbox{\hyperlink{classequations_1_1equation__thread_1_1_equation_thread_ae59dbf79a8fbf7adb1ac6d9b50083905}{run}} (self)
-\item 
+\begin{DoxyCompactList}\small\item\em Update the equation labels when the charges are changed. \end{DoxyCompactList}\item 
 None \mbox{\hyperlink{classequations_1_1equation__thread_1_1_equation_thread_a015b89dc18dd906590dea204794939c7}{change\+\_\+rounding}} (self, int increment)
-\item 
+\begin{DoxyCompactList}\small\item\em Increase (or decrease) the rounding by {\ttfamily increment}, resulting in more (or fewer) digits after the decimal place. \end{DoxyCompactList}\item 
 None \mbox{\hyperlink{classequations_1_1equation__thread_1_1_equation_thread_a440978baaba626dd66467da3443cfb97}{update\+\_\+rounding}} (self)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Update the rounding on the current equations. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -31,12 +36,9 @@ None \mbox{\hyperlink{classequations_1_1equation__thread_1_1_equation_thread_a44
 
 
 \doxysubsection{Detailed Description}
-\begin{DoxyVerb}A standalone thread for equation rendering, because this is highly computationally intensive and
-does not need to be blocking.
-\end{DoxyVerb}
- 
+A standalone thread for equation rendering, because this is highly computationally intensive and does not need to be blocking. 
 
-Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00014}{14}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
+Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00020}{20}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
 
 
 
@@ -49,7 +51,7 @@ Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00014}{14}} of 
 
 
 
-Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00020}{20}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
+Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00022}{22}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
 
 
 
@@ -60,17 +62,20 @@ Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00020}{20}} of 
 \doxysubsubsection{\texorpdfstring{change\_rounding()}{change\_rounding()}}
 {\footnotesize\ttfamily  None equations.\+equation\+\_\+thread.\+Equation\+Thread.\+change\+\_\+rounding (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{int}]{increment }\end{DoxyParamCaption})}
 
-\begin{DoxyVerb}Increase (or decrease) the rounding by ``increment``, resulting in more (or fewer) digits
-after the decimal place.
+
+
+Increase (or decrease) the rounding by {\ttfamily increment}, resulting in more (or fewer) digits after the decimal place. 
 
 Does not automatically rebuild the equations.
 
-Args:
-    increment (int): The change to the current value of ``rounding``.
-\end{DoxyVerb}
- 
 
-Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00056}{56}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
+\begin{DoxyParams}{Parameters}
+{\em increment} & The change to the current value of {\ttfamily rounding}. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00067}{67}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
 
 \mbox{\Hypertarget{classequations_1_1equation__thread_1_1_equation_thread_ae59dbf79a8fbf7adb1ac6d9b50083905}\label{classequations_1_1equation__thread_1_1_equation_thread_ae59dbf79a8fbf7adb1ac6d9b50083905}} 
 \index{equations.equation\_thread.EquationThread@{equations.equation\_thread.EquationThread}!run@{run}}
@@ -78,11 +83,13 @@ Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00056}{56}} of 
 \doxysubsubsection{\texorpdfstring{run()}{run()}}
 {\footnotesize\ttfamily  None equations.\+equation\+\_\+thread.\+Equation\+Thread.\+run (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
 
-\begin{DoxyVerb}Update the equation labels when the charges are changed.
-\end{DoxyVerb}
- 
 
-Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00038}{38}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
+
+Update the equation labels when the charges are changed. 
+
+
+
+Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00043}{43}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
 
 \mbox{\Hypertarget{classequations_1_1equation__thread_1_1_equation_thread_a440978baaba626dd66467da3443cfb97}\label{classequations_1_1equation__thread_1_1_equation_thread_a440978baaba626dd66467da3443cfb97}} 
 \index{equations.equation\_thread.EquationThread@{equations.equation\_thread.EquationThread}!update\_rounding@{update\_rounding}}
@@ -90,11 +97,13 @@ Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00038}{38}} of 
 \doxysubsubsection{\texorpdfstring{update\_rounding()}{update\_rounding()}}
 {\footnotesize\ttfamily  None equations.\+equation\+\_\+thread.\+Equation\+Thread.\+update\+\_\+rounding (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
 
-\begin{DoxyVerb}Update the rounding on the current equations.
-\end{DoxyVerb}
- 
 
-Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00072}{72}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
+
+Update the rounding on the current equations. 
+
+
+
+Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00077}{77}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
 
 
 
@@ -107,7 +116,7 @@ Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00072}{72}} of 
 
 
 
-Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00081}{81}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
+Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00083}{83}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
 
 \mbox{\Hypertarget{classequations_1_1equation__thread_1_1_equation_thread_af6b2788a6147bee7ebd6dd91c7af3b14}\label{classequations_1_1equation__thread_1_1_equation_thread_af6b2788a6147bee7ebd6dd91c7af3b14}} 
 \index{equations.equation\_thread.EquationThread@{equations.equation\_thread.EquationThread}!rounding@{rounding}}
@@ -117,7 +126,7 @@ Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00081}{81}} of 
 
 
 
-Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00028}{28}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
+Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00030}{30}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
 
 \mbox{\Hypertarget{classequations_1_1equation__thread_1_1_equation_thread_adee136d177bf5755801d2825692c9b7e}\label{classequations_1_1equation__thread_1_1_equation_thread_adee136d177bf5755801d2825692c9b7e}} 
 \index{equations.equation\_thread.EquationThread@{equations.equation\_thread.EquationThread}!x\_eqns@{x\_eqns}}
@@ -127,7 +136,7 @@ Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00028}{28}} of 
 
 
 
-Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00082}{82}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
+Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00084}{84}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
 
 \mbox{\Hypertarget{classequations_1_1equation__thread_1_1_equation_thread_a084e8642530e9046cb4b7d346caee17c}\label{classequations_1_1equation__thread_1_1_equation_thread_a084e8642530e9046cb4b7d346caee17c}} 
 \index{equations.equation\_thread.EquationThread@{equations.equation\_thread.EquationThread}!y\_eqns@{y\_eqns}}
@@ -137,7 +146,7 @@ Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00082}{82}} of 
 
 
 
-Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00083}{83}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
+Definition at line \mbox{\hyperlink{equation__thread_8py_source_l00085}{85}} of file \mbox{\hyperlink{equation__thread_8py_source}{equation\+\_\+thread.\+py}}.
 
 
 

@@ -16,9 +16,6 @@ var hierarchy =
     [ "enum.IntEnum", null, [
       [ "view.draggable_label.DraggableLabel.LabelTypes", "classview_1_1draggable__label_1_1_draggable_label_1_1_label_types.html", null ]
     ] ],
-    [ "object", null, [
-      [ "ui_main_window.Ui_MainWindow", "classui__main__window_1_1_ui___main_window.html", null ]
-    ] ],
     [ "pyqtgraph.PlotWidget", null, [
       [ "view.droppable_plot_widget.DroppablePlotWidget", "classview_1_1droppable__plot__widget_1_1_droppable_plot_widget.html", null ]
     ] ],

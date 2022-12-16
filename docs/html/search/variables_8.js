@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['mag_5feqns_0',['mag_eqns',['../classequations_1_1equation__thread_1_1_equation_thread.html#a9c753922fd272a330fff32d6a1598ca0',1,'equations::equation_thread::EquationThread']]],
-  ['menu_5fbar_1',['menu_bar',['../classui__main__window_1_1_ui___main_window.html#afed4a5f3fceaa60fba4ae13856e53199',1,'ui_main_window::Ui_MainWindow']]],
-  ['mime_5fformat_2',['MIME_FORMAT',['../classview_1_1draggable__label_1_1_draggable_label.html#ad0d1fcf51065c6d2ad7eece125d153c4',1,'view::draggable_label::DraggableLabel']]]
+  ['offset_0',['offset',['../classequations_1_1infinite__line__charge_1_1_infinite_line_charge.html#aa8e4a1f08b34c25b929e8aba9ef90cd3',1,'equations::infinite_line_charge::InfiniteLineCharge']]],
+  ['outer_5fradius_1',['outer_radius',['../classequations_1_1circle__charge_1_1_circle_charge.html#ae7870acee3b33f5354dcc0c883e41ad5',1,'equations.circle_charge.CircleCharge.outer_radius()'],['../classequations_1_1ring__charge_1_1_ring_charge.html#a25c606cca01d1c44af98f9205991457c',1,'equations.ring_charge.RingCharge.outer_radius()']]]
 ];

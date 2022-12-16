@@ -98,6 +98,9 @@ $(document).ready(function(){initNavTree('classequations_1_1equation__thread_1_1
   <div class="headertitle"><div class="title">equations.equation_thread.EquationThread Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>A standalone thread for equation rendering, because this is highly computationally intensive and does not need to be blocking.  
+ <a href="classequations_1_1equation__thread_1_1_equation_thread.html#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for equations.equation_thread.EquationThread:</div>
 <div class="dyncontent">
@@ -110,10 +113,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4a0e3f1978d79cb8071208bd17e051be"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classequations_1_1equation__thread_1_1_equation_thread.html#a4a0e3f1978d79cb8071208bd17e051be">__init__</a> (self, <a class="el" href="classequations_1_1graph__window_1_1_graph_window.html">GraphWindow</a> graph_window, Optional[QtCore.QObject] parent=None, int default_rounding=2)</td></tr>
 <tr class="separator:a4a0e3f1978d79cb8071208bd17e051be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae59dbf79a8fbf7adb1ac6d9b50083905"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classequations_1_1equation__thread_1_1_equation_thread.html#ae59dbf79a8fbf7adb1ac6d9b50083905">run</a> (self)</td></tr>
+<tr class="memdesc:ae59dbf79a8fbf7adb1ac6d9b50083905"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the equation labels when the charges are changed.  <a href="classequations_1_1equation__thread_1_1_equation_thread.html#ae59dbf79a8fbf7adb1ac6d9b50083905">More...</a><br /></td></tr>
 <tr class="separator:ae59dbf79a8fbf7adb1ac6d9b50083905"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a015b89dc18dd906590dea204794939c7"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classequations_1_1equation__thread_1_1_equation_thread.html#a015b89dc18dd906590dea204794939c7">change_rounding</a> (self, int increment)</td></tr>
+<tr class="memdesc:a015b89dc18dd906590dea204794939c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increase (or decrease) the rounding by <code>increment</code>, resulting in more (or fewer) digits after the decimal place.  <a href="classequations_1_1equation__thread_1_1_equation_thread.html#a015b89dc18dd906590dea204794939c7">More...</a><br /></td></tr>
 <tr class="separator:a015b89dc18dd906590dea204794939c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a440978baaba626dd66467da3443cfb97"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classequations_1_1equation__thread_1_1_equation_thread.html#a440978baaba626dd66467da3443cfb97">update_rounding</a> (self)</td></tr>
+<tr class="memdesc:a440978baaba626dd66467da3443cfb97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the rounding on the current equations.  <a href="classequations_1_1equation__thread_1_1_equation_thread.html#a440978baaba626dd66467da3443cfb97">More...</a><br /></td></tr>
 <tr class="separator:a440978baaba626dd66467da3443cfb97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -128,10 +134,9 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a084e8642530e9046cb4b7d346caee17c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><pre class="fragment">A standalone thread for equation rendering, because this is highly computationally intensive and
-does not need to be blocking.
-</pre> 
-<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00014">14</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
+<div class="textblock"><p >A standalone thread for equation rendering, because this is highly computationally intensive and does not need to be blocking. </p>
+
+<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00020">20</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a4a0e3f1978d79cb8071208bd17e051be" name="a4a0e3f1978d79cb8071208bd17e051be"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4a0e3f1978d79cb8071208bd17e051be">&#9670;&#160;</a></span>__init__()</h2>
@@ -171,7 +176,7 @@ does not need to be blocking.
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00020">20</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00022">22</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
 
 </div>
 </div>
@@ -201,15 +206,17 @@ does not need to be blocking.
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Increase (or decrease) the rounding by ``increment``, resulting in more (or fewer) digits
-after the decimal place.
 
-Does not automatically rebuild the equations.
+<p>Increase (or decrease) the rounding by <code>increment</code>, resulting in more (or fewer) digits after the decimal place. </p>
+<p >Does not automatically rebuild the equations.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">increment</td><td>The change to the current value of <code>rounding</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-Args:
-    increment (int): The change to the current value of ``rounding``.
-</pre> 
-<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00056">56</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00067">67</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
 
 </div>
 </div>
@@ -228,9 +235,10 @@ Args:
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Update the equation labels when the charges are changed.
-</pre> 
-<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00038">38</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
+
+<p>Update the equation labels when the charges are changed. </p>
+
+<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00043">43</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
 
 </div>
 </div>
@@ -249,9 +257,10 @@ Args:
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Update the rounding on the current equations.
-</pre> 
-<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00072">72</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
+
+<p>Update the rounding on the current equations. </p>
+
+<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00077">77</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
 
 </div>
 </div>
@@ -268,7 +277,7 @@ Args:
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00081">81</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00083">83</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
 
 </div>
 </div>
@@ -284,7 +293,7 @@ Args:
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00028">28</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00030">30</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
 
 </div>
 </div>
@@ -300,7 +309,7 @@ Args:
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00082">82</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00084">84</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
 
 </div>
 </div>
@@ -316,7 +325,7 @@ Args:
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00083">83</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="equation__thread_8py_source.html#l00085">85</a> of file <a class="el" href="equation__thread_8py_source.html">equation_thread.py</a>.</p>
 
 </div>
 </div>

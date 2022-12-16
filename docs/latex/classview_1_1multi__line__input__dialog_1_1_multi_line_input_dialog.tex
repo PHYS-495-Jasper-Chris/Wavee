@@ -1,5 +1,10 @@
 \hypertarget{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog}{}\doxysection{view.\+multi\+\_\+line\+\_\+input\+\_\+dialog.\+Multi\+Line\+Input\+Dialog Class Reference}
 \label{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog}\index{view.multi\_line\_input\_dialog.MultiLineInputDialog@{view.multi\_line\_input\_dialog.MultiLineInputDialog}}
+
+
+A QDialog with multiple input lines.  
+
+
 Inheritance diagram for view.\+multi\+\_\+line\+\_\+input\+\_\+dialog.\+Multi\+Line\+Input\+Dialog\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -12,9 +17,9 @@ Inheritance diagram for view.\+multi\+\_\+line\+\_\+input\+\_\+dialog.\+Multi\+L
 None \mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a0b7e2dd8bfb83505fa8a346c538ad37d}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, List\mbox{[}str\mbox{]} \mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a7d8b4ebf6f12808a19683ecf2dbb2862}{labels}}, Optional\mbox{[}Qt\+Widgets.\+QWidget\mbox{]} parent=None, Optional\mbox{[}str\mbox{]} \mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_acc35ed42a77e45ded1d1c7e5a2b62e4c}{description}}=None)
 \item 
 Tuple\mbox{[}List\mbox{[}float\mbox{]}, bool\mbox{]} \mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a12316b8220ad1718884cad5aa06f67b4}{get\+\_\+doubles}} (self, float value=0.\+0, float minimum=float(\char`\"{}-\/inf\char`\"{}), float maximum=float(\char`\"{}inf\char`\"{}))
-\item 
+\begin{DoxyCompactList}\small\item\em Get all input lines as floats, as well as a bool demonstrating the status. \end{DoxyCompactList}\item 
 Tuple\mbox{[}List\mbox{[}str\mbox{]}, bool\mbox{]} \mbox{\hyperlink{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a1b36280a55b269a710ee8c9c1de979be}{get\+\_\+texts}} (self)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Get all input lines as strings, as well as a bool demonstrating the status. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -30,11 +35,9 @@ Tuple\mbox{[}List\mbox{[}str\mbox{]}, bool\mbox{]} \mbox{\hyperlink{classview_1_
 
 
 \doxysubsection{Detailed Description}
-\begin{DoxyVerb}A QDialog with multiple input lines.
-\end{DoxyVerb}
- 
+A QDialog with multiple input lines. 
 
-Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00010}{10}} of file \mbox{\hyperlink{multi__line__input__dialog_8py_source}{multi\+\_\+line\+\_\+input\+\_\+dialog.\+py}}.
+Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00015}{15}} of file \mbox{\hyperlink{multi__line__input__dialog_8py_source}{multi\+\_\+line\+\_\+input\+\_\+dialog.\+py}}.
 
 
 
@@ -47,7 +50,7 @@ Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00010
 
 
 
-Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00020}{20}} of file \mbox{\hyperlink{multi__line__input__dialog_8py_source}{multi\+\_\+line\+\_\+input\+\_\+dialog.\+py}}.
+Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00022}{22}} of file \mbox{\hyperlink{multi__line__input__dialog_8py_source}{multi\+\_\+line\+\_\+input\+\_\+dialog.\+py}}.
 
 
 
@@ -58,24 +61,32 @@ Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00020
 \doxysubsubsection{\texorpdfstring{get\_doubles()}{get\_doubles()}}
 {\footnotesize\ttfamily  Tuple\mbox{[}List\mbox{[}float\mbox{]}, bool\mbox{]} view.\+multi\+\_\+line\+\_\+input\+\_\+dialog.\+Multi\+Line\+Input\+Dialog.\+get\+\_\+doubles (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{float }]{value = {\ttfamily 0.0},  }\item[{float }]{minimum = {\ttfamily float(\char`\"{}-\/inf\char`\"{})},  }\item[{float }]{maximum = {\ttfamily float(\char`\"{}inf\char`\"{})} }\end{DoxyParamCaption})}
 
-\begin{DoxyVerb}Get all input lines as floats, as well as a bool demonstrating the status.
 
-If the dialog was accepted and all lines could be successfully converted to floats,
-then success is set to True. Otherwise, the success is False.
 
-Any floats that could not be converted (or on a rejected dialog) are set to NaN.
+Get all input lines as floats, as well as a bool demonstrating the status. 
 
-Args:
-    value (float): The default value to set the spinners to. Defaults to 0.
-    minimum (float): The minimum possible value. Defaults to -INF.
-    maximum (float): The maximum possible value. Defaults to INF.
+\begin{DoxyVerb}   If the dialog was accepted and all lines could be successfully converted to floats,
+   then success is set to True. Otherwise, the success is False.
 
-Returns:
-    Tuple[List[float], bool]: Every line's value as a float and the success as a bool.
+   Any floats that could not be converted (or on a rejected dialog) are set to NaN.
 \end{DoxyVerb}
- 
 
-Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00029}{29}} of file \mbox{\hyperlink{multi__line__input__dialog_8py_source}{multi\+\_\+line\+\_\+input\+\_\+dialog.\+py}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The default value to set the spinners to. Defaults to 0. \\
+\hline
+{\em minimum} & The minimum possible value. Defaults to -\/INF. \\
+\hline
+{\em maximum} & The maximum possible value. Defaults to INF.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Tuple\mbox{[}List\mbox{[}float\mbox{]}, bool\mbox{]}\+: Every line\textquotesingle{}s value as a float and the success as a bool. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00047}{47}} of file \mbox{\hyperlink{multi__line__input__dialog_8py_source}{multi\+\_\+line\+\_\+input\+\_\+dialog.\+py}}.
 
 \mbox{\Hypertarget{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a1b36280a55b269a710ee8c9c1de979be}\label{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a1b36280a55b269a710ee8c9c1de979be}} 
 \index{view.multi\_line\_input\_dialog.MultiLineInputDialog@{view.multi\_line\_input\_dialog.MultiLineInputDialog}!get\_texts@{get\_texts}}
@@ -83,16 +94,18 @@ Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00029
 \doxysubsubsection{\texorpdfstring{get\_texts()}{get\_texts()}}
 {\footnotesize\ttfamily  Tuple\mbox{[}List\mbox{[}str\mbox{]}, bool\mbox{]} view.\+multi\+\_\+line\+\_\+input\+\_\+dialog.\+Multi\+Line\+Input\+Dialog.\+get\+\_\+texts (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
 
-\begin{DoxyVerb}Get all input lines as strings, as well as a bool demonstrating the status.
 
-If the dialog was accepted, then success is set to True. Otherwise, the success is False.
 
-Returns:
-    tuple[List[str], bool]: Every line's text as a str and the success as a bool.
+Get all input lines as strings, as well as a bool demonstrating the status. 
+
+\begin{DoxyVerb}   If the dialog was accepted, then success is set to True. Otherwise, the success is False.
 \end{DoxyVerb}
- 
+ \begin{DoxyReturn}{Returns}
+tuple\mbox{[}List\mbox{[}str\mbox{]}, bool\mbox{]}\+: Every line\textquotesingle{}s text as a str and the success as a bool. 
+\end{DoxyReturn}
 
-Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00073}{73}} of file \mbox{\hyperlink{multi__line__input__dialog_8py_source}{multi\+\_\+line\+\_\+input\+\_\+dialog.\+py}}.
+
+Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00083}{83}} of file \mbox{\hyperlink{multi__line__input__dialog_8py_source}{multi\+\_\+line\+\_\+input\+\_\+dialog.\+py}}.
 
 
 
@@ -105,7 +118,7 @@ Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00073
 
 
 
-Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00027}{27}} of file \mbox{\hyperlink{multi__line__input__dialog_8py_source}{multi\+\_\+line\+\_\+input\+\_\+dialog.\+py}}.
+Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00029}{29}} of file \mbox{\hyperlink{multi__line__input__dialog_8py_source}{multi\+\_\+line\+\_\+input\+\_\+dialog.\+py}}.
 
 \mbox{\Hypertarget{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a7d8b4ebf6f12808a19683ecf2dbb2862}\label{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_a7d8b4ebf6f12808a19683ecf2dbb2862}} 
 \index{view.multi\_line\_input\_dialog.MultiLineInputDialog@{view.multi\_line\_input\_dialog.MultiLineInputDialog}!labels@{labels}}
@@ -115,7 +128,7 @@ Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00027
 
 
 
-Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00026}{26}} of file \mbox{\hyperlink{multi__line__input__dialog_8py_source}{multi\+\_\+line\+\_\+input\+\_\+dialog.\+py}}.
+Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00028}{28}} of file \mbox{\hyperlink{multi__line__input__dialog_8py_source}{multi\+\_\+line\+\_\+input\+\_\+dialog.\+py}}.
 
 \mbox{\Hypertarget{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_ae87ec420736f112c1d404f581c1fb209}\label{classview_1_1multi__line__input__dialog_1_1_multi_line_input_dialog_ae87ec420736f112c1d404f581c1fb209}} 
 \index{view.multi\_line\_input\_dialog.MultiLineInputDialog@{view.multi\_line\_input\_dialog.MultiLineInputDialog}!LineType@{LineType}}
@@ -125,7 +138,7 @@ Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00026
 
 
 
-Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00015}{15}} of file \mbox{\hyperlink{multi__line__input__dialog_8py_source}{multi\+\_\+line\+\_\+input\+\_\+dialog.\+py}}.
+Definition at line \mbox{\hyperlink{multi__line__input__dialog_8py_source_l00017}{17}} of file \mbox{\hyperlink{multi__line__input__dialog_8py_source}{multi\+\_\+line\+\_\+input\+\_\+dialog.\+py}}.
 
 
 

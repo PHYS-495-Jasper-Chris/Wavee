@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['epsilon_5fnought_0',['EPSILON_NOUGHT',['../namespaceequations_1_1constants.html#a07a5b98aa3243304e31f1d185ca9f872',1,'equations::constants']]],
-  ['equation_5flayout_1',['equation_layout',['../classui__main__window_1_1_ui___main_window.html#af3bc45da4681cb869037768c5d8a427e',1,'ui_main_window::Ui_MainWindow']]],
-  ['equations_5fthread_2',['equations_thread',['../classview_1_1main__window_1_1_main_window.html#ab4db8e000484c7accc0cf4ab41bde2ee',1,'view::main_window::MainWindow']]]
+  ['graph_5fresolution_0',['graph_resolution',['../classview_1_1droppable__plot__widget_1_1_droppable_plot_widget.html#aaf78ffe62925ace9d42faaf0ba69f04f',1,'view::droppable_plot_widget::DroppablePlotWidget']]],
+  ['graph_5fwindow_1',['graph_window',['../classview_1_1droppable__plot__widget_1_1_droppable_plot_widget.html#a80c94bb34f9c65bed61eb05df069e38b',1,'view::droppable_plot_widget::DroppablePlotWidget']]],
+  ['graphbounds_2',['GraphBounds',['../namespaceview_1_1droppable__plot__widget.html#aa7214e1f208192f8be6759936899764c',1,'view::droppable_plot_widget']]]
 ];

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['offset_0',['offset',['../classequations_1_1infinite__line__charge_1_1_infinite_line_charge.html#aa8e4a1f08b34c25b929e8aba9ef90cd3',1,'equations::infinite_line_charge::InfiniteLineCharge']]],
-  ['outer_5fradius_1',['outer_radius',['../classequations_1_1circle__charge_1_1_circle_charge.html#ae7870acee3b33f5354dcc0c883e41ad5',1,'equations.circle_charge.CircleCharge.outer_radius()'],['../classequations_1_1ring__charge_1_1_ring_charge.html#a25c606cca01d1c44af98f9205991457c',1,'equations.ring_charge.RingCharge.outer_radius()']]]
+  ['rgbtuple_0',['RGBTuple',['../namespaceview_1_1droppable__plot__widget.html#a8df3d9be21e8f6e5848ef286637af733',1,'view::droppable_plot_widget']]],
+  ['ring_5fcharge_1',['RING_CHARGE',['../classview_1_1draggable__label_1_1_draggable_label_1_1_label_types.html#ad67eb935aca7d926a3b344bab55afd4f',1,'view::draggable_label::DraggableLabel::LabelTypes']]],
+  ['rounding_2',['rounding',['../classequations_1_1equation__thread_1_1_equation_thread.html#af6b2788a6147bee7ebd6dd91c7af3b14',1,'equations::equation_thread::EquationThread']]]
 ];
