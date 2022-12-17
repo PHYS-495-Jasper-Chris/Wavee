@@ -39,17 +39,17 @@ class GraphWindow:
 
         self._removed_charges: List[BaseCharge] = []
 
-    def add_charge(self, point_charge: BaseCharge) -> None:
+    def add_charge(self, charge: BaseCharge) -> None:
         """
-        Add point charge to the test window.
+        Add charge to the test window.
 
         Args:
-            point_charge (PointCharge): Point charge to be added.
+            charge (BaseCharge): Charge to be added.
         """
 
-        self.charges.append(point_charge)
+        self.charges.append(charge)
 
-        point_charge.charge_updated = self.charges_updated
+        charge.charge_updated = self.charges_updated
 
         self.charges_updated()
 
