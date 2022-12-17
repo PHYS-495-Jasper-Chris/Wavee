@@ -23,7 +23,7 @@ class CircleCharge(RingCharge):
         Initialize the circle of charge with a center, a radius, and a charge density.
 
         Args:
-            center (Point2D): The center of the ring of charge.
+            center (Point2D): The center of the circle of charge.
             radius (float): The radius of the circle of charge. Outside this, there is no charge.
             charge_density (float): The charge density, in C/m^2, inside the ``radius``.
         """
