@@ -2,7 +2,7 @@ name: Build and Host Documentation
 
 on:
   push:
-    branches: [$default_branch, "dev/cross-platform-doxypypy"]
+    branches: [$default_branch]
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
