@@ -175,7 +175,7 @@ class GraphWindow:
         equation.
 
         Returns:
-            List[Basic]: A list of the simplified equation of each charge's electric field
+            List[Basic]: A list of the simplified equation of the cumulative electric field
             x-component equation.
         """
 
@@ -187,7 +187,7 @@ class GraphWindow:
         equation.
 
         Returns:
-            List[Basic]: A list of the simplified equation of each charge's electric field
+            List[Basic]: A list of the simplified equation of the cumulative electric field
             y-component equation.
         """
 
