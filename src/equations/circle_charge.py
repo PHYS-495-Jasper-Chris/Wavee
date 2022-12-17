@@ -20,7 +20,7 @@ class CircleCharge(RingCharge):
 
     def __init__(self, center: Point2D, radius: float, charge_density: float) -> None:
         """
-        Initialize the ring of charge with a center, a radius, and a charge density.
+        Initialize the circle of charge with a center, a radius, and a charge density.
 
         Args:
             center (Point2D): The center of the ring of charge.
