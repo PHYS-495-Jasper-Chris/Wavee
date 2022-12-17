@@ -27,7 +27,7 @@ jobs:
       - name: Clone Doxygen-Awesome CSS
         uses: actions/checkout@v3
         with:
-          name: jothepro/doxygen-awesome-css
+          repository: jothepro/doxygen-awesome-css
           ref: v2.1.0
 
       - name: Install Python
