@@ -19,6 +19,15 @@ class CircleCharge(RingCharge):
     """
 
     def __init__(self, center: Point2D, radius: float, charge_density: float) -> None:
+        """
+        Initialize the circle of charge with a center, a radius, and a charge density.
+
+        Args:
+            center (Point2D): The center of the circle of charge.
+            radius (float): The radius of the circle of charge. Outside this, there is no charge.
+            charge_density (float): The charge density, in C/m^2, inside the ``radius``.
+        """
+
         super().__init__(center, 0.0, radius, charge_density)
 
     def open_menu(self, pos: QtCore.QPointF) -> bool:

@@ -21,7 +21,6 @@ def main():
     # Disable all Qt messages
     QtCore.qInstallMessageHandler(lambda _, __, ___: None)
 
-
     # Set icon
     icon_path = os.path.join(sys.path[0], "../images/logo.png")
     icon = QtGui.QIcon(icon_path)
